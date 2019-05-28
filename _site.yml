@@ -17,6 +17,12 @@ navbar:
         - text: "STA314 - Fall 2018"
           icon: fa-book
           href: STA314_tutorial.html
+    - text: "Coursework"
+      icon: fa-book-open
+      menu:
+        - text: "STA355"
+          icon: fa-book
+          href: STA355_coursework.html
   right: 
     - text: "About Me"
       href: about.html
