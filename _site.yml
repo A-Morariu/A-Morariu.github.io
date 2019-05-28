@@ -1,8 +1,15 @@
-name: "my-website"
+name: Alin_Morariu_Website
 navbar:
   title: "My Website"
   left:
     - text: "Home"
+      icon: fa-home
       href: index.html
+    - text: "Teaching"
+      icon: fa-university
+      menu:
+        - text: "STA302 - Summer 2019"
+          icon: fa-book
+          href: STA302_tutorial.html
     - text: "About"
       href: about.html
