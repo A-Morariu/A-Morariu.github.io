@@ -11,7 +11,7 @@
 
 
 
-<title>My Website</title>
+<title>Welcome</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -22,6 +22,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -284,7 +286,29 @@ $(document).ready(function () {
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">Home</a>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-university"></span>
+     
+    Teaching
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="STA302_tutorial.html">
+        <span class="fa fa-book"></span>
+         
+        STA302 - Summer 2019
+      </a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="about.html">About</a>
@@ -301,12 +325,44 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">My Website</h1>
+<h1 class="title toc-ignore">Welcome</h1>
 
 </div>
 
 
-<p>My first website</p>
+<style>
+body {
+text-align: justify}
+</style>
+<div style="float:left;position: relative; top: 7px; padding-right: 30px;">
+<p><img src="Images/IMG_9773-3.jpg" style="width:2in" /></p>
+</div>
+<p>My name is <a href="https://www.linkedin.com/in/alinmorariu/">Alin Morariu</a> and I’ve build this website to display my work as well as act as an active teaching resource.</p>
+
+<p>Throughout the site you will find examples of my course work and personal project along side material that I use to teach in any of my tutorials/office hours. The latter will be sorted by courses, semester and finally section.</p>
+<div id="currently-teaching" class="section level2">
+<h2>Currently Teaching</h2>
+<p><a href="https://a-morariu.github.io/STA302_tutorial.html">STA302 - Summer 2019</a></p>
+<div id="previously-taught" class="section level3">
+<h3>Previously Taught</h3>
+<p><a href="https://a-morariu.github.io/STA130_tutorial.html">STA130 - Winter 2019</a> <a href="https://ntaback.github.io/UofT_STA130/STA130syllabus2018S.html">STA130 - Winter 2018</a>: An Introduction to Statistical Reasoning and Data Science <a href="https://a-morariu.github.io/STA314_Tutorial.html">STA314 - Fall 2018</a>: Statistical Methods for Machine Learning I</p>
+</div>
+</div>
+<div id="my-favourite-r-resources" class="section level2">
+<h2>My Favourite R Resources</h2>
+<p>These are links to some of the cheat sheets I always have open when coding in R. Be it for assignments, playing around with data or professional projects, they’ve come in handy countless times. I highly recommend saving a copy of these. </p>
+<ul>
+<li><p><a href="https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf">R Markdown</a><br />
+</p></li>
+<li><p><a href="https://www.rstudio.com/wp-content/uploads/2016/10/r-cheat-sheet-3.pdf">Basic R Commands</a><br />
+</p></li>
+<li><p><a href="https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf">dplyr (Data Wrangling)</a>:<br />
+</p></li>
+<li><p><a href="https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf">ggplot 2 (Data Visualization)</a>:<br />
+</p></li>
+<li><p><a href="https://ugoproto.github.io/ugo_r_doc/data-import.pdf">Importing data</a></p></li>
+</ul>
+</div>
 
 
 

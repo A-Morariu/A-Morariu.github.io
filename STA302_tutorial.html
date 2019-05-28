@@ -19,9 +19,14 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -260,6 +265,90 @@ $(document).ready(function () {
 
 
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -267,6 +356,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -284,7 +383,29 @@ $(document).ready(function () {
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">Home</a>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-university"></span>
+     
+    Teaching
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="STA302_tutorial.html">
+        <span class="fa fa-book"></span>
+         
+        STA302 - Summer 2019
+      </a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="about.html">About</a>
@@ -306,28 +427,56 @@ $(document).ready(function () {
 </div>
 
 
-<div id="r-markdown" class="section level2">
-<h2>R Markdown</h2>
-<p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>.</p>
-<p>When you click the <strong>Knit</strong> button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</p>
-<pre class="r"><code>summary(cars)</code></pre>
-<pre><code>##      speed           dist       
-##  Min.   : 4.0   Min.   :  2.00  
-##  1st Qu.:12.0   1st Qu.: 26.00  
-##  Median :15.0   Median : 36.00  
-##  Mean   :15.4   Mean   : 42.98  
-##  3rd Qu.:19.0   3rd Qu.: 56.00  
-##  Max.   :25.0   Max.   :120.00</code></pre>
+<div id="qq-plots" class="section level1">
+<h1>QQ Plots</h1>
+<div id="a-little-background" class="section level2">
+<h2>A Little Background</h2>
+<p>In statistics, the first real tool (and often most powerful) for data analysis that becomes available to us is <em>linear regression</em>. However, it doesn’t come without some catches. To get all of the nice properties proved in class we must ensure that <em>all</em> of the assumptions are met. Recall from class the following:</p>
+<p>*<strong>Linearity</strong> - dependent variable is a linear combination of the parameters of the model (we refer to them as <span class="math inline">\(\beta\)</span>’s) and independent variables. <em>Aside: this is one of my favourite assumptions as most people often forget to mention this. Linear relationships are not the only possibilities and this will be explored in other courses dedicated to breaking this exact assumption. See STA303</em></p>
+<p>*<strong>Constant Independent Variable</strong> - mathematically we denote this as <span class="math inline">\(\mathbb{E}(e_i) = 0 \text{  } \forall i\)</span> and the underlying meaning of this is that we can treat the recorded independent variable as a known constant</p>
+<p>*<strong>Independence of errors</strong> - mathematically we write this as <span class="math inline">\(Cor(e_i, e_j) = 0 \text{  } i \neq j\)</span></p>
+<p>*<strong>Constant Variance</strong> - otherwise known as homoskedasticity (love this word, learning how to pronounce it is the first barrier to a statistics degree) and is denoted <span class="math inline">\(Var(e_i) = \sigma^2 &lt; \infty \text{  } \forall i\)</span>.</p>
+<p>A nice neat way to package this all up is to write the following (in lecture we called these the Gauss-Markov assumptions).</p>
+<p><span class="math display">\[\begin{equation} 
+  \label{eq:1}
+  e_i \sim_{iid} N(0, \sigma^2) \text{  } \forall i
+\end{equation}\]</span></p>
+<p>The purpose of this tutorial is to explore one of the ways that we will examine the above via a visual tool we refer to as a Qunatile to Quantile plot.</p>
 </div>
-<div id="including-plots" class="section level2">
-<h2>Including Plots</h2>
-<p>You can also embed plots, for example:</p>
-<p><img src="STA302_tutorial_files/figure-html/pressure-1.png" width="672" /></p>
-<p>Note that the <code>echo = FALSE</code> parameter was added to the code chunk to prevent printing of the R code that generated the plot.</p>
+<div id="does-this-look-normal" class="section level2">
+<h2>Does this look normal?</h2>
+<p>As the name suggests we will be working with the quantiles of a some distribution(s). We will develop this idea in the general setting because this works for <strong>any</strong> distribution, then focus specifically on the normal distribution since this is what we care about for this course. Let’s get started.</p>
+<div id="the-data" class="section level3">
+<h3>The Data</h3>
+<p>We are recording measurments of some random variable <span class="math inline">\(X\)</span>. We would like to check if these observations come from some ideal/suspected distribution <span class="math inline">\(F\)</span>. This means that we are <em>asking</em> if <span class="math inline">\(X \sim F\)</span>. However we are not sure… yet. What we do have is knowledge of what <span class="math inline">\(F\)</span> is since this is what we would like it to be (need to guess something you know) and we have empirical observations of our data. We denote the empirical distribution as <span class="math inline">\(G\)</span>.</p>
+</div>
+<div id="if-you-build-it-it-might-be-normal" class="section level3">
+<h3>If you build it, it might be normal</h3>
+<p>That is all to say that an equivalent question to the one above is if <span class="math inline">\(F = G\)</span> and what’s left is to compare them visually. I’d now like to highlight that <span class="math inline">\(G\)</span> is an empircal cumulative distribution function (ECDF) while <span class="math inline">\(F\)</span> is a cumulative distribution function (CDF) which makes them a bit harder to compare. ECDFs are never smooth since they are based on a finite number of points (as dictated by the data set) while CDFs are beautiful functions that make us happy. Thus, we must find a way to discretize <span class="math inline">\(F\)</span> in order to compare them on the same basis (the beauty of <span class="math inline">\(F\)</span> is that we can do exactly this). The solution is to use the inverse of the distributions, otherwise known as the qunatile function and is denoted <span class="math inline">\(F^{-1}\)</span> and <span class="math inline">\(G^{-1}\)</span> respectively. For our observed data this is easy since we can take the <a href="https://en.wikipedia.org/wiki/Order_statistic">ordered statistic</a> <span class="math inline">\(x_{(i)}\)</span> as a qunatile and we are done. For <span class="math inline">\(F\)</span> we must do a bit more work (luckily, it’s not hard work). Generate a data set (we call this simulation) of equal size as <span class="math inline">\(X\)</span> from <span class="math inline">\(F\)</span> using your computer and take the corresponding ordered statistics <span class="math inline">\(f_{(i)}\)</span>. If we don’t exactly match the quantiles of the ECDF we can do some interpolation on the generated data set due to the continuity of <span class="math inline">\(F\)</span> (when data sets are very large this step is likely not needed).</p>
+<p>The last question we must ask ourselves is what it does equality look like geometrically or on the plane. If I was to ask you to draw me a function that is the definition of two quantities being equal, what would it be? The function that should come to mind is <span class="math inline">\(y=x\)</span>. By extension we if are to compare the two distribution on a graph we should check if they fall on that line. From this, the interpretation becomes vey natural. If the two distributions in question are indeed the same, the quantiles of each one will fall along the <span class="math inline">\(y=x\)</span> line. Deviations from this line mean that they are not the same. I would like to take this opportunity to emphasize that some deviation is okay as we are dealing with <strong>random</strong> variables afterall. Large, systematic deviations (particularly in the tails) is what would be cause for concern.</p>
+<p>Here is a summary on how we construct the QQ plots.</p>
+<ol style="list-style-type: decimal">
+<li>Compute the ECDF of our data set and determine it’s quantiles.</li>
+<li>Compute the quantiles of our theoretical distribution.</li>
+<li>Plot the theoretical (y axis) vs. the empirical (x axis).</li>
+<li>Compare them to the <span class="math inline">\(y=x\)</span> line and draw appropriate conclusions.</li>
+</ol>
+</div>
+<div id="a-house-not-made-of-straws" class="section level3">
+<h3>A house not made of straws</h3>
+<p>When reading this, you will notice the deliberate omission of any particular distribution we are evaluating. All that was required was that <span class="math inline">\(F\)</span> and <span class="math inline">\(G\)</span> are <strong>some</strong> valid probability distribution. This makes QQ plots such a versatile tool because we can test for any distribution we are curious about. In our case, we are intersted in whether or not the errors come from the normal distribution in equation  1. But we can just replace that with your favourite student’s t distribution, or F distribution, chi-squared, gamma, or any other you want. You even have the power to blindly compare two ECDF’s by letting <span class="math inline">\(F\)</span> be an ECDF. If all you are intereted in is whether or not two datasets follow the same (all be it unkown) distribution this is a solid method to explore that making this a very robust tool.</p>
+</div>
+</div>
+<div id="some-examples" class="section level2">
+<h2>Some examples</h2>
+<p>Coming soon…</p>
+</div>
 </div>
 
 
 
+</div>
+</div>
 
 </div>
 
