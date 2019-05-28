@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>STA314</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">My Website</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-university"></span>
+     
+    Teaching
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="STA130_tutorial.html">
+        <span class="fa fa-book"></span>
+         
+        STA130 - Winter 2019
+      </a>
+    </li>
+    <li>
+      <a href="STA302_tutorial.html">
+        <span class="fa fa-book"></span>
+         
+        STA302 - Summer 2019
+      </a>
+    </li>
+    <li>
+      <a href="STA314_tutorial.html">
+        <span class="fa fa-book"></span>
+         
+        STA314 - Fall 2018
+      </a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About Me</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">STA314</h1>
+
+</div>
+
+
+<p>Note: Majority of this material is credited to <a href="http://utstat.toronto.edu/?page_id=11779">Prof. Daniel Simpson</a> and editted by me in cases where I thought further clarification is needed.</p>
+<div id="week-1" class="section level2">
+<h2>Week 1</h2>
+<p>This week is centred around learning the basics of R. Check out some of the cheat sheets on the main page to get a better feel for working with this langauge.</p>
+</div>
+<div id="week-2" class="section level2">
+<h2>Week 2</h2>
+<div id="question1" class="section level3">
+<h3>Question1</h3>
+</div>
+<div id="question-2" class="section level3">
+<h3>Question 2</h3>
+<pre class="r"><code>### create a function that implements the K-Means algo referenced in class
+my_kmeans &lt;- function(data, k, n_starts) {
+    
+done = FALSE # define this for our &#39;exit&#39; clause
+n = dim(data)[1] #data is a matrix, where each row is one data point
+
+# solve the trivial case in its entirety 
+if (k == 1) {
+    cluster = rep(1, n) # this vector says which cluster each point is in
+    centers = apply(
+        X = data,
+        MARGIN = 2,
+        FUN = mean
+        ) # use the apply function to calculate the cluster centre
+    cost = sum((data - centers[cluster]) ^ 2) # evaluatae cost function
+    return(list(cluster = cluster, cost = cost)) # output everything you&#39;ve calculated
+    # in order to evaluate the effectiveness of your model
+}
+
+cluster_old = rep(1, n) # &quot;guess&quot; the clustering to give us an inital set up
+cost_old = Inf # set our cost to infinity for now 
+
+# now we write a loop in order to get our clusters
+for (run in 1:n_starts) {
+    cluster = rep(1, n) #this vector says which cluster each point is in
+    #uniformly choose initial cluster centers
+    centers = data[sample(x = 1:n, 
+                          size = k,
+                          replace = FALSE), ] 
+    # sample k random points from our data as the initial clusters
+    while (!done) {
+        # Do Step 2.1
+        d = matrix(nrow = n, ncol = k)
+        for (j in 1:k) {
+        d[, j] = apply(
+            X = data,
+            MARGIN = 1,
+            FUN = function(d) sum((d - centers[j, ]) ^ 2) 
+            # computes cost functions if x_i belongs to each of the centres 
+            )
+        }
+        cluster_new = apply(
+            X = d,
+            MARGIN = 1,
+            FUN = which.min # find the min cost and assign the x_i to that cluster
+            )
+if (length(unique(cluster_new)) &lt; k)
+    stop(&quot;Empty cluster!&quot;)
+
+# Do Step 2.2
+        for (i in 1:k) {
+            centers[i, ] = apply(
+                X = data[cluster_new == i, ],
+                MARGIN = 2,
+                FUN = mean) # computes mean of each cluster for each cluster
+            }
+# Check if the cluster assignements changed. If they have, set done=TRUE
+        if (all(cluster == cluster_new)) {
+            done = TRUE # if all our clusters were correct then we&#39;re done
+            }
+        cluster = cluster_new # if not then we reassign the values based on the middle points 
+    } #end of while not done
+    
+cost = sum((data - centers[cluster, ]) ^ 2)
+if (cost_old &lt; cost) {
+    cluster = cluster_old
+    cost = cost_old
+    }
+    
+    cost_old = cost
+    cluster_old = cluster
+}
+return(list(cluster = cluster, cost = cost))
+}</code></pre>
+<p>Use this algorithm to make a 4 clustering of the data set in question2.RData. Comment on the clustering.</p>
+<pre class="r"><code># Load the data
+load(&quot;~/Documents/U of T/Teaching/STA314/Week 2/Week 2 Tutorial/question2.rdata&quot;)
+
+out = my_kmeans(dat_q2,4,2)
+dat_q2$cluster = out$cluster
+dat_q2 %&gt;% ggplot(aes(x = x,y = y)) +
+    geom_point(aes(colour = factor(cluster)))</code></pre>
+<p><img src="STA314_tutorial_files/figure-html/Q2%20continued-1.png" width="672" /></p>
+<p>Depending on how many times the kmeans algorithm is run, it sometimes doesn’t find all four distinct clusters. This is due to the uniform intial sampling and the fact that the bottom left and top right clusters are much smaller than the other two.</p>
+</div>
+<div id="question-3" class="section level3">
+<h3>Question 3</h3>
+<pre class="r"><code>#### PARTIAL SOLUTION ####
+
+# Input the data
+d = matrix(c(0, 0.3, 0.4, 0.7,
+0.3, 0, 0.5, 0.8,
+0.4, 0.5, 0.0, 0.45,
+0.7, 0.8, 0.45, 0.0), nrow = 4)
+
+# Set it as distance
+d = as.dist(d)</code></pre>
+<pre class="r"><code>#### PARTIAL SOLUTION ####
+# Plot the clusters with complete linkage:
+plot(hclust(d,method = &quot;complete&quot;))</code></pre>
+<p><img src="STA314_tutorial_files/figure-html/Q3%20Complete%20Linkage-1.png" width="672" /></p>
+<pre class="r"><code>#### PARTIAL SOLUTION ####
+# Plot the clusters with complete linkage:
+plot(hclust(d,method = &quot;single&quot;))</code></pre>
+<p><img src="STA314_tutorial_files/figure-html/Q3%20Single%20Linkage-1.png" width="672" /></p>
+<p>Comparing the two dendrograms, we see that the two clustering from the complete linkage is {1,2}, {3,4}, while the two clustering from the single linkage is {1,2,3}, {4}.</p>
+</div>
+<div id="question-4" class="section level3">
+<h3>Question 4</h3>
+<p>For part a) there is not enough information. If the two linkages are equal, then they will fuse at the same hight. Otherwise, the single linkage dendrogram will merge at a lower hight as it only requires one nearby point and not all of the points to be close.</p>
+<p>For part b) They’ll merge at the same hight because when you’re just merging single leaves, the linkages all reduce to the distance and are therefore equal.</p>
+</div>
+</div>
+<div id="week-3" class="section level2">
+<h2>Week 3</h2>
+<p>This week we covered some of fundamental proofs in linear algebra that have very powerful implications in machine learning. The hardest part of these proofs is the notational aspect of them. If you are unclear about these, please bring them up in next week’s tutorial or go to office hours.  I focused on Q3 off of the assignment. Here are links to the proofs. ###Q uestion 3</p>
+<p>####P art A <strong>WTS:</strong> <span class="math inline">\(u^Tv = 0 \Rightarrow ||u+v||^2 = ||u||^2 + ||v||^2\)</span>  <a href="https://math.stackexchange.com/questions/11509/how-to-prove-the-pythagoras-theorem-using-vectors">Solution</a> </p>
+<div id="part-b" class="section level4">
+<h4>PART B</h4>
+<p><strong>WTS:</strong> <span class="math inline">\(\Phi \in R^{n \times r}\)</span> with orthonormal columns <span class="math inline">\(\Rightarrow ||\Phi v|| = ||v||\)</span>  <a href="http://www.fen.bilkent.edu.tr/~ercelebi/rotation%20of%20coordinate%20axes.pdf">Solution</a>: note that this proof is a bit more complicated than it has to be. The essence is the same, they just break it down component wise (this is an unecessary complication as vector notation makes this proof about 2-3 lines long). </p>
+</div>
+<div id="part-c" class="section level4">
+<h4>Part C</h4>
+<p><strong>WTS:</strong><span class="math inline">\(u,v \in R^n\)</span>, what is the largest eigenvalue?  <a href="https://ccrma.stanford.edu/~dattorro/simplemat.pdf">Solution</a>: See part B1. </p>
+</div>
+<div id="part-d" class="section level4">
+<h4>Part D</h4>
+<p><strong>WTS:</strong> <span class="math inline">\(A\)</span> is a symmetric matrix, <span class="math inline">\(\max_{x} \frac{x^T A x}{x^Tx}\)</span> corresponds to the largest eigenvalue  <a href="https://math.stackexchange.com/questions/1705386/showing-that-x-topax-is-maximized-at-max-lambdaa-for-symmetric-a">Solution</a>: This proof is almost trivial once you understand spectral decomposition. More on this later. </p>
+</div>
+<div id="part-e" class="section level3">
+<h3>Part E</h3>
+<p><strong>WTS:</strong> <span class="math inline">\(A\)</span> is symmetric positive definite <span class="math inline">\(\Rightarrow A^TA\)</span> also symmetric positive definite  <strong>Solution:</strong> For this proof I will be using the <a href="http://pages.mtu.edu/~msgocken/ma5630spring2003/lectures/spectral/spectral/node2.html">Spectral Decomposition Thoerem</a> . <span class="math display">\[A = UDU^T \Rightarrow A^T A = \left( UDU^T \right)^T(U D U^T) = UDU^T UDU^T = UD^2U \]</span> We get the above since <span class="math inline">\(U^T = U^{-1}\)</span> by definition (take some time to convince yourself of this fact). Furthermore, since D is the diagonal matrix with entries being the eigenvalues, the square of set eigenvalues are necessarily positive which is sufficient to define the positive definite part of the proof. Lastly, by the construction of U the symmetry property follows. This completes the proof. </p>
+</div>
+</div>
+<div id="week-4" class="section level2">
+<h2>Week 4</h2>
+<p>This week we focused on Principle Component Analysis (will be referred to as PCA from here on out). PCA is a very useful tool for pulling out the key features from your data. The reason this is important is that, often times, you will be given data sets with a large number of columns corresponding to features. For example, if we were working on predicting heart disease for a given person and were tasked with creating this model, we could be given information such as the person’s height, weight, age, hair colour, daily caloric intake, fat consumption, transfat consumption, blood sugar level, cholesterol, etc. Needless to say we probably don’t need  one of these factors. With this in mind we will leverage our knowledge of eigenpairings in order to reduce the number of factors we will use in our model to ensure we only include the most important ones (the definition of most important is up for debate).  Given that background, we will go through some of the problems from this week’s problem set. ### Question 2 Please see <a href="https://michalmalyska.github.io/STA314.html">Michal’s</a> for sample code to these labs.</p>
+<div id="question-3-1" class="section level3">
+<h3>Question 3</h3>
+<p> The second principle component of a centred feature matrix <span class="math inline">\(X\)</span> should maximize Rayleigh’s quotient up to being orthogonal to the fist principle component.   Note, this argument is almost trivial once we understand that we can order our set of eigenvalues and combining this with the following notation: <span class="math display">\[v_2 = \text{arg} \max_{v \in \mathbb{R}^p, v \perp v_1 } \frac{v^T X^T X v}{v^T v} \]</span> All that this is asking, is that we find the eigenvector that maximizes the quotient with respect to all vectors in <span class="math inline">\(\mathbb{R}^p\)</span> which are orthogonal to <span class="math inline">\(v_1\)</span>. Furthermore, this corresponds to taking the second largest eignevalue from our ordered set. However, we will show this more rigorously using the argument made in class. We begin with the spectral decomposition of our feature matrix. <span class="math display">\[X^T X = UDU^T \text{ and define } Z = U^Tv \text{ where } v \in \mathbb{R}^p \]</span> <span class="math display">\[ \Rightarrow v^T X^T X v = z^T D z = \sum_{i=1}^{p} \lambda_i z_i z_i^T \leq \sum_{i=1}^{p} \lambda_2 z_i z_i^T = \lambda_2 \sum_{i=1}^{p} z_i z_I^T = \lambda_2 v^T U^T U v\]</span> The inequality above turns into an equality in the case where <span class="math inline">\(z_3 = z_4 = \ldots = z_p = 0\)</span>; otherwise we can say that <span class="math inline">\(\lambda_2 &gt; \lambda_i\)</span> for <span class="math inline">\(i \in \{3, 4, \ldots, p\}\)</span> which in turn maximizes the quotient with respect to the constraints. This concludes the proof.</p>
+</div>
+<div id="question-4-1" class="section level3">
+<h3>Question 4</h3>
+<p>Givens: <span class="math inline">\(\lambda^* = \{14.1, 4.3, 1.2, 0.4 \}\)</span> and <span class="math inline">\(v_1^T = [0.39, 0.42, 0.44, 0.69]\)</span>, <span class="math inline">\(v_2^T = [0.40, 0.39, 0.42, -0.72\)</span> </p>
+<div id="part-a" class="section level4">
+<h4>Part A</h4>
+<p>We are asked to calculate the proportion of variance explained by the fist 2 principle components. <span class="math display">\[\text{proportion explained} = \frac{\sum_{i=1}^{2} \lambda_i }{\sum_{i=1}^{4} \lambda_i } = \ldots = 0.92\]</span></p>
+</div>
+<div id="part-b-1" class="section level4">
+<h4>Part B</h4>
+<p>Interpreting the principle components: 1. Noticing that each of the components have a positive coefficient we can say that heavier and longer burritos have a tendency to be tastier.  2. Here we see that the component corresponding to taste has a negative coefficient which indicates that we have some burritos that are small and tasty OR large and bland (their scores would be equivalent)</p>
+</div>
+<div id="part-c-1" class="section level4">
+<h4>Part C</h4>
+<p>Here we are tasked with reconstructing the variance-covariance matrix of the centred data based on our 2 eigenpairings. This is a simple process and we back out the desired result from the spectral decomposition of the variance-covariance matrix (yes, this is a symmetric positive definite matrix and we will prove it below). <span class="math display">\[\Sigma = UDU^T = \sum_{i=1}^{2} \lambda_iv_i v_i^T = \lambda_1 v_1 v_1^T + \lambda_2 v_2 v_2^T  \]</span> We notice that we have all of the quantities specified above so now its a matter of matrix multiplication. I will spare you all of the gory details and skip straight to the answer.</p>
+<p><span class="math display">\[\Sigma = \left( \begin{array}{cccc} 
+2.833 \\ 
+2.980 &amp; 3.141 \\
+3.142 &amp; 3.310 &amp; 3.488 \\
+2.556 &amp; 2.879 &amp; 2.980 &amp; 8.942
+\end{array} \right) \]</span> Noting that <span class="math inline">\(\Sigma\)</span> is symmetric we can fill in the rest. As an extension to the problem, we can multiply our eigenvectors by our loading factors matrix to get estimates of mean corrected data. <span class="math display">\[X = LV^T \Rightarrow x_i^T = \left( \begin{array}{cc} l_1 &amp; l_2 \end{array} \right) 
+\left( \begin{array}{c} v_1^T \\ v_2^T \end{array} \right) = \ldots = \left( \begin{array}{cccc} 0.39l_1 + 0.40l_2 &amp; \ldots &amp; 0.69l_1 -0.72l_2 \end{array} \right)\]</span></p>
+</div>
+</div>
+</div>
+<div id="week-5---a-review" class="section level2">
+<h2>Week 5 - A Review</h2>
+<p>This week is dedicated to reviewing some of the material we have covered so far (clutering algorithms, linear regression, PCA). These concepts will appear on the midterm and the style of problem is likely to be similar. I am only posting solutions to the proof questions and omitting any short answer/discussion based ones. Furthermore, the WTS lines are abreviated relative to the question on the problem set; needless to say, it encompasses everything that the original question asks for,</p>
+<div id="question-1" class="section level3">
+<h3>Question 1</h3>
+<div id="part-b-2" class="section level4">
+<h4>Part B</h4>
+ K-means algorithm converges   Fix K points from your data set (sample them randomly). We know that we now iterate through the following steps until we reach our “exit condition” of our cluster centres being unchanged with any additional iterations (i.e. we have the most optimal clusters with respect to our cost function). As a recap, here are the steps: 
+
+<p>Now we define our cost function. <span class="math display">\[cost = \sum_{i=1}^{k} \sum_{x \in C_i} ||x-z_i||^2 = \sum_{i=1}^k \min_{i\in \{1,\ldots, k\}} ||x-z_i||^2\]</span> We now need to minimize this function with respect to <span class="math inline">\(z_i\)</span>. I want to emphasize that previous statement because it dictates exactly how we approach our optimization. We proceed by derivating the cost function. <span class="math display">\[\nabla_{z_i}cost = -2 \sum_{i=1}^{k} \sum_{x \in C_i}(x-z_i) \]</span> Now, because we are minimizing with respect to an  cluster centre we are not interested in in that outer summation so we can drop it all together. <span class="math display">\[0 = \sum_{i=1}^{k} \sum_{x \in C_i}(x-z_i) = \sum_{x \in C_i}x - \sum_{x \in C_i} z_i \Rightarrow \sum_{x \in C_i}x = \sum_{x \in C_i} z_i \Rightarrow z_i^* = \frac{1}{|C_i|} \sum_{x \in C_i} x\]</span> where <span class="math inline">\(|C_i|\)</span> is the number of points within the <span class="math inline">\(i^{th}\)</span> cluster. Notice how this is simply the arithmetic mean of the cluster. We now move on to examine the second derivative. <span class="math display">\[\nabla^2_{z_i}cost = -2 \sum_{x \in C_i} (-1) = 2|C_i| &gt;0 \]</span> As expected, this value corresponds to the global minimum of the function. To complete the proof we now notice that we have a function that attains a minimum and is always decreasing. Additionally the <span class="math inline">\(cost \geq 0\)</span> since it is a sum of distances (always positive). Combining these two facts, we get convergence. This completes the proof.</p>
+</div>
+</div>
+<div id="question-2-1" class="section level3">
+<h3>Question 2</h3>
+<div id="part-a-1" class="section level4">
+<h4>Part A</h4>
+<p> least variation explained corresponds to smallest eigenvector   This proof is similar to the most variation explained one, we just take the opposite bound. <span class="math display">\[X^T X = UDU^T\]</span> and define <span class="math display">\[
+Z = U^Tv \text{ , } v \in \mathbb{R}^p \]</span></p>
+<p><span class="math display">\[ \Rightarrow v^T X^T X v = z^T D z = \sum_{i=1}^{p} \lambda_i z_i z_i^T \geq \sum_{i=1}^{p} \lambda_p z_i z_i^T = \lambda_p \sum_{i=1}^{p} z_i z_I^T = \lambda_p v^T U^T U v = \lambda_p v^Tv\]</span> The equality holds only in the case were <span class="math inline">\(\{ \lambda_1, \ldots, \lambda_{p-1} = 0 \}\)</span>, which ensures that this is the minimum and the corresponding eigenvector will explain the least amount of variation.</p>
+</div>
+<div id="part-b-3" class="section level4">
+<h4>Part B</h4>
+<p> proportion of variance explained by jth component is <span class="math inline">\(\frac{\sigma_j^2}{\sum_i \sigma^2_i}\)</span>   This proof is reduced to one line once we notice that <span class="math display">\[\mathbb{V}(X)= \text{Tr}(\Sigma) = \sum_i \sigma^2_i \Rightarrow \text{prop} = \frac{\sigma_j^2}{\sum_i \sigma^2_i}\]</span></p>
+</div>
+</div>
+<div id="question-4-2" class="section level3">
+<h3>Question 4</h3>
+<div id="part-a-2" class="section level4">
+<h4>Part A</h4>
+<p> <span class="math inline">\(||Y-X\beta||^2\)</span> is minimized at <span class="math inline">\(X^T X \beta =X^T Y\)</span>   We will avoid the gory details of this proof by using matrix calculus. However, before we dive into that I want to take a moment to explain how to approach not only this problem. but proofs in general.  What we must remember is that all of these proofs are fundamental in statistics and as such we can rely on our most basic of concepts in order to arrive to the conclusions. In this case, we know that linear regression written in matrix form is <span class="math inline">\(Y = X\beta + \epsilon\)</span>. In simple linear regression, we solved for <span class="math inline">\(\{ \beta_0 , \beta_1 \}\)</span> by minimizing the least squares error. We will try the same approach here (spoiler: it works!). When working with matricies, we know that the equivalent to squaring something is left multiplying by its transpose. With this being said, we can proceed. <span class="math display">\[\begin{equation}
+  \epsilon^T \epsilon = (Y-X\beta)^T (Y-X\beta) \\
+  = (Y^T-\beta^T X^T) (Y-X\beta) \\
+  = Y^T Y -\beta^T X^T Y - Y^T X\beta + \beta^T X^T X\beta
+\end{equation}\]</span></p>
+<p>Now we want to optimize this with respect to <span class="math inline">\(\beta\)</span> since this is the parameter we want to calculate from our data (our data are n-tuples of x’s and a y). To do so we will use the matrix calculus mentioned above, specifically the following theorems (you are encouraged to pr prove these on your own so you are convinced).</p>
+
+<p>Here is a <a href="https://atmos.washington.edu/~dennis/MatrixCalculus.pdf">link</a> to verify your proofs. We can now proceed to differentiate the expansion above and find the critical value. <span class="math display">\[\begin{equation}
+  \nabla_\beta (\epsilon^T \epsilon) = 0 -(X^T Y)^T - Y^TX + 2 X^T X \beta \\
+  0 = -2X^T Y + 2X^T X \beta \\
+  X^T X \beta = Y^TX
+\end{equation}\]</span> This completes the proof. Now please note that we can use the above formula to calculate our estimate for <span class="math inline">\(\beta\)</span> given a data set. All we need to do is write it explicitly in the form <span class="math display">\[\hat{\beta} = (X^T X)^{-1} X Y^T \]</span></p>
+<p>This concludes this week’s review, best of luck with the midterm.</p>
+</div>
+</div>
+</div>
+<div id="week-6" class="section level2">
+<h2>Week 6</h2>
+<p>This week served as a work period to go over any coding related questions in class.</p>
+</div>
+<div id="week-7" class="section level2">
+<h2>Week 7</h2>
+<p>Classification problems are those where you have to assign a random to a group. The way we do this, is by examining the features of a new input and use our classification rule which we establish using our data. For more details on this please see the lecture notes. It will also have a mathematical expresion for this process.  We now go over the problems in the assignment. ### Question 1</p>
+<p>For any classification function <span class="math inline">\(h\)</span>, the expected loss can be given directly as:</p>
+<p><span class="math display">\[R(h) = \alpha_{FN}\mathbb{P}(h(x)=0,y=1|X=x) + \alpha_{FP}\mathbb{P}(h(x)=1, y = 0 | X=x) \\
+= \alpha_{FN}\mathbb{P}(y=1|h(x)=0,X=x)\mathbb{P}(h(x)= 0|X=x) + \\
+\alpha_{FP}\mathbb{P}(y=0|h(x)=1,X=x)\mathbb{P}(h(x)=1|X=x)\]</span> Now, writing <span class="math inline">\(m(x) = \mathbb{P}(y=1 | X=x)\)</span> we can rewrite this as:</p>
+<p><span class="math display">\[R(h) = \alpha_{FN}m(x)(1-h(x)) + \alpha_{PN}(1-m(x))h(x)\]</span></p>
+<p>Now let <span class="math inline">\(h^*\)</span> be the optimal classifier. And let <span class="math inline">\(h\)</span> be any classifier. We know that <span class="math inline">\(R(h^*)-R(h) \leq 0\)</span>. And then:</p>
+<p><span class="math display">\[R(h^*)- R(h) = -\alpha_{FN}m(x)h^*(x)+\alpha_{FP}h^*(x) - \alpha_{FP}m(x)h^*(x) \\
++ \alpha_{FN}m(x)h(x) - \alpha_{FN}h(x) + \alpha_{FP}m(x)h(x) = \\
+= (h^*(x) - h(x))[\alpha_{FP}-(\alpha_{FN}+\alpha_{FP})m(x)]= \\
+(\alpha_{FN}+\alpha_{FP})(h^*(x) - h(x))(\frac{\alpha_{FN}}{\alpha_{FN}+\alpha_{FP}} - m(x)) \leq 0\]</span> We can see that his is exactly <span class="math inline">\(0\)</span> when:</p>
+<p><span class="math display">\[\mathbb{P}(y=1 | X=x) = m(x) = \frac{\alpha_{FN}}{\alpha_{FN}+\alpha_{FP}}\]</span> ### Question 2 This question generalizes logistic regression to the case where we have K labels/groups. To do so, we set the Kth class as the baseline and use a K-1 encoding system to solve the problem. We are given the log-odds ratio for the i-th class.</p>
+<p><span class="math display">\[ \log \frac{\mathbb{P} (G = i | X = x) }{\mathbb{P} (G = K | X = x)} = \beta_{i,0} + \beta_i^Tx \]</span> We now exponentiate to get rid of the log. <span class="math display">\[ \frac{\mathbb{P} (G = i | X = x) }{\mathbb{P} (G = K | X = x)} = \exp \{\beta_{i,0} + \beta_i^Tx \} \]</span> We can sum the above over all possible values of i. <span class="math display">\[\frac{ \sum_{i=1}^{K-1}\mathbb{P} (G = i | X = x) }{\mathbb{P} (G = K | X = x)} = \sum_{i=1}^{K-1} \exp \{\beta_{i,0} + \beta_i^Tx \} \]</span> The numerator of the left hand side can we simplified if we apply the law of total conditional probability with respect to G. <span class="math display">\[ \sum_{i=1}^{K-1}\mathbb{P} (G = i | X = x) = 1 - \mathbb{P} (G = K | X = x) \]</span> <span class="math display">\[ \frac{1}{\mathbb{P} (G = K | X = x)} - 1 =  \sum_{i=1}^{K-1} \exp \{\beta_{i,0} + \beta_i^Tx \} \Rightarrow  \mathbb{P} (G = K | X = x) = \frac{1}{ 1 + \sum_{i=1}^{K-1} \exp \{\beta_{i,0} + \beta_i^Tx \}}\]</span> From the above, we can apply Bayes’ Theorem to get the conditional probabilty of a single class. <span class="math display">\[ \mathbb{P} (G = j | X = x) = \frac{ \exp \{\beta_{j,0} + \beta_j^Tx \}}{ 1 + \sum_{i=1}^{K-1} \exp \{\beta_{i,0} + \beta_i^Tx \}}\]</span> This completes the proof.</p>
+<div id="question-3-2" class="section level3">
+<h3>Question 3</h3>
+<p>Lab 4.6.2 from the textbook: implementation of logistic regression model.</p>
+<pre class="r"><code>suppressMessages(library(tidyverse))
+# load the Smarket data from the ISLR library 
+# if you need: install.packages(&quot;ISLR&quot;)
+library(ISLR)
+head(Smarket)</code></pre>
+<pre><code>##   Year   Lag1   Lag2   Lag3   Lag4   Lag5 Volume  Today Direction
+## 1 2001  0.381 -0.192 -2.624 -1.055  5.010 1.1913  0.959        Up
+## 2 2001  0.959  0.381 -0.192 -2.624 -1.055 1.2965  1.032        Up
+## 3 2001  1.032  0.959  0.381 -0.192 -2.624 1.4112 -0.623      Down
+## 4 2001 -0.623  1.032  0.959  0.381 -0.192 1.2760  0.614        Up
+## 5 2001  0.614 -0.623  1.032  0.959  0.381 1.2057  0.213        Up
+## 6 2001  0.213  0.614 -0.623  1.032  0.959 1.3491  1.392        Up</code></pre>
+<pre class="r"><code># logistic regression is encompassed by a larger class of models
+# called Generalized Linear Models. As such we will fit using the build in glm() 
+# function and specify that we want the logist subcategory
+logit_model &lt;- glm(Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + Lag5 + Volume, data = Smarket, family = binomial)
+# using ?glm in your console you can see other types of family&#39;s for GLMs but you
+# need to first understand link functions 
+summary(logit_model)</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + Lag5 + 
+##     Volume, family = binomial, data = Smarket)
+## 
+## Deviance Residuals: 
+##    Min      1Q  Median      3Q     Max  
+## -1.446  -1.203   1.065   1.145   1.326  
+## 
+## Coefficients:
+##              Estimate Std. Error z value Pr(&gt;|z|)
+## (Intercept) -0.126000   0.240736  -0.523    0.601
+## Lag1        -0.073074   0.050167  -1.457    0.145
+## Lag2        -0.042301   0.050086  -0.845    0.398
+## Lag3         0.011085   0.049939   0.222    0.824
+## Lag4         0.009359   0.049974   0.187    0.851
+## Lag5         0.010313   0.049511   0.208    0.835
+## Volume       0.135441   0.158360   0.855    0.392
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 1731.2  on 1249  degrees of freedom
+## Residual deviance: 1727.6  on 1243  degrees of freedom
+## AIC: 1741.6
+## 
+## Number of Fisher Scoring iterations: 3</code></pre>
+<p>This gives us the model for the data. We can explore this further and clean it up to make it “better”. Start by examining the coefficients and the respective P values in order to see if we can drop some of them to get a simpler model.</p>
+<pre class="r"><code>print(&quot;The coefficient of each predictor is:&quot;)</code></pre>
+<pre><code>## [1] &quot;The coefficient of each predictor is:&quot;</code></pre>
+<pre class="r"><code>round(coef(logit_model),4)</code></pre>
+<pre><code>## (Intercept)        Lag1        Lag2        Lag3        Lag4        Lag5 
+##     -0.1260     -0.0731     -0.0423      0.0111      0.0094      0.0103 
+##      Volume 
+##      0.1354</code></pre>
+<pre class="r"><code>print(&quot;The summary statistics for each predictor are:&quot;)</code></pre>
+<pre><code>## [1] &quot;The summary statistics for each predictor are:&quot;</code></pre>
+<pre class="r"><code>round(summary(logit_model)$coeff, 4)</code></pre>
+<pre><code>##             Estimate Std. Error z value Pr(&gt;|z|)
+## (Intercept)  -0.1260     0.2407 -0.5234   0.6007
+## Lag1         -0.0731     0.0502 -1.4566   0.1452
+## Lag2         -0.0423     0.0501 -0.8446   0.3983
+## Lag3          0.0111     0.0499  0.2220   0.8243
+## Lag4          0.0094     0.0500  0.1873   0.8514
+## Lag5          0.0103     0.0495  0.2083   0.8350
+## Volume        0.1354     0.1584  0.8553   0.3924</code></pre>
+<p>We immediately see that we cannot reject any of the predictors are an <span class="math inline">\(\alpha = 0.5\)</span> level since the P values are quite high. Let’s examine what our model predicts for each of the data points we fed into it based on the parameters we computed.</p>
+<pre class="r"><code># use the predict function to predict on all the data that was fed into it, 
+# or we could specify a subset. This is useful when we have training and testing sets
+logit_pred &lt;- predict(logit_model, type = &quot;response&quot;)
+round(logit_pred[1:10], 4)</code></pre>
+<pre><code>##      1      2      3      4      5      6      7      8      9     10 
+## 0.5071 0.4815 0.4811 0.5152 0.5108 0.5070 0.4927 0.5092 0.5176 0.4888</code></pre>
+<pre class="r"><code># Assuming a hard cutoff rule of 0.5 then we can extrapolate 0&#39;s and 1&#39;s from this
+as.numeric(round(logit_pred[1:10], 4) &gt; 0.5)</code></pre>
+<pre><code>##  [1] 1 0 0 1 1 1 0 1 1 0</code></pre>
+</div>
+</div>
+<div id="week-8---midterm-practice" class="section level2">
+<h2>Week 8 - Midterm Practice</h2>
+<div id="question-1-1" class="section level3">
+<h3>Question 1</h3>
+<div id="part-a-3" class="section level4">
+<h4>Part A</h4>
+<p>Loss function for linear regression is <span class="math inline">\(L(\beta,x,y) = (y-x^T\beta)^2\)</span>.<br />
+Loss function for classification is <span class="math inline">\(L(h(\cdot),y,x) = I(h(x) \neq y)\)</span>.</p>
+</div>
+<div id="part-b-4" class="section level4">
+<h4>Part B</h4>
+<p>We could make the <strong>generalization</strong> that fitting an ML model on just STA314 students if we were certain that it accurately represented the population of the statistics major. However, we know that this isn’t the case since not all students in the major are required to take this course. If we train our model on just this subset of the data we would be training the model to pick up many of the specific features of students in STA314. The key here is to realize that our models cannot extrapolate, but only interpolate within the space defined by our training data.</p>
+</div>
+</div>
+<div id="question-2-2" class="section level3">
+<h3>Question 2</h3>
+<div id="part-a-4" class="section level4">
+<h4>Part A</h4>
+<p>This question asks us to compute the single and complete linkage clusterings. These calculations will be omitted as they are outlined in the lecture slides. Here are the second to last merges for each linkage method to check your answers.<br />
+1. Single linkage - <span class="math inline">\(\{(51, 52.53.101, 103), (102)\}\)</span><br />
+2. Complete linkage = <span class="math inline">\(\{(51, 53.103), (52, 101, 102) \}\)</span></p>
+</div>
+<div id="part-b-5" class="section level4">
+<h4>Part B</h4>
+<p>K-means++ attempts to remediate the situation in which the random sampling that sets the first centres has them too close together by taking K points that are as far appart from each other as possible. But note that this isn’t very efficient since you need to compute and compare distances between every point of your data set.</p>
+</div>
+</div>
+<div id="question-3-3" class="section level3">
+<h3>Question 3</h3>
+<div id="part-a-5" class="section level4">
+<h4>Part A</h4>
+<p>Here are the conditions for implementing linear regression. 1. Linearity - Plot the residuals and look for nonlinearities<br />
+2. Independence of errors - see tests for indepedence from STA261 and STA302<br />
+3. Identically distributed errors - plot errors and check for homoskedasticity<br />
+4. Normality of errors - QQ-plot and empirical CDF assessment</p>
+</div>
+<div id="part-b-6" class="section level4">
+<h4>Part B</h4>
+<p>Let <span class="math inline">\(A = uv^T\)</span>. Then the eigenvalue equation <span class="math inline">\(Ax= \lambda x\)</span> becomes <span class="math display">\[\begin{align}
+Ax &amp;= \lambda x \notag\\
+uv^Tx &amp;= \lambda x \notag\\
+(v^Tx)u = \lambda x.\label{eqn1}
+\end{align}\]</span> Now, <span class="math inline">\(v^Tx\)</span> and <span class="math inline">\(\lambda\)</span> are both scalars, so the only way the final vector equality can hold is if <span class="math inline">\(x = \alpha u\)</span>, for some <span class="math inline">\(\alpha \in \mathbb{R}\)</span>. By convention, eigenvectors have unit norm, so the eigenvector is <span class="math display">\[x = \frac{u}{\|u\|}\]</span></p>
+<p>Substituting that into the above, we get <span class="math display">\[\frac{v^Tu}{\|u\|} u = \frac{\lambda}{\|u\|} u,\]</span> which implies <span class="math inline">\(\lambda = v^Tu\)</span>. To show that this is the largest eigenvector (in absolute value), we note that if we choose <span class="math inline">\(x\)</span> to be any of the <span class="math inline">\(n-1\)</span> vectors <span class="math inline">\(w\)</span> that satisfy <span class="math inline">\(v^Tw=0\)</span>, then <span class="math inline">\(Ax=\lambda x\)</span> simplifies to <span class="math inline">\(0\cdot w = \lambda w\)</span>, which implies that all of the other eigenvalues of <span class="math inline">\(A\)</span> are zero.</p>
+</div>
+</div>
+<div id="question-4-3" class="section level3">
+<h3>Question 4</h3>
+<div id="part-a-6" class="section level4">
+<h4>Part A</h4>
+<p>We want to find the direction that explains the <strong>third</strong> largest amount of information. Given that we already know the first two PCs, we don’t need to explain any more information in those particular directions, so we’re only interested in directions that are <strong>orthogonal</strong> to <span class="math inline">\(v_1\)</span> and <span class="math inline">\(v_2\)</span>. From the lectures, we know that the variance in a direction <span class="math inline">\(u\)</span> is given by <span class="math display">\[(n-1)^{-1}\|Xu\|\]</span> So we need to solve the following optimization problem <span class="math display">\[v_24= \arg \max_{\substack{u^Tv_1=0\\ u^Tv_2 =0 \\ \|u\|=1}} u^TX^TXu = \arg \max_{\substack{u^Tv_1=0\\ u^Tv_2 =0 }} \frac{u^TX^TXu}{u^Tu} \]</span></p>
+<p>Following the same reasoning as the lectures, we compute the eigendecomposition <span class="math inline">\(X^TX = V\Lambda V^T\)</span> and set <span class="math inline">\(z = V^Tu\)</span>. Because <span class="math inline">\(u \perp v_1, v_2\)</span>, the first two components of <span class="math inline">\(z\)</span> will be zero. Then it follows that</p>
+<p><span class="math display">\[ u^TX^TXu = z^T\Lambda z = \sum_{i=1}^p \lambda_iz_i^2 =\sum_{i=3}^p \lambda_iz_i^2 \leq \lambda_3\sum_{i=3}^p z_i^2  = \lambda_3 u^TVV^Tu = \lambda_3 u^Tu \]</span></p>
+<p>As in class, that inequality is an equality if <span class="math inline">\(z_4= z_5 = \ldots = z_p=0\)</span>, which occurs when <span class="math inline">\(u = v_3\)</span>. As we have shown that the Rayleigh quotient cannot be larger than <span class="math inline">\(\lambda_3\)</span> when computed on vectors that are orthogonal to <span class="math inline">\(v_1\)</span> and <span class="math inline">\(v_2\)</span> <strong>and</strong> that value is attained when <span class="math inline">\(u=v_3\)</span>, it follows that <span class="math inline">\(v_3\)</span> maximizes the constrained Rayleigh quotient and hence the second principal component is the eigenvector of <span class="math inline">\(X^TX\)</span> that corresponds to the second largest eigenvalue. This completes the proof.</p>
+</div>
+<div id="part-b-7" class="section level4">
+<h4>Part B</h4>
+<p>In forward variable selection you start with a model that only has an inter- cept. At each step you add the feature that maximizes the prediction error on the test set. Continue until all features have been added.<br />
+In backward variable selection, you start with a model that has all the features in it. At each step you remove the feature that reduces the prediction error the least on the test set. Continue until there are no features left.<br />
+Forwards selection is preferable if there are more features than observations. Best of luck on the midterm.</p>
+</div>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

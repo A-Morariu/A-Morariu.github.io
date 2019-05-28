@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>STA130</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">My Website</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-university"></span>
+     
+    Teaching
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="STA130_tutorial.html">
+        <span class="fa fa-book"></span>
+         
+        STA130 - Winter 2019
+      </a>
+    </li>
+    <li>
+      <a href="STA302_tutorial.html">
+        <span class="fa fa-book"></span>
+         
+        STA302 - Summer 2019
+      </a>
+    </li>
+    <li>
+      <a href="STA314_tutorial.html">
+        <span class="fa fa-book"></span>
+         
+        STA314 - Fall 2018
+      </a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About Me</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">STA130</h1>
+
+</div>
+
+
+<div id="week-1" class="section level1">
+<h1>Week 1</h1>
+<p>Welcome to STA130 - An Introduction to Statistical Reasoning and Data Science!</p>
+<div id="getting-out-of-the-cloud" class="section level2">
+<h2>Getting out of the Cloud</h2>
+<p>As I mentioned in tutorial, I highly recommend installing R locally and using that instead of the cloud based option. You will use R for the remainder of your undergraduate degree and this gives you more flexiblity in your work flow. I will provide information on install R and R Studio along with the necessary packages that will help you output beautiful PDF documents of our work.</p>
+<div id="installing-r" class="section level4">
+<h4>Installing R</h4>
+<p>As a Universiy of Toronto student you have special privelages when it comes to installing R. Visit the U of T specific <a href="http://cran.utstat.utoronto.ca/">CRAN-R</a> and download the appropriate installation module for your operating system. Follow the instructions once you unzip the folder.</p>
+</div>
+<div id="install-r-studio" class="section level4">
+<h4>Install R Studio</h4>
+<p>Head to the <a href="https://www.rstudio.com/products/rstudio/download/">R Studio</a> and download the <em>free</em> version (first column of the table). Follow the instructions once you unzip the folder.</p>
+</div>
+<div id="rmd-files" class="section level4">
+<h4>.Rmd Files</h4>
+.Rmd files will be our go to work environments for R. They allow us to maintain a very clean and organized work flow and support LaTeX input to help render equations, amongst other things which we will not need fow now. The <a href="Files/STA_Assignment_Template.Rmd">.Rmd code</a> for my assignment/project (<a href="Files/STA_Assignment_Template.pdf">click for preview</a>) template is a good starting point which can be used in anoy of your courses. The top of the document contains something called a YAML header:
+<div class="figure">
+<img src="Images/YAML_header.png" alt="My YAML header. Modify as you see fit" width="50%" />
+<p class="caption">
+My YAML header. Modify as you see fit
+</p>
+</div>
+<p>This controls the style of the output. For all the options you have with respect to this section, check this <a href="https://bookdown.org/yihui/rmarkdown/pdf-document.html">link</a>.</p>
+</div>
+<div id="knitr-and-tex" class="section level4">
+<h4>knitr and TeX</h4>
+<p>The first package in R you must install/update is . Copy the below code into you console.</p>
+<pre class="r"><code>install.packages(&quot;knitr&quot;)
+library(knitr)</code></pre>
+<p>Next you need a TeX rendering software. I recommend [MiKTeX]{<a href="https://miktex.org/download" class="uri">https://miktex.org/download</a>}. This just needs to be downloaded, installed, and forgotten about. It will always be running in the background and will render any LaTeX equations in your .Rmd files. Here is an example of an equation in LaTeX:</p>
+<p><span class="math display">\[ \rho(x,y) = \frac{\sum_{i=1}^{n} (x_i-\bar{x}) (y_i-\bar{y}) }{\left ( \sum_{i=1}^{n} (x_i-\bar{x})\right)^\frac{1}{2} \sqrt{ \sum_{i=1}^{n} (y_i-\bar{y})}} \]</span></p>
+<hr />
+</div>
+</div>
+<div id="some-material" class="section level2">
+<h2>Some material</h2>
+<p>This week we focused on ways to represent our data, mainly through histograms, bar graphs, and scatter plots. I will be using the <em>Highway1</em> dataset for examples. Here is a preview:</p>
+<pre class="r"><code>df &lt;- as.data.frame(Highway1)
+head(df)</code></pre>
+<pre><code>## # A tibble: 6 x 12
+##    rate   len   adt  trks  sigs1  slim  shld  lane  acpt   itg  lwid htype
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt;  &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;fct&gt;
+## 1  4.58  4.99    69     8 0.200     55    10     8   4.6  1.2     12 FAI  
+## 2  2.86 16.1     73     8 0.0621    60    10     4   4.4  1.43    12 FAI  
+## 3  3.02  9.75    49    10 0.103     60    10     4   4.7  1.54    12 FAI  
+## 4  2.29 10.6     61    13 0.0939    65    10     6   3.8  0.94    12 FAI  
+## 5  1.61 20.0     28    12 0.0500    70    10     4   2.2  0.65    12 FAI  
+## 6  6.87  5.97    30     6 2.01      55    10     4  24.8  0.34    12 PA</code></pre>
+<pre class="r"><code># I&#39;m going to select a few columns so we don&#39;t carry the whole data frame around
+df &lt;- df %&gt;% 
+        select(rate, slim, lane)
+head(df)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##    rate  slim  lane
+##   &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
+## 1  4.58    55     8
+## 2  2.86    60     4
+## 3  3.02    60     4
+## 4  2.29    65     6
+## 5  1.61    70     4
+## 6  6.87    55     4</code></pre>
+<div id="histograms" class="section level4">
+<h4>Histograms</h4>
+<p><strong>What:</strong> a graph used to display counts of continous variables. The X-axis splits the data into <em>bins</em> that provide a range your data could take while the Y-axis displays the frequencies of points in each of the respective bins.</p>
+<p><strong>Why:</strong> examine the spread of your variable with respect to the values it could take</p>
+<p><strong>Example:</strong></p>
+<pre class="r"><code>hg &lt;- df %&gt;% 
+  ggplot(aes(rate)) + 
+  geom_histogram(binwidth = 1, fill = &quot;steelblue&quot;, colour = &quot;navy&quot;, alpha = 0.9) + 
+  labs(title = &quot;Histogram for Number of Lanes&quot;, 
+       xlab = &quot;Number of Lanes&quot;, 
+       ylab = &quot;Counts&quot;) + 
+  scale_x_continuous(breaks = seq(0, max(df$rate), by = 1)) +  
+  theme_minimal() 
+
+hg</code></pre>
+<p><img src="STA130_tutorial_files/figure-html/Histogram%20example-1.png" width="672" /></p>
+</div>
+<div id="bar-graphs" class="section level4">
+<h4>Bar Graphs</h4>
+<p><strong>What:</strong> a graph used to display counts of categorical variables. The X-axis splits the data into different labels your data could take while the Y-axis displays the frequencies of the data for the respective labels</p>
+<p><strong>Why:</strong> examine the spread of your variable with respect to the values it could take</p>
+<p><strong>Example:</strong></p>
+<pre class="r"><code>bg &lt;- df %&gt;% 
+  ggplot(aes(factor(slim))) + 
+  geom_bar(fill = &quot;steelblue&quot;, colour = &quot;navy&quot;, alpha = 0.9) + 
+  labs(title = &quot;Bar Graph for Speed Limits &quot;, 
+       x = &quot;Speed Limit (mph)&quot;, 
+       y = &quot;Counts&quot;) +
+  theme_minimal()
+# note that I used the factor() function around the slim variable to ensure this is categorical 
+bg</code></pre>
+<p><img src="STA130_tutorial_files/figure-html/Bar%20Graph%20example-1.png" width="672" /></p>
+</div>
+<div id="scatterplots" class="section level4">
+<h4>Scatterplots</h4>
+<p><strong>What:</strong> mapping pairwise data points on a Cartesian plane. This works best for continuous data but can be done with factors as well. However, factors are best shown through the aesthetic functionality of ggplot via colours or with facets.</p>
+<p><strong>Why:</strong> examine the relationship between the variables</p>
+<p><strong>Example:</strong></p>
+<pre class="r"><code>sp &lt;- df %&gt;% 
+  ggplot(aes(x = slim, y = rate)) +
+  geom_point(aes(color = factor(lane)), alpha = 0.7) + 
+  labs(title = &quot;Accident rate vs. Speed Limit&quot;,
+       x = &quot;Speed Limit (mph)&quot;,
+       y = &quot;Rate (per Million Vehicle Miles)&quot;) +
+  geom_smooth(method=&#39;lm&#39;)+
+  theme_minimal()
+# note how the factor(lane) is in the geom_point as to tell ggplot to consider the full dataset
+# when constructing the line of best fit. Putting it as an argument to ggplot will result in lines
+# of best fit for each factor level (try this on your own)
+sp </code></pre>
+<p><img src="STA130_tutorial_files/figure-html/Scatterplot%20example-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+<div id="week-2" class="section level1">
+<h1>Week 2</h1>
+<p>This week was dedicated to summary statistics, specifically <em>mean, median,</em> and <em>standard deviation</em>. For the purpose of this week we will work with the imaginary and arbitrary dataset known as <span class="math display">\[X = \{ x_1, x_2, \ldots, x_n \} \]</span></p>
+<div id="median" class="section level3">
+<h3>Median</h3>
+<p>Our first measure of centrality is the <em>median</em>. Simply put, it is the middle most number of our data set. Defining what we mean by “middle” in a more mathematical framework, the median refers to the point at which 50% of the data lie below it, and 50% of the data lie above it. <span class="math display">\[ \mathbb{P}(X \geq m) \geq 0.5 \text{ and } \mathbb {P}(X \leq m) \geq 0.5\]</span> The point <span class="math inline">\(m\)</span> where this occurs, is the <em>median</em>.</p>
+<div id="order-statistics" class="section level4">
+<h4>Order Statistics</h4>
+<p>I will introduce the concept of an ordered statistic as a way of showing some of the computational intuition that is behind the median. Order statistics are simply an ordered (smallest to largest) version of our original dataset. Define a subset of our data</p>
+<p><span class="math display">\[ Y = \{ x_{(1)}, x_{(2)}, \ldots, x_{(n)}  \} \text{ s.t. } x_{(1)} \leq x_{(2)} \leq \ldots \leq x_{(n)}\]</span></p>
+<p>Each of the <span class="math inline">\(x_{(i)}\)</span> come from <span class="math inline">\(X\)</span>. By extension, the median can now be easily computed by “crossing out”&quot; one number from each end of the ordered statistic set. Two cases will arise; one where <span class="math inline">\(n\)</span> is even, the other when <span class="math inline">\(n\)</span> is odd, with the respective medians being listed below</p>
+<p><span class="math display">\[ x_m = \left\{ \begin{array}{rcl}
+     x_{(\frac{n+1}{2})} &amp; \text{ for } &amp; n \text{ odd} \\
+     \frac{x_{(\frac{n}{2})} + x_{(\frac{n}{2} + 1)} }{2} &amp; \text{ for } &amp; n \text{ even} 
+\end{array} \right. \]</span></p>
+</div>
+</div>
+<div id="mean" class="section level3">
+<h3>Mean</h3>
+<p>Often referred to as the average, the mean refers to the arthemetic middle of a set of numbers. It is defined by <span class="math display">\[ \mu = \frac{ \sum_{i=1}^N x_i}{N} \]</span> One thing I’d like to highlight regarding the mean is that we now take into account the magnitude of each measurement <span class="math inline">\(x_i\)</span>. With the median, we look at the middle most number regardless of large they are but now we put value on the size of that measurement.</p>
+</div>
+<div id="so-why-does-it-matter" class="section level3">
+<h3>So why does it matter?</h3>
+<p>This becomes of vital importance when we look at skewed distributions.. The example below highlights the difference between the mean and median.</p>
+<pre class="r"><code>set.seed(19971222)
+
+sym &lt;- as.data.frame(cbind(c(1:500), rnorm(500))) # generate 500 random numbers from a symetric distribution
+colnames(sym) &lt;- c(&quot;index&quot;, &quot;rnum&quot;)
+
+sym_mean &lt;- mean(sym$rnum)
+sym_med &lt;- median(sym$rnum)
+# get into a format that tidyverse likes
+
+
+sym %&gt;% ggplot(aes(sym$rnum)) + 
+  geom_histogram(binwidth = 0.2, fill = &quot;steelblue&quot;, colour = &quot;navy&quot;, alpha = 0.9) + 
+  geom_vline(xintercept = sym_mean, colour = &quot;red&quot;) + 
+  geom_vline(xintercept = sym_med, colour = &quot;yellow&quot;) + 
+  labs(title = &quot;Histogram of 500 Randomly Generated Numbers from the Standard Normal&quot;, 
+       x = &quot;Value&quot;, 
+       y = &quot;Frequency&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="STA130_tutorial_files/figure-html/Mean%20and%20Median%20Difference%20Sym-1.png" width="672" /> From the graph, we can see that the mean and median are almost identical. More specifically, the mean has a value of 0.034241 and the median has a value of 0.030894. This will hold true for all symetric distributions. Furthermore, as we increase the amount of numbers generated the two will converge and be equal. This is a fun proof and you can do it as an exercise, otherwise, replicate the code above but use try generated 10,000 or 1,000,000 numbers and verify that difference.</p>
+<p>Now let’s check the non-symetric/skewed case.</p>
+<pre class="r"><code>set.seed(19971222)
+
+sym &lt;- as.data.frame(cbind(c(1:500), rchisq(500, df = 2))) # generate 500 random numbers from a symetric distribution
+colnames(sym) &lt;- c(&quot;index&quot;, &quot;rnum&quot;)
+
+sym_mean &lt;- mean(sym$rnum)
+sym_med &lt;- median(sym$rnum)
+# get into a format that tidyverse likes
+central_measures &lt;- as.data.frame(cbind(sym_mean, sym_med))
+colnames(central_measures) &lt;- c(&quot;mean&quot;, &quot;median&quot;)
+
+sym %&gt;% ggplot(aes(sym$rnum)) + 
+  geom_histogram(binwidth = 0.4, fill = &quot;steelblue&quot;, colour = &quot;navy&quot;, alpha = 0.9) + 
+  geom_vline(aes(color = &#39;Mean&#39;),xintercept = sym_mean, colour = &quot;red&quot;, show.legend = TRUE) + 
+  geom_vline(aes(color = &#39;Median&#39;), xintercept = sym_med, colour = &quot;yellow&quot;, show.legend = TRUE) + 
+  scale_color_manual(values = c(&quot;red&quot;, &quot;yellow&quot;)) +
+  labs(title = &quot;Histogram of 500 Randomly Generated Numbers from the Chi-Squared Distribution&quot;, 
+       x = &quot;Value&quot;, 
+       y = &quot;Frequency&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="STA130_tutorial_files/figure-html/Mean%20and%20Median%20Difference%20Non-sym-1.png" width="672" /></p>
+<p>As you can see, the difference between the mean and the median is more apparent given this skewed distribtion. You should think about what happens if the distribution is left skewed and try to code an example of it to verify your conjecture.</p>
+</div>
+<div id="measures-of-spread---variancestandard-deviation" class="section level3">
+<h3>Measures of Spread - Variance/Standard Deviation</h3>
+<p>The last thing that we will examine this week is measuring dispersion in our data with the idea of standard deviation. This is quite literally how far your data strays from it’s central point, the mean. Before diving into the specifics of this quantity, I’d like to go over the idea of distance from a mathematical perspective.</p>
+<p>In general, we use <em>norms</em> to quantify how far something is from a given point in space. A norm is any mapping <span class="math inline">\(g:\mathbb{R}^n \rightarrow [0,+\infty)\)</span> which obeys the triangle inequality, closed under scalar multiplication, and has the zero vector being mapped to 0. You can look this up in more detail on the <a href="https://en.wikipedia.org/wiki/Norm_(mathematics)">Wikipedia</a> page but this is strictly outside of the scope of this course and not necessary (cool if you are curious about the mathematical intricacies of the concept). For our purposes, we will be working with the <span class="math inline">\(L_2\)</span> norm, which is more often known as the Euclidean distance. In the case where you are interested in the distance of a point from any other point that is not the origin, say <span class="math inline">\(\mu_x\)</span>, it is define as <span class="math display">\[L_2 :\mathbb{R}^n \rightarrow [0,+\infty) \text{ s.t. } x \mapsto \sqrt{ (x_1 - \mu_x)^2 + \ldots + (x_n - \mu_x)^2}\]</span></p>
+<p>We will use this as a way of quantifying how far each point is from the mean of the data set. As such, if we want to measure the total spread we should add up the distance from every point to the mean. The variance will then be defined as</p>
+<p><span class="math display">\[ Var(X) = \frac{\sum_{i=1}^N (x_i-\mu_x)^2}{N}\]</span> But note that the square root is missing and gives variance very little meaning from an intuitive perspective. It is not until we introduce that square root and use the previously mentioned <span class="math inline">\(L_2\)</span> norm that we bring this concept back to the idea of distances in space which gives rise to the more useful <em>standard deviation</em> which we will from now on label <span class="math inline">\(\sigma_x\)</span>.</p>
+<p><span class="math display">\[\sigma_x = \sqrt{Var(X)} = \sqrt{\frac{\sum_{i=1}^N (x_i-\mu_x)^2}{N}}\]</span></p>
+</div>
+<div id="population-statistics-vs.sample-statistics" class="section level3">
+<h3>Population Statistics vs. Sample Statistics</h3>
+<p>You may have noticed my deliberate use of <span class="math inline">\(N\)</span> in the denominators of the mean and standard variation which represents the size of the whole population (if we are measuring the height of humans, we would need to measure <a href="http://www.worldometers.info/world-population/">every</a> person in the world). However, measuring a full population is not always feasible and as such we must settle for a subset of the population which will we will refer to as a <em>sample</em> from this point on. In a sample, you will always be taking <span class="math inline">\(n &lt; N\)</span> (and often times <span class="math inline">\(n &lt;&lt; N\)</span>) members of the population. As such our formulas will be modified in the following way.</p>
+<p><span class="math display">\[ \hat{\mu}_x = \bar{x} = \frac{\sum_{i=1}^n x_i}{n} \]</span> A subtle distinction arises when computing the variance. Since the variance is a function of both the data and the mean we must differentiate between the estimated population standard deviation (<span class="math inline">\(\hat{\sigma}_x\)</span>) and the sample standard deviation <span class="math inline">\(s_x\)</span>. When estimating the population standard deviation using a sample you will notice that we use the population mean above. This would only be doable if the mean is known ahead of time and given to you. <span class="math display">\[\hat{\sigma}_x = \sqrt{\frac{\sum_{i=1}^n (x_i-\mu_x)^2}{n}}  \]</span> However, there are many instances where the population mean will not be available. In this case we will be forced to use an estimate of the population mean, the sample mean. This gives rise to the sample standard variation which we define in a similar way. <span class="math display">\[ s_x = \sqrt{\frac{\sum_{i=1}^n (x_i-\bar{x})^2}{n-1}} \text{ with } \lim_{n \rightarrow \infty} s_x = \sigma_x\]</span> You will notice that the denominator has slightly different since we are now dividing by <span class="math inline">\(n-1\)</span> instead of the <span class="math inline">\(n\)</span> we’ve used previously. The reason for this is because we are loosing a <a href="https://en.wikipedia.org/wiki/Degrees_of_freedom_(statistics)">degree of freedom</a> when using that estimated mean. The simplest explanation (leaving out many important and interesting details which you will see in later statistics courses) is when given the sample mean I could take away 1 data point from your sample and you would still be able to figure out what your sample was based on the <span class="math inline">\(n-1\)</span> numbers and that mean (you can algebraically back out the n-th point).</p>
+</div>
+</div>
+<div id="week-3" class="section level1">
+<h1>Week 3</h1>
+<p>This week was centered around <em>data wrangling</em>. As a general definition, data wrangling or data cleaning refers to any and all manipulations or changes you make to your data in order to get it ready to be analyzed. Within the <strong>tidyverse</strong> package there are several tools, specifically the <a href="https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf">dplyr</a> package, which are useful in organizing your data. Each data set is unique and will require some cleaning before it is ready for being analyzed. As such I will not go into any details regarding methodologies or give examples, there are just too many possibilities.</p>
+</div>
+<div id="week-4" class="section level1">
+<h1>Week 4</h1>
+<p>P values</p>
+<p>QUESTIONS</p>
+<ol style="list-style-type: lower-alpha">
+<li>A health survey asked 200 individuals aged 20-45 living in Toronto to report the number minutes they exercised last week. Researchers were interested in determining whether the Version Feb 4, 2019. average duration of exercise differed between people who consume alcohol and those who do not consume alcohol. Assume the researchers who conducted this study found that people who drank alcohol exercised, on average, 20 minutes per week. In contrast, people who did not drink alcohol exercised 40 minutes per week, on average. The researchers reported a p-value of 0.249.</li>
+<li>A study was conducted to examine whether the sex of a baby is related to whether or not the baby’s mother smoked while she was pregnant. The researchers used a birth registry of all children born in Ontario in 2018, which included approximately 130,000 births. The researchers found that 4% of mothers reported smoking during pregnancy and 52% of babies born to mothers who smoked were male. In contrast, 51% of babies born to mothers who did not smoke were male. The researchers reported a p-value of 0.50.</li>
+<li>Based on results from a survey of graduates from the University of Toronto, we would like to compare the median salaries of graduates of statistics programs and graduates of computer science programs. 1,000 recent graduates who completed their Bachelor’s degree in the last five years were included in the study; 80% of the respondents were female and 20% were male. Among statistics graduates, the median reported income was 76,000. Among computer science graduates, the median reported income was 84,000. The researchers reported a p-value of 0.014.</li>
+<li>A team of researchers were interested in understanding millennial’s views regarding housing affordability in Toronto. The team interviewed 850 millennials currently living in Toronto. 84% reported that they felt housing prices were unaffordable in the city. Suppose the researchers were interested in testing whether this proportion was different from a study published last year, which found that 92% of millennials reported that housing costs were unaffordable. The researchers reported a p-value of 0.023.</li>
+</ol>
+</div>
+<div id="week-6" class="section level1">
+<h1>Week 6</h1>
+<p><a href="Files/Week6.docx">The questions</a></p>
+</div>
+<div id="week-8" class="section level1">
+<h1>Week 8</h1>
+<p>Here are the questions.</p>
+<div id="topic-1" class="section level3">
+<h3>Topic 1</h3>
+<ul>
+<li>Refer to Question 4 from the homework.</li>
+<li>Explain how to make a ROC curve and the type of information it provides.</li>
+<li>Based on the ROC curves provided, describe the accuracy of each of the 3 trees.</li>
+<li>Does this fit your expectations based on the description of how each classifier identified spam emails?</li>
+</ul>
+</div>
+<div id="topic-2" class="section level3">
+<h3>Topic 2</h3>
+<ul>
+<li>Refer to Question 2 from the homework.</li>
+<li>Explain what a confusion matrix is and how each cell is calculated.</li>
+<li>Using the calculated confusion matrix answer the following questions: What percentage of disease positive people who were classified as disease positive were actually disease positive according to cutpoint A? According to cutpoint B?</li>
+<li>What is another term used to describe the percentage you calculated above?</li>
+</ul>
+</div>
+<div id="topic-3" class="section level3">
+<h3>Topic 3</h3>
+<ul>
+<li>Refer to Question 1b.</li>
+<li>Summarize the classification tree from part (b); make sure to include at least the following points: how the splits on each variable were selected, how a new observation would be predicted by this classification tree.</li>
+<li>Do you think there may be other important factors to consider? Explain.</li>
+</ul>
+</div>
+</div>
+<div id="week-9" class="section level1">
+<h1>Week 9</h1>
+<div id="topic-1-1" class="section level3">
+<h3>Topic 1</h3>
+<ul>
+<li>Questions 1a and 1c</li>
+<li>Describe your plot produced in question 1a. Make sure to note the x- and y-axis and to describe the association you observe, if any. E.g. the association linear, positive, negative, strong, weak, etc.?</li>
+<li>What is the correlation between head size and brain weight? Make sure to explain how you calculated this value and what it means; i.e., provide an interpretation of the value.</li>
+<li>Does this make sense based on your prior expectations? Are there any other variables you think may be important factors influencing brain weight?</li>
+<li>Do there appear to be many outliers? Why might this matter?</li>
+</ul>
+</div>
+<div id="topic-2-1" class="section level3">
+<h3>Topic 2</h3>
+<ul>
+<li>Questions 1d-f</li>
+<li>Provide a simple linear regression equation for the association between head size and brain weight. Explain what each part of the model means in lay terms.</li>
+<li>Based on your answer to part e, report the estimated values of your model and provide an interpretation of these values.</li>
+<li>How well does your model fit the data? Explain what the coefficient of determination means and provide an interpretation.</li>
+</ul>
+</div>
+<div id="topic-3-1" class="section level3">
+<h3>Topic 3</h3>
+<ul>
+<li>Question 2c</li>
+<li>Present your regression model of msrp on year based on the training set.</li>
+<li>What is the model equation and estimated values? What is the coefficient of determination? Explain what these values mean and an interpretation in lay terms.</li>
+<li>How well does your model perform?</li>
+</ul>
+</div>
+<div id="topic-4" class="section level3">
+<h3>Topic 4</h3>
+<ul>
+<li>Question 2d</li>
+<li>What is your predicted 2013 msrp for a 2010 model hybrid vehicle? Make sure to present your regression equation, including all coefficients.</li>
+<li>Suppose the actual 2013 msrp for this 2010 model hybrid vehicle was $27,000. What is the residual? Provide an interpretation in lay terms. Is this a large difference? Based on previous work done in this question, why do you think this may be the case? Hint: Think about how well the model fits the data, if there may be other important factors, etc.</li>
+</ul>
+<pre class="r"><code># begin by generating data
+x &lt;- runif(1000, min = 0, max = 10)
+y &lt;- rnorm(1000, mean = 7, sd = 1)
+df1 &lt;- as.data.frame(cbind(x, y))
+colnames(df1) &lt;- c(&quot;x&quot;, &quot;y&quot;)
+
+# the boring case
+model1 &lt;- lm(y ~ x, data = df1)
+summary(model1)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ x, data = df1)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -2.6204 -0.7022  0.0265  0.7260  3.9618 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  6.90733    0.06484 106.528   &lt;2e-16 ***
+## x            0.01281    0.01140   1.124    0.261    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.026 on 998 degrees of freedom
+## Multiple R-squared:  0.001263,   Adjusted R-squared:  0.0002625 
+## F-statistic: 1.262 on 1 and 998 DF,  p-value: 0.2615</code></pre>
+<pre class="r"><code>LR1 &lt;- df1 %&gt;% ggplot(aes(x, y)) + 
+  geom_point(fill = &quot;steelblue&quot;) + 
+  geom_smooth( color = &quot;navy&quot;) +
+  labs(title = &quot;Linear Regression Sample Graph&quot;, 
+       x = &quot;x&quot;, 
+       y = &quot;y&quot;) +
+  theme_minimal()
+LR1</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
+<p><img src="STA130_tutorial_files/figure-html/Linear%20Regression-1.png" width="672" /></p>
+<pre class="r"><code># what if there is some underlying structure? 
+y2 &lt;- 0.527*x + rnorm(1000, mean = 0, sd = 1)
+df2 &lt;- as.data.frame(cbind(x, y2))
+colnames(df2) &lt;- c(&quot;x&quot;, &quot;y&quot;)
+
+model2 &lt;- lm(y ~ x, data = df2)
+summary(model2)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ x, data = df2)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.1528 -0.6717 -0.0492  0.6306  3.3494 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  0.05330    0.06162   0.865    0.387    
+## x            0.51874    0.01083  47.882   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.9748 on 998 degrees of freedom
+## Multiple R-squared:  0.6967, Adjusted R-squared:  0.6964 
+## F-statistic:  2293 on 1 and 998 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>LR2 &lt;- df2 %&gt;% ggplot(aes(x, y)) + 
+  geom_point(fill = &quot;steelblue&quot;) + 
+  geom_smooth(color = &quot;navy&quot;) +
+  labs(title = &quot;Linear Regression Sample Graph with underlying structure&quot;, 
+       x = &quot;x&quot;, 
+       y = &quot;y&quot;) +
+  theme_minimal()
+LR2</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
+<p><img src="STA130_tutorial_files/figure-html/Linear%20Regression%202-1.png" width="672" /></p>
+<p>Because regression is a bit boring lets try to look at when it fails and how to fix that (note this is outside the scope of the course).</p>
+<pre class="r"><code># what if there is some underlying NON LINEAR structure? 
+y3 &lt;- 7 + log(x) + rnorm(1000, mean = 0, sd = 1)
+df3 &lt;- as.data.frame(cbind(x, y3))
+colnames(df3) &lt;- c(&quot;x&quot;, &quot;y&quot;)
+
+model3 &lt;- lm(y ~ x, data = df3)
+summary(model2)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ x, data = df2)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.1528 -0.6717 -0.0492  0.6306  3.3494 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  0.05330    0.06162   0.865    0.387    
+## x            0.51874    0.01083  47.882   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.9748 on 998 degrees of freedom
+## Multiple R-squared:  0.6967, Adjusted R-squared:  0.6964 
+## F-statistic:  2293 on 1 and 998 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>LR3 &lt;- df3 %&gt;% ggplot(aes(x, y)) + 
+  geom_point(fill = &quot;steelblue&quot;) + 
+  geom_smooth(method = lm,  color = &quot;navy&quot;) +
+  labs(title = &quot;Linear Regression Sample Graph with underlying structure&quot;, 
+       x = &quot;x&quot;, 
+       y = &quot;y&quot;) +
+  theme_minimal()
+LR3</code></pre>
+<p><img src="STA130_tutorial_files/figure-html/Non-linear%20regression-1.png" width="672" /></p>
+<p>Not bad, but there’s clearly something wrong since the shape of the data looks non-linear. We can fix this with a transformation.</p>
+<pre class="r"><code># what if there is some underlying NON LINEAR structure? 
+y4 &lt;- log(7 + x + rnorm(1000, mean = 0, sd = 1))
+df4 &lt;- as.data.frame(cbind(x, y4))
+colnames(df4) &lt;- c(&quot;x&quot;, &quot;y&quot;)
+
+model3 &lt;- lm(exp(y) ~ x, data = df3)
+summary(model2)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ x, data = df2)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.1528 -0.6717 -0.0492  0.6306  3.3494 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  0.05330    0.06162   0.865    0.387    
+## x            0.51874    0.01083  47.882   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.9748 on 998 degrees of freedom
+## Multiple R-squared:  0.6967, Adjusted R-squared:  0.6964 
+## F-statistic:  2293 on 1 and 998 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>LR4 &lt;- df4 %&gt;% ggplot(aes(x, exp(y))) + 
+  geom_point(fill = &quot;steelblue&quot;) + 
+  geom_smooth(method = lm,  color = &quot;navy&quot;) +
+  labs(title = &quot;Linear Regression Sample Graph with underlying structure&quot;, 
+       x = &quot;exp(x)&quot;, 
+       y = &quot;y&quot;) +
+  theme_minimal()
+LR4</code></pre>
+<p><img src="STA130_tutorial_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p>We did it! It’s now linear again!</p>
+</div>
+</div>
+<div id="week-10" class="section level1">
+<h1>Week 10</h1>
+<p>We discuss questions in your presentation groups and debrief as a class.</p>
+<div id="question-1" class="section level3">
+<h3>Question 1</h3>
+<p>As pertaining to Q1a ii. Carry out an hypothesis test to investigate whether the mean selling price is the same for sellers who do and do not use stock photos. Assuming the conditions necessary for the inference procedure to be valid are reasonable in this situation, what do you conclude? How could you apply a method from earlier in the term to carry out this hypothesis test?</p>
+</div>
+<div id="question-2" class="section level3">
+<h3>Question 2</h3>
+<p>As pertaining to Q1c. * Is there evidence of a difference between sellers with low and high ratings in the relationship between ‘totalPr‘ and ‘duration‘? * Is there evidence of a difference between sellers with medium and high ratings in the relationship between ‘totalPr‘ and ‘duration‘? * Is there evidence of a difference between sellers with low and medium ratings in the relationship between ‘totalPr‘ and ‘duration‘? iv. Briefly explain a way to obtain p-values for the tests needed to address iii?</p>
+</div>
+<div id="evaluation" class="section level3">
+<h3>Evaluation</h3>
+<p><em>Please write a paragraph answering the following question.</em> Using R, you fit two regression models that you defined in (2c). Which model do you think would best explain the association between temperature and yield? Think about the shape of the association and any model statistics that may be relevant. Are there any limitations to these models? Remember to mention: your research question and the methods you applied.</p>
+</div>
+</div>
+<div id="week-11" class="section level1">
+<h1>Week 11</h1>
+<p>Not the last week yet!</p>
+<div id="question-1-1" class="section level3">
+<h3>Question 1</h3>
+<p>Interpret the p-value of this test to compare the mean improvement for Lumosity versus crossword puzzles. How does it compare to the p-value estimated using the randomization test earlier in this question? Is this surprising? Why or why not? Make sure to explain the methods you used.</p>
+</div>
+<div id="question-2-1" class="section level3">
+<h3>Question 2</h3>
+<p>What type of study did Hardy et al. conduct? What were the conclusions? Are there any limitations?</p>
+</div>
+<div id="question-3" class="section level3">
+<h3>Question 3</h3>
+<p>Is age a confounder of this association? Why or why not?</p>
+</div>
+<div id="question-4" class="section level3">
+<h3>Question 4</h3>
+<p>What ethical considerations did Hardy et al. make in their study? Why were these steps necessary? Consider the Statistical Society of Canada (SSC) Code of Ethical Statistical Practice, what practices should you consider while completing your poster project?</p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

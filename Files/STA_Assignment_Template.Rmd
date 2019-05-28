@@ -1,0 +1,45 @@
+---
+title: "Assignment Template"
+author: "First_Name Last_Name - Student_Number"
+date: '2019-01-14'
+output: pdf_document
+toc: TRUE 
+number_sections: TRUE 
+fig_caption: TRUE
+df_print: tibble 
+fontsize: 12pt 
+header-includes:
+   - \usepackage{amsmath}          
+---
+```{r Load Packages, eval=TRUE, echo=FALSE, message=FALSE, error=FALSE}
+library(gridExtra)
+library(MASS)
+library(ISLR)
+library(car)
+library(modelr)
+library(gapminder)
+library(broom)
+library(e1071)
+library(summarytools)
+library(tidyverse)
+
+# Choose the number you want as the basis of all your random number generation
+# Can be ANY integer number 
+set.seed(19971222) 
+```
+\newpage 
+\section{Question 1}
+
+\subsection{Part A}
+```{r Q1 Part A, eval=TRUE, echo=TRUE, message=FALSE, error=FALSE}
+# insert code for to solve the question
+```
+
+Type your answers here. Or anywhere outside of the code chunk above. 
+\subsection{Part b}
+
+\section{Question 2}
+
+\subsection{Part A}
+
+\subsection{Part b}

@@ -8,8 +8,15 @@ navbar:
     - text: "Teaching"
       icon: fa-university
       menu:
+        - text: "STA130 - Winter 2019"
+          icon: fa-book
+          href: STA130_tutorial.html
         - text: "STA302 - Summer 2019"
           icon: fa-book
           href: STA302_tutorial.html
-    - text: "About"
+        - text: "STA314 - Fall 2018"
+          icon: fa-book
+          href: STA314_tutorial.html
+  right: 
+    - text: "About Me"
       href: about.html
