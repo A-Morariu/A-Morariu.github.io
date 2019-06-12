@@ -11,7 +11,7 @@
 
 
 
-<title>STA302</title>
+<title>Spatial Stats</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -471,54 +471,127 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">STA302</h1>
+<h1 class="title toc-ignore">Spatial Stats</h1>
 
 </div>
 
 
-<div id="qq-plots" class="section level1">
-<h1>QQ Plots</h1>
-<div id="a-little-background" class="section level2">
-<h2>A Little Background</h2>
-<p>In statistics, the first real tool (and often most powerful) for data analysis that becomes available to us is <em>linear regression</em>. However, it doesn’t come without some catches. To get all of the nice properties proved in class we must ensure that <em>all</em> of the assumptions are met. Recall from class the following:</p>
-<p>*<strong>Linearity</strong> - dependent variable is a linear combination of the parameters of the model (we refer to them as <span class="math inline">\(\beta\)</span>’s) and independent variables. <em>Aside: this is one of my favourite assumptions as most people often forget to mention this. Linear relationships are not the only possibilities and this will be explored in other courses dedicated to breaking this exact assumption. See STA303</em></p>
-<p>*<strong>Constant Independent Variable</strong> - mathematically we denote this as <span class="math inline">\(\mathbb{E}(e_i) = 0 \text{  } \forall i\)</span> and the underlying meaning of this is that we can treat the recorded independent variable as a known constant</p>
-<p>*<strong>Independence of errors</strong> - mathematically we write this as <span class="math inline">\(Cor(e_i, e_j) = 0 \text{  } i \neq j\)</span></p>
-<p>*<strong>Constant Variance</strong> - otherwise known as homoskedasticity (love this word, learning how to pronounce it is the first barrier to a statistics degree) and is denoted <span class="math inline">\(Var(e_i) = \sigma^2 &lt; \infty \text{  } \forall i\)</span>.</p>
-<p>A nice neat way to package this all up is to write the following (in lecture we called these the Gauss-Markov assumptions).</p>
-<p><span class="math display">\[\begin{equation} 
-  \label{eq:1}
-  e_i \sim_{iid} N(0, \sigma^2) \text{  } \forall i
-\end{equation}\]</span></p>
-<p>The purpose of this tutorial is to explore one of the ways that we will examine the above via a visual tool we refer to as a Qunatile to Quantile plot.</p>
+<div id="where-did-this-all-start" class="section level1">
+<h1>Where did this all start?</h1>
+<p>In my final year of my undergraduate degree, I took a course in spatial statistics taught by none other than <a href="https://scholar.google.co.uk/citations?user=oQIKmWUAAAAJ&amp;hl=en">Prof. Daniel Simpson</a>. As someone that’s always asked “what’s the point” to almost everything that I was taught, spatial statistics always provided a very clear answer to that. Every model that we use has a tangible underlying object, disease, species, or thing we are interested in looking at but also takes into account the **location* of these objects which has always been ignored. The assumption that where observations were made doesn’t matter has never sat well with me so this was a breadth of fresh air.</p>
+<p>As a result, I created this blog post to showcase any work I’ve done in this field. I want to take this opportunity to mention that spatial statistics is heavily based on Bayesian methods so I recommend familarizing yourself with those before proceedig. My advice is to read <a href="http://www.stat.columbia.edu/~gelman/book/">Bayesian Data Analysis</a> by Gelman et. all. Further, most models are fit using <a href="http://www.r-inla.org/">R-INLA</a> or <a href="https://mc-stan.org/users/interfaces/rstan">R-Stan</a>; two statistical packages that are very powerful and very confusing but worth the struggle!</p>
 </div>
-<div id="does-this-look-normal" class="section level2">
-<h2>Does this look normal?</h2>
-<p>As the name suggests we will be working with the quantiles of a some distribution(s). We will develop this idea in the general setting because this works for <strong>any</strong> distribution, then focus specifically on the normal distribution since this is what we care about for this course. Let’s get started.</p>
-<div id="the-data" class="section level3">
-<h3>The Data</h3>
-<p>We are recording measurments of some random variable <span class="math inline">\(X\)</span>. We would like to check if these observations come from some ideal/suspected distribution <span class="math inline">\(F\)</span>. This means that we are <em>asking</em> if <span class="math inline">\(X \sim F\)</span>. However we are not sure… yet. What we do have is knowledge of what <span class="math inline">\(F\)</span> is since this is what we would like it to be (need to guess something you know) and we have empirical observations of our data. We denote the empirical distribution as <span class="math inline">\(G\)</span>.</p>
-</div>
-<div id="if-you-build-it-it-might-be-normal" class="section level3">
-<h3>If you build it, it might be normal</h3>
-<p>That is all to say that an equivalent question to the one above is if <span class="math inline">\(F = G\)</span> and what’s left is to compare them visually. I’d now like to highlight that <span class="math inline">\(G\)</span> is an empircal cumulative distribution function (ECDF) while <span class="math inline">\(F\)</span> is a cumulative distribution function (CDF) which makes them a bit harder to compare. ECDFs are never smooth since they are based on a finite number of points (as dictated by the data set) while CDFs are beautiful functions that make us happy. Thus, we must find a way to discretize <span class="math inline">\(F\)</span> in order to compare them on the same basis (the beauty of <span class="math inline">\(F\)</span> is that we can do exactly this). The solution is to use the inverse of the distributions, otherwise known as the qunatile function and is denoted <span class="math inline">\(F^{-1}\)</span> and <span class="math inline">\(G^{-1}\)</span> respectively. For our observed data this is easy since we can take the <a href="https://en.wikipedia.org/wiki/Order_statistic">ordered statistic</a> <span class="math inline">\(x_{(i)}\)</span> as a qunatile and we are done. For <span class="math inline">\(F\)</span> we must do a bit more work (luckily, it’s not hard work). Generate a data set (we call this simulation) of equal size as <span class="math inline">\(X\)</span> from <span class="math inline">\(F\)</span> using your computer and take the corresponding ordered statistics <span class="math inline">\(f_{(i)}\)</span>. If we don’t exactly match the quantiles of the ECDF we can do some interpolation on the generated data set due to the continuity of <span class="math inline">\(F\)</span> (when data sets are very large this step is likely not needed).</p>
-<p>The last question we must ask ourselves is what it does equality look like geometrically or on the plane. If I was to ask you to draw me a function that is the definition of two quantities being equal, what would it be? The function that should come to mind is <span class="math inline">\(y=x\)</span>. By extension we if are to compare the two distribution on a graph we should check if they fall on that line. From this, the interpretation becomes vey natural. If the two distributions in question are indeed the same, the quantiles of each one will fall along the <span class="math inline">\(y=x\)</span> line. Deviations from this line mean that they are not the same. I would like to take this opportunity to emphasize that some deviation is okay as we are dealing with <strong>random</strong> variables afterall. Large, systematic deviations (particularly in the tails) is what would be cause for concern.</p>
-<p>Here is a summary on how we construct the QQ plots.</p>
+<div id="posterior-sampling-of-random-effects-using-inla" class="section level1">
+<h1>Posterior sampling of random effects using INLA</h1>
+<p>While working on an air pollution project during my time and St. Michael’s hospital, we were interested in sampling the poster distribution of a <a href="https://en.wikipedia.org/wiki/Random_effects_model">random effect</a> within a model. This exercise is broken down into three parts in order to explain the methodology.</p>
 <ol style="list-style-type: decimal">
-<li>Compute the ECDF of our data set and determine it’s quantiles.</li>
-<li>Compute the quantiles of our theoretical distribution.</li>
-<li>Plot the theoretical (y axis) vs. the empirical (x axis).</li>
-<li>Compare them to the <span class="math inline">\(y=x\)</span> line and draw appropriate conclusions.</li>
+<li>Understanding INLA output</li>
+<li>Formal mathematical argument for sampling</li>
+<li>Implemenation/code</li>
 </ol>
+<div id="what-are-you-doing-inla" class="section level2">
+<h2>What are you doing INLA</h2>
+<p>If you’ve fit any model in INLA you know that it outputs a nested list that can be hard to navigate. Fortunately, thanks to <a href="http://pbrown.ca/">Prof. Patrick Brown</a> and his <a href="http://pbrown.ca/teaching/astwo/slides/?C=M;O=A">Applied Statistics II</a> we can find some clarity. We know that INLA provides estimates of the posterior distribution of the latent field of the model. The details of how it does this will be omitted as they require solving stochastic partial differential equations and that is a battle for a different day. Let’s begin with an example:</p>
+<div id="the-bacteria-dataset" class="section level3">
+<h3>The Bacteria Dataset</h3>
+<p>The question we are asking is whether or not a given treatment reduces the probability that the bacteria is present in the subject’s body.</p>
+<pre class="r"><code>head(bacteria)</code></pre>
+<pre><code>##   y ap hilo week  ID     trt
+## 1 y  p   hi    0 X01 placebo
+## 2 y  p   hi    2 X01 placebo
+## 3 y  p   hi    4 X01 placebo
+## 4 y  p   hi   11 X01 placebo
+## 5 y  a   hi    0 X02   drug+
+## 6 y  a   hi    2 X02   drug+</code></pre>
 </div>
-<div id="a-house-not-made-of-straws" class="section level3">
-<h3>A house not made of straws</h3>
-<p>When reading this, you will notice the deliberate omission of any particular distribution we are evaluating. All that was required was that <span class="math inline">\(F\)</span> and <span class="math inline">\(G\)</span> are <strong>some</strong> valid probability distribution. This makes QQ plots such a versatile tool because we can test for any distribution we are curious about. In our case, we are intersted in whether or not the errors come from the normal distribution in equation  1. But we can just replace that with your favourite student’s t distribution, or F distribution, chi-squared, gamma, or any other you want. You even have the power to blindly compare two ECDF’s by letting <span class="math inline">\(F\)</span> be an ECDF. If all you are intereted in is whether or not two datasets follow the same (all be it unkown) distribution this is a solid method to explore that making this a very robust tool.</p>
+<div id="the-model" class="section level3">
+<h3>The Model</h3>
+<p>The variables are defined as follows:</p>
+<ul>
+<li><span class="math inline">\(y_{it}\)</span> is the presence of bacteria in individual <span class="math inline">\(i\)</span> at time <span class="math inline">\(t\)</span></li>
+<li><span class="math inline">\(X_{it}\)</span> is the design matrix for the indicator of the week the individual was examined</li>
+<li><span class="math inline">\(U_i\)</span> is the individual level random effect</li>
+</ul>
+<p>And the model is structured accordingly:</p>
+<p><span class="math display">\[\begin{align}
+     y_{it} &amp;\sim Bernoulli(\lambda_{it}) \\
+     logit(\lambda_{it}) &amp;= \mu + X_{it} \beta + U_i \\
+     U_i &amp;\sim N(0, \sigma^2)
+\end{align}\]</span></p>
+<p>Finally, setting the priors:</p>
+<p><span class="math display">\[\begin{align}
+     \mu &amp;\sim N(0, 10^2) \\
+     \beta &amp;\sim N(0, 3^2 I) \\
+     \sigma &amp;= 1
+\end{align}\]</span></p>
+<p>Now we can go ahead and fit this model using INLA… right? Not quite. Because we have repeated measurements from the same individual (the time component of our data) you no longer have independence between the data points. Furthermore, some people are naturally more succeptible to certain bacterias and don’t have any additional information to highlight those people. As a result, we will restructre our model into a more convenient form for INLA to work with (and luckily for us to understand). From theory on <a href="https://en.wikipedia.org/wiki/Generalized_linear_model">GLMs</a>, specifically the link functions, we know that <span class="math inline">\(logit(\lambda_{it}) \sim N(\cdot, \cdot)\)</span> resulting in the following equivalent model:</p>
+<p><span class="math display">\[\begin{align}
+     y_{it} &amp;\sim Bernoulli(\lambda_{it}) \\
+     logit(\lambda_{it}) &amp;= \eta_{it} = X_{it} \beta + U_i \\
+     U_i &amp;\sim N(0, \sigma^2)
+\end{align}\]</span></p>
+<p>And the reformulated priors: <span class="math display">\[\begin{align}
+     \beta_0 &amp;\sim N(0, 10^2) \\
+     \{\beta_p ; p &gt; 1 \} &amp;\overset{ind}{\sim} N(0, 3^2 I) \\
+     \sigma &amp;= 1
+\end{align}\]</span></p>
+<p>In doing this, the propertie of multivariate normals can be exploited (which is what INLA needs to work it’s magic). The key result here is:</p>
+<p><span class="math display">\[\begin{equation}
+     W = (\eta, U, \beta)^T \sim MVN
+\end{equation}\]</span></p>
+<p>Which allows INLA to create a Gaussian approximation of this latent field. It is worth noting that the the dimensions of the field <span class="math inline">\(W\)</span>.</p>
+<p><span class="math display">\[\begin{align}
+     dim(W) &amp;= ncol(\eta) + ncol(U) + ncol(\beta) \\
+     &amp;= \text{Number of observations} + \text{Number of individuals} + \text{number of treatments}
+\end{align}\]</span></p>
+<p>The latent field is composed of submatricies of every observation (<span class="math inline">\(\eta\)</span>), random effects (how many <span class="math inline">\(U_i\)</span>’s there are), and fixed effects (how many <span class="math inline">\(\beta\)</span>’s there are) which are in the model. Because we are using the multivariate normal, we need to write our priors in a vectorized form too. <span class="math display">\[\begin{align}
+     \eta \vert \beta, U &amp;\sim N(X\beta + AU, \epsilon I) \\
+     \beta &amp;\sim N(0,\Gamma) \\
+     U \vert \sigma &amp;\sim N(0, \Sigma_\sigma) \\
+     \sigma &amp;= 1
+\end{align}\]</span></p>
+<p><span class="math display">\[\begin{equation}
+     W \vert \sigma \sim N \left( 0, 
+          \begin{pmatrix} 
+              A\Sigma_\sigma A^T + X \Gamma X^T &amp; A^T &amp; X^T \\
+              A &amp; \Sigma_\sigma &amp; 0 \\
+              X &amp; 0 &amp; \Gamma
+          \end{pmatrix}
+     \right)
+\end{equation}\]</span></p>
+<p>And this is the estimate which INLA gives us. The latent field can become quite large very quickly since each new data point adds a row and a column to the precision matrix of <span class="math inline">\(W\)</span> (due to the increase of the dimension of <span class="math inline">\(\eta\)</span>); however, the precision matrix tends to be quite sparse which makes further computations signifcantly faster.</p>
+<p>This is a good opportunity to take a look back at our initial goal: taking posterior samples of the random effects in the model. Knowing the structure of <span class="math inline">\(W\)</span>, it is clear that the we are interested in the submatrix <span class="math inline">\(U\)</span>. All that’s required is to take transform <span class="math inline">\(W\)</span> by some matrix <span class="math inline">\(A\)</span> which leaves us with just <span class="math inline">\(U\)</span>.</p>
+<p><span class="math display">\[\begin{align}
+     A &amp;= 
+     \begin{pmatrix}
+          0_\eta \\
+          \hline
+          I \\
+          \hline
+          0_\beta
+     \end{pmatrix} \\
+     0_\eta &amp;\in \mathbb{R}^{nrow(U) \times ncol(\eta)} \\
+     I &amp;\in \mathbb{R}^{nrow(U) \times ncol(U)} \\
+     0_\beta &amp;\in \mathbb{R}^{nrow(U) \times ncol(\beta)}
+\end{align}\]</span></p>
 </div>
 </div>
-<div id="some-examples" class="section level2">
-<h2>Some examples</h2>
-<p>Coming soon…</p>
+<div id="transforming-a-mulivariate-normal-for-selective-sampling" class="section level2">
+<h2>Transforming a mulivariate normal for selective sampling</h2>
+<p>Unfortunately, sampling <span class="math inline">\(U\)</span> is not as simple as pulling it out of <span class="math inline">\(W\)</span>. In this section, we show the mathematical procedure for generating a random sample from the same distribution as <span class="math inline">\(U\)</span>. The <a href="https://en.wikipedia.org/wiki/Cholesky_decomposition">Cholesky decompositon</a> will be used in order to break down the precision matrix in order to create a random sample from <span class="math inline">\(U\)</span>.</p>
+<p><span class="math display">\[\begin{align}
+     W &amp;\sim N(\mu_W, Q_W^{-1}) \\
+     \Rightarrow A^TW &amp;\sim N(A\mu_W, A^T Q_W^{-1} A) \\
+     &amp;\sim N(A^T\mu_W, A^T (L_W L_W^T)^{-1} A) \\
+     &amp;\sim N(A^T\mu_W, A^T (L_W^{-1})^T (L_W)^{-1} A) \\
+     &amp;\sim N(A^T\mu_W, (L_W^{-1} A)^T ((L_W)^{-1} A)) \\
+     &amp;\sim N(A^T\mu_W, \widetilde{L}^T \widetilde{L} ) \\
+     &amp;\sim N(A^T\mu_W, \Sigma_U)
+\end{align}\]</span></p>
+<p>Taking a random sample from the standard multivariate normal <span class="math inline">\(Z\)</span> and applying the following transformation we get a sample from the desired distribution</p>
+<p><span class="math display">\[\begin{align}
+    A^T \mu_x + \widetilde{L}Z \sim N_p (A^T\mu_x, \Sigma_U) \Leftrightarrow A^T \mu_x + \widetilde{L}Z &amp;\overset{d}{=} U
+\end{align}\]</span></p>
 </div>
 </div>
 
