@@ -24,5 +24,14 @@ navbar:
           icon: fa-book
           href: STA355_coursework.html
   right: 
+    - text: "Personal Projects"
+      icon: fa-briefcase
+      menu:
+        - text: "Spatial Statistics"
+          icon: fa-map-marker
+          href: Spatial_Stats.html
+    - text: "Resume"
+      icon: fa-file-pdf-o
+      href: Files/Resume_AMorariu_Cyan.pdf
     - text: "About Me"
       href: about.html
