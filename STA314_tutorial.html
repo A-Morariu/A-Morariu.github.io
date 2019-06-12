@@ -478,16 +478,16 @@ div.tocify {
 
 <p>Note: Majority of this material is credited to <a href="http://utstat.toronto.edu/?page_id=11779">Prof. Daniel Simpson</a> and editted by me in cases where I thought further clarification is needed.</p>
 <div id="week-1" class="section level2">
-<h2>Week 1</h2>
+<h2><span class="header-section-number">0.1</span> Week 1</h2>
 <p>This week is centred around learning the basics of R. Check out some of the cheat sheets on the main page to get a better feel for working with this langauge.</p>
 </div>
 <div id="week-2" class="section level2">
-<h2>Week 2</h2>
+<h2><span class="header-section-number">0.2</span> Week 2</h2>
 <div id="question1" class="section level3">
-<h3>Question1</h3>
+<h3><span class="header-section-number">0.2.1</span> Question1</h3>
 </div>
 <div id="question-2" class="section level3">
-<h3>Question 2</h3>
+<h3><span class="header-section-number">0.2.2</span> Question 2</h3>
 <pre class="r"><code>### create a function that implements the K-Means algo referenced in class
 my_kmeans &lt;- function(data, k, n_starts) {
     
@@ -574,7 +574,7 @@ dat_q2 %&gt;% ggplot(aes(x = x,y = y)) +
 <p>Depending on how many times the kmeans algorithm is run, it sometimes doesn’t find all four distinct clusters. This is due to the uniform intial sampling and the fact that the bottom left and top right clusters are much smaller than the other two.</p>
 </div>
 <div id="question-3" class="section level3">
-<h3>Question 3</h3>
+<h3><span class="header-section-number">0.2.3</span> Question 3</h3>
 <pre class="r"><code>#### PARTIAL SOLUTION ####
 
 # Input the data
@@ -596,52 +596,52 @@ plot(hclust(d,method = &quot;single&quot;))</code></pre>
 <p>Comparing the two dendrograms, we see that the two clustering from the complete linkage is {1,2}, {3,4}, while the two clustering from the single linkage is {1,2,3}, {4}.</p>
 </div>
 <div id="question-4" class="section level3">
-<h3>Question 4</h3>
+<h3><span class="header-section-number">0.2.4</span> Question 4</h3>
 <p>For part a) there is not enough information. If the two linkages are equal, then they will fuse at the same hight. Otherwise, the single linkage dendrogram will merge at a lower hight as it only requires one nearby point and not all of the points to be close.</p>
 <p>For part b) They’ll merge at the same hight because when you’re just merging single leaves, the linkages all reduce to the distance and are therefore equal.</p>
 </div>
 </div>
 <div id="week-3" class="section level2">
-<h2>Week 3</h2>
+<h2><span class="header-section-number">0.3</span> Week 3</h2>
 <p>This week we covered some of fundamental proofs in linear algebra that have very powerful implications in machine learning. The hardest part of these proofs is the notational aspect of them. If you are unclear about these, please bring them up in next week’s tutorial or go to office hours.  I focused on Q3 off of the assignment. Here are links to the proofs. ###Q uestion 3</p>
 <p>####P art A <strong>WTS:</strong> <span class="math inline">\(u^Tv = 0 \Rightarrow ||u+v||^2 = ||u||^2 + ||v||^2\)</span>  <a href="https://math.stackexchange.com/questions/11509/how-to-prove-the-pythagoras-theorem-using-vectors">Solution</a> </p>
 <div id="part-b" class="section level4">
-<h4>PART B</h4>
+<h4><span class="header-section-number">0.3.0.1</span> PART B</h4>
 <p><strong>WTS:</strong> <span class="math inline">\(\Phi \in R^{n \times r}\)</span> with orthonormal columns <span class="math inline">\(\Rightarrow ||\Phi v|| = ||v||\)</span>  <a href="http://www.fen.bilkent.edu.tr/~ercelebi/rotation%20of%20coordinate%20axes.pdf">Solution</a>: note that this proof is a bit more complicated than it has to be. The essence is the same, they just break it down component wise (this is an unecessary complication as vector notation makes this proof about 2-3 lines long). </p>
 </div>
 <div id="part-c" class="section level4">
-<h4>Part C</h4>
+<h4><span class="header-section-number">0.3.0.2</span> Part C</h4>
 <p><strong>WTS:</strong><span class="math inline">\(u,v \in R^n\)</span>, what is the largest eigenvalue?  <a href="https://ccrma.stanford.edu/~dattorro/simplemat.pdf">Solution</a>: See part B1. </p>
 </div>
 <div id="part-d" class="section level4">
-<h4>Part D</h4>
+<h4><span class="header-section-number">0.3.0.3</span> Part D</h4>
 <p><strong>WTS:</strong> <span class="math inline">\(A\)</span> is a symmetric matrix, <span class="math inline">\(\max_{x} \frac{x^T A x}{x^Tx}\)</span> corresponds to the largest eigenvalue  <a href="https://math.stackexchange.com/questions/1705386/showing-that-x-topax-is-maximized-at-max-lambdaa-for-symmetric-a">Solution</a>: This proof is almost trivial once you understand spectral decomposition. More on this later. </p>
 </div>
 <div id="part-e" class="section level3">
-<h3>Part E</h3>
+<h3><span class="header-section-number">0.3.1</span> Part E</h3>
 <p><strong>WTS:</strong> <span class="math inline">\(A\)</span> is symmetric positive definite <span class="math inline">\(\Rightarrow A^TA\)</span> also symmetric positive definite  <strong>Solution:</strong> For this proof I will be using the <a href="http://pages.mtu.edu/~msgocken/ma5630spring2003/lectures/spectral/spectral/node2.html">Spectral Decomposition Thoerem</a> . <span class="math display">\[A = UDU^T \Rightarrow A^T A = \left( UDU^T \right)^T(U D U^T) = UDU^T UDU^T = UD^2U \]</span> We get the above since <span class="math inline">\(U^T = U^{-1}\)</span> by definition (take some time to convince yourself of this fact). Furthermore, since D is the diagonal matrix with entries being the eigenvalues, the square of set eigenvalues are necessarily positive which is sufficient to define the positive definite part of the proof. Lastly, by the construction of U the symmetry property follows. This completes the proof. </p>
 </div>
 </div>
 <div id="week-4" class="section level2">
-<h2>Week 4</h2>
+<h2><span class="header-section-number">0.4</span> Week 4</h2>
 <p>This week we focused on Principle Component Analysis (will be referred to as PCA from here on out). PCA is a very useful tool for pulling out the key features from your data. The reason this is important is that, often times, you will be given data sets with a large number of columns corresponding to features. For example, if we were working on predicting heart disease for a given person and were tasked with creating this model, we could be given information such as the person’s height, weight, age, hair colour, daily caloric intake, fat consumption, transfat consumption, blood sugar level, cholesterol, etc. Needless to say we probably don’t need  one of these factors. With this in mind we will leverage our knowledge of eigenpairings in order to reduce the number of factors we will use in our model to ensure we only include the most important ones (the definition of most important is up for debate).  Given that background, we will go through some of the problems from this week’s problem set. ### Question 2 Please see <a href="https://michalmalyska.github.io/STA314.html">Michal’s</a> for sample code to these labs.</p>
 <div id="question-3-1" class="section level3">
-<h3>Question 3</h3>
+<h3><span class="header-section-number">0.4.1</span> Question 3</h3>
 <p> The second principle component of a centred feature matrix <span class="math inline">\(X\)</span> should maximize Rayleigh’s quotient up to being orthogonal to the fist principle component.   Note, this argument is almost trivial once we understand that we can order our set of eigenvalues and combining this with the following notation: <span class="math display">\[v_2 = \text{arg} \max_{v \in \mathbb{R}^p, v \perp v_1 } \frac{v^T X^T X v}{v^T v} \]</span> All that this is asking, is that we find the eigenvector that maximizes the quotient with respect to all vectors in <span class="math inline">\(\mathbb{R}^p\)</span> which are orthogonal to <span class="math inline">\(v_1\)</span>. Furthermore, this corresponds to taking the second largest eignevalue from our ordered set. However, we will show this more rigorously using the argument made in class. We begin with the spectral decomposition of our feature matrix. <span class="math display">\[X^T X = UDU^T \text{ and define } Z = U^Tv \text{ where } v \in \mathbb{R}^p \]</span> <span class="math display">\[ \Rightarrow v^T X^T X v = z^T D z = \sum_{i=1}^{p} \lambda_i z_i z_i^T \leq \sum_{i=1}^{p} \lambda_2 z_i z_i^T = \lambda_2 \sum_{i=1}^{p} z_i z_I^T = \lambda_2 v^T U^T U v\]</span> The inequality above turns into an equality in the case where <span class="math inline">\(z_3 = z_4 = \ldots = z_p = 0\)</span>; otherwise we can say that <span class="math inline">\(\lambda_2 &gt; \lambda_i\)</span> for <span class="math inline">\(i \in \{3, 4, \ldots, p\}\)</span> which in turn maximizes the quotient with respect to the constraints. This concludes the proof.</p>
 </div>
 <div id="question-4-1" class="section level3">
-<h3>Question 4</h3>
+<h3><span class="header-section-number">0.4.2</span> Question 4</h3>
 <p>Givens: <span class="math inline">\(\lambda^* = \{14.1, 4.3, 1.2, 0.4 \}\)</span> and <span class="math inline">\(v_1^T = [0.39, 0.42, 0.44, 0.69]\)</span>, <span class="math inline">\(v_2^T = [0.40, 0.39, 0.42, -0.72\)</span> </p>
 <div id="part-a" class="section level4">
-<h4>Part A</h4>
+<h4><span class="header-section-number">0.4.2.1</span> Part A</h4>
 <p>We are asked to calculate the proportion of variance explained by the fist 2 principle components. <span class="math display">\[\text{proportion explained} = \frac{\sum_{i=1}^{2} \lambda_i }{\sum_{i=1}^{4} \lambda_i } = \ldots = 0.92\]</span></p>
 </div>
 <div id="part-b-1" class="section level4">
-<h4>Part B</h4>
+<h4><span class="header-section-number">0.4.2.2</span> Part B</h4>
 <p>Interpreting the principle components: 1. Noticing that each of the components have a positive coefficient we can say that heavier and longer burritos have a tendency to be tastier.  2. Here we see that the component corresponding to taste has a negative coefficient which indicates that we have some burritos that are small and tasty OR large and bland (their scores would be equivalent)</p>
 </div>
 <div id="part-c-1" class="section level4">
-<h4>Part C</h4>
+<h4><span class="header-section-number">0.4.2.3</span> Part C</h4>
 <p>Here we are tasked with reconstructing the variance-covariance matrix of the centred data based on our 2 eigenpairings. This is a simple process and we back out the desired result from the spectral decomposition of the variance-covariance matrix (yes, this is a symmetric positive definite matrix and we will prove it below). <span class="math display">\[\Sigma = UDU^T = \sum_{i=1}^{2} \lambda_iv_i v_i^T = \lambda_1 v_1 v_1^T + \lambda_2 v_2 v_2^T  \]</span> We notice that we have all of the quantities specified above so now its a matter of matrix multiplication. I will spare you all of the gory details and skip straight to the answer.</p>
 <p><span class="math display">\[\Sigma = \left( \begin{array}{cccc} 
 2.833 \\ 
@@ -654,34 +654,34 @@ plot(hclust(d,method = &quot;single&quot;))</code></pre>
 </div>
 </div>
 <div id="week-5---a-review" class="section level2">
-<h2>Week 5 - A Review</h2>
+<h2><span class="header-section-number">0.5</span> Week 5 - A Review</h2>
 <p>This week is dedicated to reviewing some of the material we have covered so far (clutering algorithms, linear regression, PCA). These concepts will appear on the midterm and the style of problem is likely to be similar. I am only posting solutions to the proof questions and omitting any short answer/discussion based ones. Furthermore, the WTS lines are abreviated relative to the question on the problem set; needless to say, it encompasses everything that the original question asks for,</p>
 <div id="question-1" class="section level3">
-<h3>Question 1</h3>
+<h3><span class="header-section-number">0.5.1</span> Question 1</h3>
 <div id="part-b-2" class="section level4">
-<h4>Part B</h4>
+<h4><span class="header-section-number">0.5.1.1</span> Part B</h4>
  K-means algorithm converges   Fix K points from your data set (sample them randomly). We know that we now iterate through the following steps until we reach our “exit condition” of our cluster centres being unchanged with any additional iterations (i.e. we have the most optimal clusters with respect to our cost function). As a recap, here are the steps: 
 
 <p>Now we define our cost function. <span class="math display">\[cost = \sum_{i=1}^{k} \sum_{x \in C_i} ||x-z_i||^2 = \sum_{i=1}^k \min_{i\in \{1,\ldots, k\}} ||x-z_i||^2\]</span> We now need to minimize this function with respect to <span class="math inline">\(z_i\)</span>. I want to emphasize that previous statement because it dictates exactly how we approach our optimization. We proceed by derivating the cost function. <span class="math display">\[\nabla_{z_i}cost = -2 \sum_{i=1}^{k} \sum_{x \in C_i}(x-z_i) \]</span> Now, because we are minimizing with respect to an  cluster centre we are not interested in in that outer summation so we can drop it all together. <span class="math display">\[0 = \sum_{i=1}^{k} \sum_{x \in C_i}(x-z_i) = \sum_{x \in C_i}x - \sum_{x \in C_i} z_i \Rightarrow \sum_{x \in C_i}x = \sum_{x \in C_i} z_i \Rightarrow z_i^* = \frac{1}{|C_i|} \sum_{x \in C_i} x\]</span> where <span class="math inline">\(|C_i|\)</span> is the number of points within the <span class="math inline">\(i^{th}\)</span> cluster. Notice how this is simply the arithmetic mean of the cluster. We now move on to examine the second derivative. <span class="math display">\[\nabla^2_{z_i}cost = -2 \sum_{x \in C_i} (-1) = 2|C_i| &gt;0 \]</span> As expected, this value corresponds to the global minimum of the function. To complete the proof we now notice that we have a function that attains a minimum and is always decreasing. Additionally the <span class="math inline">\(cost \geq 0\)</span> since it is a sum of distances (always positive). Combining these two facts, we get convergence. This completes the proof.</p>
 </div>
 </div>
 <div id="question-2-1" class="section level3">
-<h3>Question 2</h3>
+<h3><span class="header-section-number">0.5.2</span> Question 2</h3>
 <div id="part-a-1" class="section level4">
-<h4>Part A</h4>
+<h4><span class="header-section-number">0.5.2.1</span> Part A</h4>
 <p> least variation explained corresponds to smallest eigenvector   This proof is similar to the most variation explained one, we just take the opposite bound. <span class="math display">\[X^T X = UDU^T\]</span> and define <span class="math display">\[
 Z = U^Tv \text{ , } v \in \mathbb{R}^p \]</span></p>
 <p><span class="math display">\[ \Rightarrow v^T X^T X v = z^T D z = \sum_{i=1}^{p} \lambda_i z_i z_i^T \geq \sum_{i=1}^{p} \lambda_p z_i z_i^T = \lambda_p \sum_{i=1}^{p} z_i z_I^T = \lambda_p v^T U^T U v = \lambda_p v^Tv\]</span> The equality holds only in the case were <span class="math inline">\(\{ \lambda_1, \ldots, \lambda_{p-1} = 0 \}\)</span>, which ensures that this is the minimum and the corresponding eigenvector will explain the least amount of variation.</p>
 </div>
 <div id="part-b-3" class="section level4">
-<h4>Part B</h4>
+<h4><span class="header-section-number">0.5.2.2</span> Part B</h4>
 <p> proportion of variance explained by jth component is <span class="math inline">\(\frac{\sigma_j^2}{\sum_i \sigma^2_i}\)</span>   This proof is reduced to one line once we notice that <span class="math display">\[\mathbb{V}(X)= \text{Tr}(\Sigma) = \sum_i \sigma^2_i \Rightarrow \text{prop} = \frac{\sigma_j^2}{\sum_i \sigma^2_i}\]</span></p>
 </div>
 </div>
 <div id="question-4-2" class="section level3">
-<h3>Question 4</h3>
+<h3><span class="header-section-number">0.5.3</span> Question 4</h3>
 <div id="part-a-2" class="section level4">
-<h4>Part A</h4>
+<h4><span class="header-section-number">0.5.3.1</span> Part A</h4>
 <p> <span class="math inline">\(||Y-X\beta||^2\)</span> is minimized at <span class="math inline">\(X^T X \beta =X^T Y\)</span>   We will avoid the gory details of this proof by using matrix calculus. However, before we dive into that I want to take a moment to explain how to approach not only this problem. but proofs in general.  What we must remember is that all of these proofs are fundamental in statistics and as such we can rely on our most basic of concepts in order to arrive to the conclusions. In this case, we know that linear regression written in matrix form is <span class="math inline">\(Y = X\beta + \epsilon\)</span>. In simple linear regression, we solved for <span class="math inline">\(\{ \beta_0 , \beta_1 \}\)</span> by minimizing the least squares error. We will try the same approach here (spoiler: it works!). When working with matricies, we know that the equivalent to squaring something is left multiplying by its transpose. With this being said, we can proceed. <span class="math display">\[\begin{equation}
   \epsilon^T \epsilon = (Y-X\beta)^T (Y-X\beta) \\
   = (Y^T-\beta^T X^T) (Y-X\beta) \\
@@ -699,11 +699,11 @@ Z = U^Tv \text{ , } v \in \mathbb{R}^p \]</span></p>
 </div>
 </div>
 <div id="week-6" class="section level2">
-<h2>Week 6</h2>
+<h2><span class="header-section-number">0.6</span> Week 6</h2>
 <p>This week served as a work period to go over any coding related questions in class.</p>
 </div>
 <div id="week-7" class="section level2">
-<h2>Week 7</h2>
+<h2><span class="header-section-number">0.7</span> Week 7</h2>
 <p>Classification problems are those where you have to assign a random to a group. The way we do this, is by examining the features of a new input and use our classification rule which we establish using our data. For more details on this please see the lecture notes. It will also have a mathematical expresion for this process.  We now go over the problems in the assignment. ### Question 1</p>
 <p>For any classification function <span class="math inline">\(h\)</span>, the expected loss can be given directly as:</p>
 <p><span class="math display">\[R(h) = \alpha_{FN}\mathbb{P}(h(x)=0,y=1|X=x) + \alpha_{FP}\mathbb{P}(h(x)=1, y = 0 | X=x) \\
@@ -718,7 +718,7 @@ Z = U^Tv \text{ , } v \in \mathbb{R}^p \]</span></p>
 <p><span class="math display">\[\mathbb{P}(y=1 | X=x) = m(x) = \frac{\alpha_{FN}}{\alpha_{FN}+\alpha_{FP}}\]</span> ### Question 2 This question generalizes logistic regression to the case where we have K labels/groups. To do so, we set the Kth class as the baseline and use a K-1 encoding system to solve the problem. We are given the log-odds ratio for the i-th class.</p>
 <p><span class="math display">\[ \log \frac{\mathbb{P} (G = i | X = x) }{\mathbb{P} (G = K | X = x)} = \beta_{i,0} + \beta_i^Tx \]</span> We now exponentiate to get rid of the log. <span class="math display">\[ \frac{\mathbb{P} (G = i | X = x) }{\mathbb{P} (G = K | X = x)} = \exp \{\beta_{i,0} + \beta_i^Tx \} \]</span> We can sum the above over all possible values of i. <span class="math display">\[\frac{ \sum_{i=1}^{K-1}\mathbb{P} (G = i | X = x) }{\mathbb{P} (G = K | X = x)} = \sum_{i=1}^{K-1} \exp \{\beta_{i,0} + \beta_i^Tx \} \]</span> The numerator of the left hand side can we simplified if we apply the law of total conditional probability with respect to G. <span class="math display">\[ \sum_{i=1}^{K-1}\mathbb{P} (G = i | X = x) = 1 - \mathbb{P} (G = K | X = x) \]</span> <span class="math display">\[ \frac{1}{\mathbb{P} (G = K | X = x)} - 1 =  \sum_{i=1}^{K-1} \exp \{\beta_{i,0} + \beta_i^Tx \} \Rightarrow  \mathbb{P} (G = K | X = x) = \frac{1}{ 1 + \sum_{i=1}^{K-1} \exp \{\beta_{i,0} + \beta_i^Tx \}}\]</span> From the above, we can apply Bayes’ Theorem to get the conditional probabilty of a single class. <span class="math display">\[ \mathbb{P} (G = j | X = x) = \frac{ \exp \{\beta_{j,0} + \beta_j^Tx \}}{ 1 + \sum_{i=1}^{K-1} \exp \{\beta_{i,0} + \beta_i^Tx \}}\]</span> This completes the proof.</p>
 <div id="question-3-2" class="section level3">
-<h3>Question 3</h3>
+<h3><span class="header-section-number">0.7.1</span> Question 3</h3>
 <p>Lab 4.6.2 from the textbook: implementation of logistic regression model.</p>
 <pre class="r"><code>suppressMessages(library(tidyverse))
 # load the Smarket data from the ISLR library 
@@ -797,43 +797,43 @@ as.numeric(round(logit_pred[1:10], 4) &gt; 0.5)</code></pre>
 </div>
 </div>
 <div id="week-8---midterm-practice" class="section level2">
-<h2>Week 8 - Midterm Practice</h2>
+<h2><span class="header-section-number">0.8</span> Week 8 - Midterm Practice</h2>
 <div id="question-1-1" class="section level3">
-<h3>Question 1</h3>
+<h3><span class="header-section-number">0.8.1</span> Question 1</h3>
 <div id="part-a-3" class="section level4">
-<h4>Part A</h4>
+<h4><span class="header-section-number">0.8.1.1</span> Part A</h4>
 <p>Loss function for linear regression is <span class="math inline">\(L(\beta,x,y) = (y-x^T\beta)^2\)</span>.<br />
 Loss function for classification is <span class="math inline">\(L(h(\cdot),y,x) = I(h(x) \neq y)\)</span>.</p>
 </div>
 <div id="part-b-4" class="section level4">
-<h4>Part B</h4>
+<h4><span class="header-section-number">0.8.1.2</span> Part B</h4>
 <p>We could make the <strong>generalization</strong> that fitting an ML model on just STA314 students if we were certain that it accurately represented the population of the statistics major. However, we know that this isn’t the case since not all students in the major are required to take this course. If we train our model on just this subset of the data we would be training the model to pick up many of the specific features of students in STA314. The key here is to realize that our models cannot extrapolate, but only interpolate within the space defined by our training data.</p>
 </div>
 </div>
 <div id="question-2-2" class="section level3">
-<h3>Question 2</h3>
+<h3><span class="header-section-number">0.8.2</span> Question 2</h3>
 <div id="part-a-4" class="section level4">
-<h4>Part A</h4>
+<h4><span class="header-section-number">0.8.2.1</span> Part A</h4>
 <p>This question asks us to compute the single and complete linkage clusterings. These calculations will be omitted as they are outlined in the lecture slides. Here are the second to last merges for each linkage method to check your answers.<br />
 1. Single linkage - <span class="math inline">\(\{(51, 52.53.101, 103), (102)\}\)</span><br />
 2. Complete linkage = <span class="math inline">\(\{(51, 53.103), (52, 101, 102) \}\)</span></p>
 </div>
 <div id="part-b-5" class="section level4">
-<h4>Part B</h4>
+<h4><span class="header-section-number">0.8.2.2</span> Part B</h4>
 <p>K-means++ attempts to remediate the situation in which the random sampling that sets the first centres has them too close together by taking K points that are as far appart from each other as possible. But note that this isn’t very efficient since you need to compute and compare distances between every point of your data set.</p>
 </div>
 </div>
 <div id="question-3-3" class="section level3">
-<h3>Question 3</h3>
+<h3><span class="header-section-number">0.8.3</span> Question 3</h3>
 <div id="part-a-5" class="section level4">
-<h4>Part A</h4>
+<h4><span class="header-section-number">0.8.3.1</span> Part A</h4>
 <p>Here are the conditions for implementing linear regression. 1. Linearity - Plot the residuals and look for nonlinearities<br />
 2. Independence of errors - see tests for indepedence from STA261 and STA302<br />
 3. Identically distributed errors - plot errors and check for homoskedasticity<br />
 4. Normality of errors - QQ-plot and empirical CDF assessment</p>
 </div>
 <div id="part-b-6" class="section level4">
-<h4>Part B</h4>
+<h4><span class="header-section-number">0.8.3.2</span> Part B</h4>
 <p>Let <span class="math inline">\(A = uv^T\)</span>. Then the eigenvalue equation <span class="math inline">\(Ax= \lambda x\)</span> becomes <span class="math display">\[\begin{align}
 Ax &amp;= \lambda x \notag\\
 uv^Tx &amp;= \lambda x \notag\\
@@ -843,16 +843,16 @@ uv^Tx &amp;= \lambda x \notag\\
 </div>
 </div>
 <div id="question-4-3" class="section level3">
-<h3>Question 4</h3>
+<h3><span class="header-section-number">0.8.4</span> Question 4</h3>
 <div id="part-a-6" class="section level4">
-<h4>Part A</h4>
+<h4><span class="header-section-number">0.8.4.1</span> Part A</h4>
 <p>We want to find the direction that explains the <strong>third</strong> largest amount of information. Given that we already know the first two PCs, we don’t need to explain any more information in those particular directions, so we’re only interested in directions that are <strong>orthogonal</strong> to <span class="math inline">\(v_1\)</span> and <span class="math inline">\(v_2\)</span>. From the lectures, we know that the variance in a direction <span class="math inline">\(u\)</span> is given by <span class="math display">\[(n-1)^{-1}\|Xu\|\]</span> So we need to solve the following optimization problem <span class="math display">\[v_24= \arg \max_{\substack{u^Tv_1=0\\ u^Tv_2 =0 \\ \|u\|=1}} u^TX^TXu = \arg \max_{\substack{u^Tv_1=0\\ u^Tv_2 =0 }} \frac{u^TX^TXu}{u^Tu} \]</span></p>
 <p>Following the same reasoning as the lectures, we compute the eigendecomposition <span class="math inline">\(X^TX = V\Lambda V^T\)</span> and set <span class="math inline">\(z = V^Tu\)</span>. Because <span class="math inline">\(u \perp v_1, v_2\)</span>, the first two components of <span class="math inline">\(z\)</span> will be zero. Then it follows that</p>
 <p><span class="math display">\[ u^TX^TXu = z^T\Lambda z = \sum_{i=1}^p \lambda_iz_i^2 =\sum_{i=3}^p \lambda_iz_i^2 \leq \lambda_3\sum_{i=3}^p z_i^2  = \lambda_3 u^TVV^Tu = \lambda_3 u^Tu \]</span></p>
 <p>As in class, that inequality is an equality if <span class="math inline">\(z_4= z_5 = \ldots = z_p=0\)</span>, which occurs when <span class="math inline">\(u = v_3\)</span>. As we have shown that the Rayleigh quotient cannot be larger than <span class="math inline">\(\lambda_3\)</span> when computed on vectors that are orthogonal to <span class="math inline">\(v_1\)</span> and <span class="math inline">\(v_2\)</span> <strong>and</strong> that value is attained when <span class="math inline">\(u=v_3\)</span>, it follows that <span class="math inline">\(v_3\)</span> maximizes the constrained Rayleigh quotient and hence the second principal component is the eigenvector of <span class="math inline">\(X^TX\)</span> that corresponds to the second largest eigenvalue. This completes the proof.</p>
 </div>
 <div id="part-b-7" class="section level4">
-<h4>Part B</h4>
+<h4><span class="header-section-number">0.8.4.2</span> Part B</h4>
 <p>In forward variable selection you start with a model that only has an inter- cept. At each step you add the feature that maximizes the prediction error on the test set. Continue until all features have been added.<br />
 In backward variable selection, you start with a model that has all the features in it. At each step you remove the feature that reduces the prediction error the least on the test set. Continue until there are no features left.<br />
 Forwards selection is preferable if there are more features than observations. Best of luck on the midterm.</p>

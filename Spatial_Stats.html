@@ -477,23 +477,23 @@ div.tocify {
 
 
 <div id="where-did-this-all-start" class="section level1">
-<h1>Where did this all start?</h1>
+<h1><span class="header-section-number">1</span> Where did this all start?</h1>
 <p>In my final year of my undergraduate degree, I took a course in spatial statistics taught by none other than <a href="https://scholar.google.co.uk/citations?user=oQIKmWUAAAAJ&amp;hl=en">Prof. Daniel Simpson</a>. As someone that’s always asked “what’s the point” to almost everything that I was taught, spatial statistics always provided a very clear answer to that. Every model that we use has a tangible underlying object, disease, species, or thing we are interested in looking at but also takes into account the **location* of these objects which has always been ignored. The assumption that where observations were made doesn’t matter has never sat well with me so this was a breadth of fresh air.</p>
 <p>As a result, I created this blog post to showcase any work I’ve done in this field. I want to take this opportunity to mention that spatial statistics is heavily based on Bayesian methods so I recommend familarizing yourself with those before proceedig. My advice is to read <a href="http://www.stat.columbia.edu/~gelman/book/">Bayesian Data Analysis</a> by Gelman et. all. Further, most models are fit using <a href="http://www.r-inla.org/">R-INLA</a> or <a href="https://mc-stan.org/users/interfaces/rstan">R-Stan</a>; two statistical packages that are very powerful and very confusing but worth the struggle!</p>
 </div>
 <div id="posterior-sampling-of-random-effects-using-inla" class="section level1">
-<h1>Posterior sampling of random effects using INLA</h1>
+<h1><span class="header-section-number">2</span> Posterior sampling of random effects using INLA</h1>
 <p>While working on an air pollution project during my time and St. Michael’s hospital, we were interested in sampling the poster distribution of a <a href="https://en.wikipedia.org/wiki/Random_effects_model">random effect</a> within a model. This exercise is broken down into three parts in order to explain the methodology.</p>
 <ol style="list-style-type: decimal">
 <li>Understanding INLA output</li>
 <li>Formal mathematical argument for sampling</li>
 <li>Implemenation/code</li>
 </ol>
-<div id="what-are-you-doing-inla" class="section level2">
-<h2>What are you doing INLA</h2>
+<div id="latent-field-representation-of-a-model" class="section level2">
+<h2><span class="header-section-number">2.1</span> Latent field representation of a model</h2>
 <p>If you’ve fit any model in INLA you know that it outputs a nested list that can be hard to navigate. Fortunately, thanks to <a href="http://pbrown.ca/">Prof. Patrick Brown</a> and his <a href="http://pbrown.ca/teaching/astwo/slides/?C=M;O=A">Applied Statistics II</a> we can find some clarity. We know that INLA provides estimates of the posterior distribution of the latent field of the model. The details of how it does this will be omitted as they require solving stochastic partial differential equations and that is a battle for a different day. Let’s begin with an example:</p>
 <div id="the-bacteria-dataset" class="section level3">
-<h3>The Bacteria Dataset</h3>
+<h3><span class="header-section-number">2.1.1</span> The Bacteria Dataset</h3>
 <p>The question we are asking is whether or not a given treatment reduces the probability that the bacteria is present in the subject’s body.</p>
 <pre class="r"><code>head(bacteria)</code></pre>
 <pre><code>##   y ap hilo week  ID     trt
@@ -505,7 +505,7 @@ div.tocify {
 ## 6 y  a   hi    2 X02   drug+</code></pre>
 </div>
 <div id="the-model" class="section level3">
-<h3>The Model</h3>
+<h3><span class="header-section-number">2.1.2</span> The Model</h3>
 <p>The variables are defined as follows:</p>
 <ul>
 <li><span class="math inline">\(y_{it}\)</span> is the presence of bacteria in individual <span class="math inline">\(i\)</span> at time <span class="math inline">\(t\)</span></li>
@@ -577,7 +577,7 @@ div.tocify {
 </div>
 </div>
 <div id="transforming-a-mulivariate-normal-for-selective-sampling" class="section level2">
-<h2>Transforming a mulivariate normal for selective sampling</h2>
+<h2><span class="header-section-number">2.2</span> Transforming a mulivariate normal for selective sampling</h2>
 <p>Unfortunately, sampling <span class="math inline">\(U\)</span> is not as simple as pulling it out of <span class="math inline">\(W\)</span>. In this section, we show the mathematical procedure for generating a random sample from the same distribution as <span class="math inline">\(U\)</span>. The <a href="https://en.wikipedia.org/wiki/Cholesky_decomposition">Cholesky decompositon</a> will be used in order to break down the precision matrix in order to create a random sample from <span class="math inline">\(U\)</span>.</p>
 <p><span class="math display">\[\begin{align}
      W &amp;\sim N(\mu_W, Q_W^{-1}) \\
@@ -592,6 +592,9 @@ div.tocify {
 <p><span class="math display">\[\begin{align}
     A^T \mu_x + \widetilde{L}Z \sim N_p (A^T\mu_x, \Sigma_U) \Leftrightarrow A^T \mu_x + \widetilde{L}Z &amp;\overset{d}{=} U
 \end{align}\]</span></p>
+</div>
+<div id="implementation" class="section level2">
+<h2><span class="header-section-number">2.3</span> Implementation</h2>
 </div>
 </div>
 

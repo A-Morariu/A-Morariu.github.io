@@ -477,9 +477,9 @@ div.tocify {
 
 
 <div id="qq-plots" class="section level1">
-<h1>QQ Plots</h1>
+<h1><span class="header-section-number">1</span> QQ Plots</h1>
 <div id="a-little-background" class="section level2">
-<h2>A Little Background</h2>
+<h2><span class="header-section-number">1.1</span> A Little Background</h2>
 <p>In statistics, the first real tool (and often most powerful) for data analysis that becomes available to us is <em>linear regression</em>. However, it doesn’t come without some catches. To get all of the nice properties proved in class we must ensure that <em>all</em> of the assumptions are met. Recall from class the following:</p>
 <p>*<strong>Linearity</strong> - dependent variable is a linear combination of the parameters of the model (we refer to them as <span class="math inline">\(\beta\)</span>’s) and independent variables. <em>Aside: this is one of my favourite assumptions as most people often forget to mention this. Linear relationships are not the only possibilities and this will be explored in other courses dedicated to breaking this exact assumption. See STA303</em></p>
 <p>*<strong>Constant Independent Variable</strong> - mathematically we denote this as <span class="math inline">\(\mathbb{E}(e_i) = 0 \text{  } \forall i\)</span> and the underlying meaning of this is that we can treat the recorded independent variable as a known constant</p>
@@ -493,14 +493,14 @@ div.tocify {
 <p>The purpose of this tutorial is to explore one of the ways that we will examine the above via a visual tool we refer to as a Qunatile to Quantile plot.</p>
 </div>
 <div id="does-this-look-normal" class="section level2">
-<h2>Does this look normal?</h2>
+<h2><span class="header-section-number">1.2</span> Does this look normal?</h2>
 <p>As the name suggests we will be working with the quantiles of a some distribution(s). We will develop this idea in the general setting because this works for <strong>any</strong> distribution, then focus specifically on the normal distribution since this is what we care about for this course. Let’s get started.</p>
 <div id="the-data" class="section level3">
-<h3>The Data</h3>
+<h3><span class="header-section-number">1.2.1</span> The Data</h3>
 <p>We are recording measurments of some random variable <span class="math inline">\(X\)</span>. We would like to check if these observations come from some ideal/suspected distribution <span class="math inline">\(F\)</span>. This means that we are <em>asking</em> if <span class="math inline">\(X \sim F\)</span>. However we are not sure… yet. What we do have is knowledge of what <span class="math inline">\(F\)</span> is since this is what we would like it to be (need to guess something you know) and we have empirical observations of our data. We denote the empirical distribution as <span class="math inline">\(G\)</span>.</p>
 </div>
 <div id="if-you-build-it-it-might-be-normal" class="section level3">
-<h3>If you build it, it might be normal</h3>
+<h3><span class="header-section-number">1.2.2</span> If you build it, it might be normal</h3>
 <p>That is all to say that an equivalent question to the one above is if <span class="math inline">\(F = G\)</span> and what’s left is to compare them visually. I’d now like to highlight that <span class="math inline">\(G\)</span> is an empircal cumulative distribution function (ECDF) while <span class="math inline">\(F\)</span> is a cumulative distribution function (CDF) which makes them a bit harder to compare. ECDFs are never smooth since they are based on a finite number of points (as dictated by the data set) while CDFs are beautiful functions that make us happy. Thus, we must find a way to discretize <span class="math inline">\(F\)</span> in order to compare them on the same basis (the beauty of <span class="math inline">\(F\)</span> is that we can do exactly this). The solution is to use the inverse of the distributions, otherwise known as the qunatile function and is denoted <span class="math inline">\(F^{-1}\)</span> and <span class="math inline">\(G^{-1}\)</span> respectively. For our observed data this is easy since we can take the <a href="https://en.wikipedia.org/wiki/Order_statistic">ordered statistic</a> <span class="math inline">\(x_{(i)}\)</span> as a qunatile and we are done. For <span class="math inline">\(F\)</span> we must do a bit more work (luckily, it’s not hard work). Generate a data set (we call this simulation) of equal size as <span class="math inline">\(X\)</span> from <span class="math inline">\(F\)</span> using your computer and take the corresponding ordered statistics <span class="math inline">\(f_{(i)}\)</span>. If we don’t exactly match the quantiles of the ECDF we can do some interpolation on the generated data set due to the continuity of <span class="math inline">\(F\)</span> (when data sets are very large this step is likely not needed).</p>
 <p>The last question we must ask ourselves is what it does equality look like geometrically or on the plane. If I was to ask you to draw me a function that is the definition of two quantities being equal, what would it be? The function that should come to mind is <span class="math inline">\(y=x\)</span>. By extension we if are to compare the two distribution on a graph we should check if they fall on that line. From this, the interpretation becomes vey natural. If the two distributions in question are indeed the same, the quantiles of each one will fall along the <span class="math inline">\(y=x\)</span> line. Deviations from this line mean that they are not the same. I would like to take this opportunity to emphasize that some deviation is okay as we are dealing with <strong>random</strong> variables afterall. Large, systematic deviations (particularly in the tails) is what would be cause for concern.</p>
 <p>Here is a summary on how we construct the QQ plots.</p>
@@ -512,12 +512,12 @@ div.tocify {
 </ol>
 </div>
 <div id="a-house-not-made-of-straws" class="section level3">
-<h3>A house not made of straws</h3>
+<h3><span class="header-section-number">1.2.3</span> A house not made of straws</h3>
 <p>When reading this, you will notice the deliberate omission of any particular distribution we are evaluating. All that was required was that <span class="math inline">\(F\)</span> and <span class="math inline">\(G\)</span> are <strong>some</strong> valid probability distribution. This makes QQ plots such a versatile tool because we can test for any distribution we are curious about. In our case, we are intersted in whether or not the errors come from the normal distribution in equation  1. But we can just replace that with your favourite student’s t distribution, or F distribution, chi-squared, gamma, or any other you want. You even have the power to blindly compare two ECDF’s by letting <span class="math inline">\(F\)</span> be an ECDF. If all you are intereted in is whether or not two datasets follow the same (all be it unkown) distribution this is a solid method to explore that making this a very robust tool.</p>
 </div>
 </div>
 <div id="some-examples" class="section level2">
-<h2>Some examples</h2>
+<h2><span class="header-section-number">1.3</span> Some examples</h2>
 <p>Coming soon…</p>
 </div>
 </div>

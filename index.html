@@ -19,6 +19,9 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -262,6 +265,90 @@ $(document).ready(function () {
 
 
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -269,6 +356,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -390,15 +487,15 @@ text-align: justify}
 
 <p>Throughout the site you will find examples of my course work and personal project along side material that I use to teach in any of my tutorials/office hours. The latter will be sorted by courses, semester and finally section.</p>
 <div id="currently-teaching" class="section level2">
-<h2>Currently Teaching</h2>
+<h2><span class="header-section-number">0.1</span> Currently Teaching</h2>
 <p><a href="https://a-morariu.github.io/STA302_tutorial.html">STA302 - Summer 2019</a></p>
 <div id="previously-taught" class="section level3">
-<h3>Previously Taught</h3>
+<h3><span class="header-section-number">0.1.1</span> Previously Taught</h3>
 <p><a href="https://a-morariu.github.io/STA130_tutorial.html">STA130 - Winter 2019</a> <a href="https://ntaback.github.io/UofT_STA130/STA130syllabus2018S.html">STA130 - Winter 2018</a>: An Introduction to Statistical Reasoning and Data Science <a href="https://a-morariu.github.io/STA314_Tutorial.html">STA314 - Fall 2018</a>: Statistical Methods for Machine Learning I</p>
 </div>
 </div>
 <div id="my-favourite-r-resources" class="section level2">
-<h2>My Favourite R Resources</h2>
+<h2><span class="header-section-number">0.2</span> My Favourite R Resources</h2>
 <p>These are links to some of the cheat sheets I always have open when coding in R. Be it for assignments, playing around with data or professional projects, they’ve come in handy countless times. I highly recommend saving a copy of these. </p>
 <ul>
 <li><p><a href="https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf">R Markdown</a><br />
@@ -415,6 +512,8 @@ text-align: justify}
 
 
 
+</div>
+</div>
 
 </div>
 

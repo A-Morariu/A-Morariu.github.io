@@ -477,21 +477,21 @@ div.tocify {
 
 
 <div id="week-1" class="section level1">
-<h1>Week 1</h1>
+<h1><span class="header-section-number">1</span> Week 1</h1>
 <p>Welcome to STA130 - An Introduction to Statistical Reasoning and Data Science!</p>
 <div id="getting-out-of-the-cloud" class="section level2">
-<h2>Getting out of the Cloud</h2>
+<h2><span class="header-section-number">1.1</span> Getting out of the Cloud</h2>
 <p>As I mentioned in tutorial, I highly recommend installing R locally and using that instead of the cloud based option. You will use R for the remainder of your undergraduate degree and this gives you more flexiblity in your work flow. I will provide information on install R and R Studio along with the necessary packages that will help you output beautiful PDF documents of our work.</p>
 <div id="installing-r" class="section level4">
-<h4>Installing R</h4>
+<h4><span class="header-section-number">1.1.0.1</span> Installing R</h4>
 <p>As a Universiy of Toronto student you have special privelages when it comes to installing R. Visit the U of T specific <a href="http://cran.utstat.utoronto.ca/">CRAN-R</a> and download the appropriate installation module for your operating system. Follow the instructions once you unzip the folder.</p>
 </div>
 <div id="install-r-studio" class="section level4">
-<h4>Install R Studio</h4>
+<h4><span class="header-section-number">1.1.0.2</span> Install R Studio</h4>
 <p>Head to the <a href="https://www.rstudio.com/products/rstudio/download/">R Studio</a> and download the <em>free</em> version (first column of the table). Follow the instructions once you unzip the folder.</p>
 </div>
 <div id="rmd-files" class="section level4">
-<h4>.Rmd Files</h4>
+<h4><span class="header-section-number">1.1.0.3</span> .Rmd Files</h4>
 .Rmd files will be our go to work environments for R. They allow us to maintain a very clean and organized work flow and support LaTeX input to help render equations, amongst other things which we will not need fow now. The <a href="Files/STA_Assignment_Template.Rmd">.Rmd code</a> for my assignment/project (<a href="Files/STA_Assignment_Template.pdf">click for preview</a>) template is a good starting point which can be used in anoy of your courses. The top of the document contains something called a YAML header:
 <div class="figure">
 <img src="Images/YAML_header.png" alt="My YAML header. Modify as you see fit" width="50%" />
@@ -502,7 +502,7 @@ My YAML header. Modify as you see fit
 <p>This controls the style of the output. For all the options you have with respect to this section, check this <a href="https://bookdown.org/yihui/rmarkdown/pdf-document.html">link</a>.</p>
 </div>
 <div id="knitr-and-tex" class="section level4">
-<h4>knitr and TeX</h4>
+<h4><span class="header-section-number">1.1.0.4</span> knitr and TeX</h4>
 <p>The first package in R you must install/update is . Copy the below code into you console.</p>
 <pre class="r"><code>install.packages(&quot;knitr&quot;)
 library(knitr)</code></pre>
@@ -512,7 +512,7 @@ library(knitr)</code></pre>
 </div>
 </div>
 <div id="some-material" class="section level2">
-<h2>Some material</h2>
+<h2><span class="header-section-number">1.2</span> Some material</h2>
 <p>This week we focused on ways to represent our data, mainly through histograms, bar graphs, and scatter plots. I will be using the <em>Highway1</em> dataset for examples. Here is a preview:</p>
 <pre class="r"><code>df &lt;- as.data.frame(Highway1)
 head(df)</code></pre>
@@ -539,7 +539,7 @@ head(df)</code></pre>
 ## 5  1.61    70     4
 ## 6  6.87    55     4</code></pre>
 <div id="histograms" class="section level4">
-<h4>Histograms</h4>
+<h4><span class="header-section-number">1.2.0.1</span> Histograms</h4>
 <p><strong>What:</strong> a graph used to display counts of continous variables. The X-axis splits the data into <em>bins</em> that provide a range your data could take while the Y-axis displays the frequencies of points in each of the respective bins.</p>
 <p><strong>Why:</strong> examine the spread of your variable with respect to the values it could take</p>
 <p><strong>Example:</strong></p>
@@ -556,7 +556,7 @@ hg</code></pre>
 <p><img src="STA130_tutorial_files/figure-html/Histogram%20example-1.png" width="672" /></p>
 </div>
 <div id="bar-graphs" class="section level4">
-<h4>Bar Graphs</h4>
+<h4><span class="header-section-number">1.2.0.2</span> Bar Graphs</h4>
 <p><strong>What:</strong> a graph used to display counts of categorical variables. The X-axis splits the data into different labels your data could take while the Y-axis displays the frequencies of the data for the respective labels</p>
 <p><strong>Why:</strong> examine the spread of your variable with respect to the values it could take</p>
 <p><strong>Example:</strong></p>
@@ -572,7 +572,7 @@ bg</code></pre>
 <p><img src="STA130_tutorial_files/figure-html/Bar%20Graph%20example-1.png" width="672" /></p>
 </div>
 <div id="scatterplots" class="section level4">
-<h4>Scatterplots</h4>
+<h4><span class="header-section-number">1.2.0.3</span> Scatterplots</h4>
 <p><strong>What:</strong> mapping pairwise data points on a Cartesian plane. This works best for continuous data but can be done with factors as well. However, factors are best shown through the aesthetic functionality of ggplot via colours or with facets.</p>
 <p><strong>Why:</strong> examine the relationship between the variables</p>
 <p><strong>Example:</strong></p>
@@ -593,13 +593,13 @@ sp </code></pre>
 </div>
 </div>
 <div id="week-2" class="section level1">
-<h1>Week 2</h1>
+<h1><span class="header-section-number">2</span> Week 2</h1>
 <p>This week was dedicated to summary statistics, specifically <em>mean, median,</em> and <em>standard deviation</em>. For the purpose of this week we will work with the imaginary and arbitrary dataset known as <span class="math display">\[X = \{ x_1, x_2, \ldots, x_n \} \]</span></p>
 <div id="median" class="section level3">
-<h3>Median</h3>
+<h3><span class="header-section-number">2.0.1</span> Median</h3>
 <p>Our first measure of centrality is the <em>median</em>. Simply put, it is the middle most number of our data set. Defining what we mean by “middle” in a more mathematical framework, the median refers to the point at which 50% of the data lie below it, and 50% of the data lie above it. <span class="math display">\[ \mathbb{P}(X \geq m) \geq 0.5 \text{ and } \mathbb {P}(X \leq m) \geq 0.5\]</span> The point <span class="math inline">\(m\)</span> where this occurs, is the <em>median</em>.</p>
 <div id="order-statistics" class="section level4">
-<h4>Order Statistics</h4>
+<h4><span class="header-section-number">2.0.1.1</span> Order Statistics</h4>
 <p>I will introduce the concept of an ordered statistic as a way of showing some of the computational intuition that is behind the median. Order statistics are simply an ordered (smallest to largest) version of our original dataset. Define a subset of our data</p>
 <p><span class="math display">\[ Y = \{ x_{(1)}, x_{(2)}, \ldots, x_{(n)}  \} \text{ s.t. } x_{(1)} \leq x_{(2)} \leq \ldots \leq x_{(n)}\]</span></p>
 <p>Each of the <span class="math inline">\(x_{(i)}\)</span> come from <span class="math inline">\(X\)</span>. By extension, the median can now be easily computed by “crossing out”&quot; one number from each end of the ordered statistic set. Two cases will arise; one where <span class="math inline">\(n\)</span> is even, the other when <span class="math inline">\(n\)</span> is odd, with the respective medians being listed below</p>
@@ -610,11 +610,11 @@ sp </code></pre>
 </div>
 </div>
 <div id="mean" class="section level3">
-<h3>Mean</h3>
+<h3><span class="header-section-number">2.0.2</span> Mean</h3>
 <p>Often referred to as the average, the mean refers to the arthemetic middle of a set of numbers. It is defined by <span class="math display">\[ \mu = \frac{ \sum_{i=1}^N x_i}{N} \]</span> One thing I’d like to highlight regarding the mean is that we now take into account the magnitude of each measurement <span class="math inline">\(x_i\)</span>. With the median, we look at the middle most number regardless of large they are but now we put value on the size of that measurement.</p>
 </div>
 <div id="so-why-does-it-matter" class="section level3">
-<h3>So why does it matter?</h3>
+<h3><span class="header-section-number">2.0.3</span> So why does it matter?</h3>
 <p>This becomes of vital importance when we look at skewed distributions.. The example below highlights the difference between the mean and median.</p>
 <pre class="r"><code>set.seed(19971222)
 
@@ -660,7 +660,7 @@ sym %&gt;% ggplot(aes(sym$rnum)) +
 <p>As you can see, the difference between the mean and the median is more apparent given this skewed distribtion. You should think about what happens if the distribution is left skewed and try to code an example of it to verify your conjecture.</p>
 </div>
 <div id="measures-of-spread---variancestandard-deviation" class="section level3">
-<h3>Measures of Spread - Variance/Standard Deviation</h3>
+<h3><span class="header-section-number">2.0.4</span> Measures of Spread - Variance/Standard Deviation</h3>
 <p>The last thing that we will examine this week is measuring dispersion in our data with the idea of standard deviation. This is quite literally how far your data strays from it’s central point, the mean. Before diving into the specifics of this quantity, I’d like to go over the idea of distance from a mathematical perspective.</p>
 <p>In general, we use <em>norms</em> to quantify how far something is from a given point in space. A norm is any mapping <span class="math inline">\(g:\mathbb{R}^n \rightarrow [0,+\infty)\)</span> which obeys the triangle inequality, closed under scalar multiplication, and has the zero vector being mapped to 0. You can look this up in more detail on the <a href="https://en.wikipedia.org/wiki/Norm_(mathematics)">Wikipedia</a> page but this is strictly outside of the scope of this course and not necessary (cool if you are curious about the mathematical intricacies of the concept). For our purposes, we will be working with the <span class="math inline">\(L_2\)</span> norm, which is more often known as the Euclidean distance. In the case where you are interested in the distance of a point from any other point that is not the origin, say <span class="math inline">\(\mu_x\)</span>, it is define as <span class="math display">\[L_2 :\mathbb{R}^n \rightarrow [0,+\infty) \text{ s.t. } x \mapsto \sqrt{ (x_1 - \mu_x)^2 + \ldots + (x_n - \mu_x)^2}\]</span></p>
 <p>We will use this as a way of quantifying how far each point is from the mean of the data set. As such, if we want to measure the total spread we should add up the distance from every point to the mean. The variance will then be defined as</p>
@@ -668,17 +668,17 @@ sym %&gt;% ggplot(aes(sym$rnum)) +
 <p><span class="math display">\[\sigma_x = \sqrt{Var(X)} = \sqrt{\frac{\sum_{i=1}^N (x_i-\mu_x)^2}{N}}\]</span></p>
 </div>
 <div id="population-statistics-vs.sample-statistics" class="section level3">
-<h3>Population Statistics vs. Sample Statistics</h3>
+<h3><span class="header-section-number">2.0.5</span> Population Statistics vs. Sample Statistics</h3>
 <p>You may have noticed my deliberate use of <span class="math inline">\(N\)</span> in the denominators of the mean and standard variation which represents the size of the whole population (if we are measuring the height of humans, we would need to measure <a href="http://www.worldometers.info/world-population/">every</a> person in the world). However, measuring a full population is not always feasible and as such we must settle for a subset of the population which will we will refer to as a <em>sample</em> from this point on. In a sample, you will always be taking <span class="math inline">\(n &lt; N\)</span> (and often times <span class="math inline">\(n &lt;&lt; N\)</span>) members of the population. As such our formulas will be modified in the following way.</p>
 <p><span class="math display">\[ \hat{\mu}_x = \bar{x} = \frac{\sum_{i=1}^n x_i}{n} \]</span> A subtle distinction arises when computing the variance. Since the variance is a function of both the data and the mean we must differentiate between the estimated population standard deviation (<span class="math inline">\(\hat{\sigma}_x\)</span>) and the sample standard deviation <span class="math inline">\(s_x\)</span>. When estimating the population standard deviation using a sample you will notice that we use the population mean above. This would only be doable if the mean is known ahead of time and given to you. <span class="math display">\[\hat{\sigma}_x = \sqrt{\frac{\sum_{i=1}^n (x_i-\mu_x)^2}{n}}  \]</span> However, there are many instances where the population mean will not be available. In this case we will be forced to use an estimate of the population mean, the sample mean. This gives rise to the sample standard variation which we define in a similar way. <span class="math display">\[ s_x = \sqrt{\frac{\sum_{i=1}^n (x_i-\bar{x})^2}{n-1}} \text{ with } \lim_{n \rightarrow \infty} s_x = \sigma_x\]</span> You will notice that the denominator has slightly different since we are now dividing by <span class="math inline">\(n-1\)</span> instead of the <span class="math inline">\(n\)</span> we’ve used previously. The reason for this is because we are loosing a <a href="https://en.wikipedia.org/wiki/Degrees_of_freedom_(statistics)">degree of freedom</a> when using that estimated mean. The simplest explanation (leaving out many important and interesting details which you will see in later statistics courses) is when given the sample mean I could take away 1 data point from your sample and you would still be able to figure out what your sample was based on the <span class="math inline">\(n-1\)</span> numbers and that mean (you can algebraically back out the n-th point).</p>
 </div>
 </div>
 <div id="week-3" class="section level1">
-<h1>Week 3</h1>
+<h1><span class="header-section-number">3</span> Week 3</h1>
 <p>This week was centered around <em>data wrangling</em>. As a general definition, data wrangling or data cleaning refers to any and all manipulations or changes you make to your data in order to get it ready to be analyzed. Within the <strong>tidyverse</strong> package there are several tools, specifically the <a href="https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf">dplyr</a> package, which are useful in organizing your data. Each data set is unique and will require some cleaning before it is ready for being analyzed. As such I will not go into any details regarding methodologies or give examples, there are just too many possibilities.</p>
 </div>
 <div id="week-4" class="section level1">
-<h1>Week 4</h1>
+<h1><span class="header-section-number">4</span> Week 4</h1>
 <p>P values</p>
 <p>QUESTIONS</p>
 <ol style="list-style-type: lower-alpha">
@@ -689,14 +689,14 @@ sym %&gt;% ggplot(aes(sym$rnum)) +
 </ol>
 </div>
 <div id="week-6" class="section level1">
-<h1>Week 6</h1>
+<h1><span class="header-section-number">5</span> Week 6</h1>
 <p><a href="Files/Week6.docx">The questions</a></p>
 </div>
 <div id="week-8" class="section level1">
-<h1>Week 8</h1>
+<h1><span class="header-section-number">6</span> Week 8</h1>
 <p>Here are the questions.</p>
 <div id="topic-1" class="section level3">
-<h3>Topic 1</h3>
+<h3><span class="header-section-number">6.0.1</span> Topic 1</h3>
 <ul>
 <li>Refer to Question 4 from the homework.</li>
 <li>Explain how to make a ROC curve and the type of information it provides.</li>
@@ -705,7 +705,7 @@ sym %&gt;% ggplot(aes(sym$rnum)) +
 </ul>
 </div>
 <div id="topic-2" class="section level3">
-<h3>Topic 2</h3>
+<h3><span class="header-section-number">6.0.2</span> Topic 2</h3>
 <ul>
 <li>Refer to Question 2 from the homework.</li>
 <li>Explain what a confusion matrix is and how each cell is calculated.</li>
@@ -714,7 +714,7 @@ sym %&gt;% ggplot(aes(sym$rnum)) +
 </ul>
 </div>
 <div id="topic-3" class="section level3">
-<h3>Topic 3</h3>
+<h3><span class="header-section-number">6.0.3</span> Topic 3</h3>
 <ul>
 <li>Refer to Question 1b.</li>
 <li>Summarize the classification tree from part (b); make sure to include at least the following points: how the splits on each variable were selected, how a new observation would be predicted by this classification tree.</li>
@@ -723,9 +723,9 @@ sym %&gt;% ggplot(aes(sym$rnum)) +
 </div>
 </div>
 <div id="week-9" class="section level1">
-<h1>Week 9</h1>
+<h1><span class="header-section-number">7</span> Week 9</h1>
 <div id="topic-1-1" class="section level3">
-<h3>Topic 1</h3>
+<h3><span class="header-section-number">7.0.1</span> Topic 1</h3>
 <ul>
 <li>Questions 1a and 1c</li>
 <li>Describe your plot produced in question 1a. Make sure to note the x- and y-axis and to describe the association you observe, if any. E.g. the association linear, positive, negative, strong, weak, etc.?</li>
@@ -735,7 +735,7 @@ sym %&gt;% ggplot(aes(sym$rnum)) +
 </ul>
 </div>
 <div id="topic-2-1" class="section level3">
-<h3>Topic 2</h3>
+<h3><span class="header-section-number">7.0.2</span> Topic 2</h3>
 <ul>
 <li>Questions 1d-f</li>
 <li>Provide a simple linear regression equation for the association between head size and brain weight. Explain what each part of the model means in lay terms.</li>
@@ -744,7 +744,7 @@ sym %&gt;% ggplot(aes(sym$rnum)) +
 </ul>
 </div>
 <div id="topic-3-1" class="section level3">
-<h3>Topic 3</h3>
+<h3><span class="header-section-number">7.0.3</span> Topic 3</h3>
 <ul>
 <li>Question 2c</li>
 <li>Present your regression model of msrp on year based on the training set.</li>
@@ -753,7 +753,7 @@ sym %&gt;% ggplot(aes(sym$rnum)) +
 </ul>
 </div>
 <div id="topic-4" class="section level3">
-<h3>Topic 4</h3>
+<h3><span class="header-section-number">7.0.4</span> Topic 4</h3>
 <ul>
 <li>Question 2d</li>
 <li>What is your predicted 2013 msrp for a 2010 model hybrid vehicle? Make sure to present your regression equation, including all coefficients.</li>
@@ -905,38 +905,38 @@ LR4</code></pre>
 </div>
 </div>
 <div id="week-10" class="section level1">
-<h1>Week 10</h1>
+<h1><span class="header-section-number">8</span> Week 10</h1>
 <p>We discuss questions in your presentation groups and debrief as a class.</p>
 <div id="question-1" class="section level3">
-<h3>Question 1</h3>
+<h3><span class="header-section-number">8.0.1</span> Question 1</h3>
 <p>As pertaining to Q1a ii. Carry out an hypothesis test to investigate whether the mean selling price is the same for sellers who do and do not use stock photos. Assuming the conditions necessary for the inference procedure to be valid are reasonable in this situation, what do you conclude? How could you apply a method from earlier in the term to carry out this hypothesis test?</p>
 </div>
 <div id="question-2" class="section level3">
-<h3>Question 2</h3>
+<h3><span class="header-section-number">8.0.2</span> Question 2</h3>
 <p>As pertaining to Q1c. * Is there evidence of a difference between sellers with low and high ratings in the relationship between ‘totalPr‘ and ‘duration‘? * Is there evidence of a difference between sellers with medium and high ratings in the relationship between ‘totalPr‘ and ‘duration‘? * Is there evidence of a difference between sellers with low and medium ratings in the relationship between ‘totalPr‘ and ‘duration‘? iv. Briefly explain a way to obtain p-values for the tests needed to address iii?</p>
 </div>
 <div id="evaluation" class="section level3">
-<h3>Evaluation</h3>
+<h3><span class="header-section-number">8.0.3</span> Evaluation</h3>
 <p><em>Please write a paragraph answering the following question.</em> Using R, you fit two regression models that you defined in (2c). Which model do you think would best explain the association between temperature and yield? Think about the shape of the association and any model statistics that may be relevant. Are there any limitations to these models? Remember to mention: your research question and the methods you applied.</p>
 </div>
 </div>
 <div id="week-11" class="section level1">
-<h1>Week 11</h1>
+<h1><span class="header-section-number">9</span> Week 11</h1>
 <p>Not the last week yet!</p>
 <div id="question-1-1" class="section level3">
-<h3>Question 1</h3>
+<h3><span class="header-section-number">9.0.1</span> Question 1</h3>
 <p>Interpret the p-value of this test to compare the mean improvement for Lumosity versus crossword puzzles. How does it compare to the p-value estimated using the randomization test earlier in this question? Is this surprising? Why or why not? Make sure to explain the methods you used.</p>
 </div>
 <div id="question-2-1" class="section level3">
-<h3>Question 2</h3>
+<h3><span class="header-section-number">9.0.2</span> Question 2</h3>
 <p>What type of study did Hardy et al. conduct? What were the conclusions? Are there any limitations?</p>
 </div>
 <div id="question-3" class="section level3">
-<h3>Question 3</h3>
+<h3><span class="header-section-number">9.0.3</span> Question 3</h3>
 <p>Is age a confounder of this association? Why or why not?</p>
 </div>
 <div id="question-4" class="section level3">
-<h3>Question 4</h3>
+<h3><span class="header-section-number">9.0.4</span> Question 4</h3>
 <p>What ethical considerations did Hardy et al. make in their study? Why were these steps necessary? Consider the Statistical Society of Canada (SSC) Code of Ethical Statistical Practice, what practices should you consider while completing your poster project?</p>
 </div>
 </div>
