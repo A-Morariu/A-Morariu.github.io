@@ -483,13 +483,30 @@ div.tocify {
 </div>
 
 
-<div id="where-did-this-all-start" class="section level1">
-<h1><span class="header-section-number">1</span> Where did this all start?</h1>
+<pre class="r"><code>library(gridExtra)
+library(MASS)
+library(ISLR)
+library(car)
+library(modelr)
+library(gapminder)
+library(broom)
+library(e1071)
+library(summarytools)
+library(tidyverse)
+library(knitr)
+library(png)
+library(jpeg)
+library(fdrtool)
+library(Matrix)
+
+set.seed(19971222)</code></pre>
+<div id="where-did-this-all-start" class="section level1 unnumbered">
+<h1>Where did this all start?</h1>
 <p>In my final year of my undergraduate degree, I took a course in spatial statistics taught by none other than <a href="https://scholar.google.co.uk/citations?user=oQIKmWUAAAAJ&amp;hl=en">Prof. Daniel Simpson</a>. As someone that’s always asked “what’s the point” to almost everything that I was taught, spatial statistics always provided a very clear answer to that. Every model that we use has a tangible underlying object, disease, species, or thing we are interested in looking at but also takes into account the **location* of these objects which has always been ignored. The assumption that where observations were made doesn’t matter has never sat well with me so this was a breadth of fresh air.</p>
 <p>As a result, I created this blog post to showcase any work I’ve done in this field. I want to take this opportunity to mention that spatial statistics is heavily based on Bayesian methods so I recommend familarizing yourself with those before proceedig. My advice is to read <a href="http://www.stat.columbia.edu/~gelman/book/">Bayesian Data Analysis</a> by Gelman et. all. Further, most models are fit using <a href="http://www.r-inla.org/">R-INLA</a> or <a href="https://mc-stan.org/users/interfaces/rstan">R-Stan</a>; two statistical packages that are very powerful and very confusing but worth the struggle!</p>
 </div>
 <div id="posterior-sampling-of-random-effects-using-inla" class="section level1">
-<h1><span class="header-section-number">2</span> Posterior sampling of random effects using INLA</h1>
+<h1><span class="header-section-number">1</span> Posterior sampling of random effects using INLA</h1>
 <p>While working on an air pollution project during my time and St. Michael’s hospital, we were interested in sampling the poster distribution of a <a href="https://en.wikipedia.org/wiki/Random_effects_model">random effect</a> within a model. This exercise is broken down into three parts in order to explain the methodology.</p>
 <ol style="list-style-type: decimal">
 <li>Understanding INLA output</li>
@@ -497,10 +514,10 @@ div.tocify {
 <li>Implemenation/code</li>
 </ol>
 <div id="latent-field-representation-of-a-model" class="section level2">
-<h2><span class="header-section-number">2.1</span> Latent field representation of a model</h2>
+<h2><span class="header-section-number">1.1</span> Latent field representation of a model</h2>
 <p>If you’ve fit any model in INLA you know that it outputs a nested list that can be hard to navigate. Fortunately, thanks to <a href="http://pbrown.ca/">Prof. Patrick Brown</a> and his <a href="http://pbrown.ca/teaching/astwo/slides/?C=M;O=A">Applied Statistics II</a> we can find some clarity. We know that INLA provides estimates of the posterior distribution of the latent field of the model. The details of how it does this will be omitted as they require solving stochastic partial differential equations and that is a battle for a different day. Let’s begin with an example:</p>
 <div id="the-bacteria-dataset" class="section level3">
-<h3><span class="header-section-number">2.1.1</span> The Bacteria Dataset</h3>
+<h3><span class="header-section-number">1.1.1</span> The Bacteria Dataset</h3>
 <p>The question we are asking is whether or not a given treatment reduces the probability that the bacteria is present in the subject’s body.</p>
 <pre class="r"><code>head(bacteria)</code></pre>
 <pre><code>##   y ap hilo week  ID     trt
@@ -512,7 +529,7 @@ div.tocify {
 ## 6 y  a   hi    2 X02   drug+</code></pre>
 </div>
 <div id="the-model" class="section level3">
-<h3><span class="header-section-number">2.1.2</span> The Model</h3>
+<h3><span class="header-section-number">1.1.2</span> The Model</h3>
 <p>The variables are defined as follows:</p>
 <ul>
 <li><span class="math inline">\(y_{it}\)</span> is the presence of bacteria in individual <span class="math inline">\(i\)</span> at time <span class="math inline">\(t\)</span></li>
@@ -584,9 +601,9 @@ div.tocify {
 </div>
 </div>
 <div id="transforming-a-mulivariate-normal-for-selective-sampling" class="section level2">
-<h2><span class="header-section-number">2.2</span> Transforming a mulivariate normal for selective sampling</h2>
+<h2><span class="header-section-number">1.2</span> Transforming a mulivariate normal for selective sampling</h2>
 <p>Unfortunately, sampling <span class="math inline">\(U\)</span> is not as simple as pulling it out of <span class="math inline">\(W\)</span>. In this section, we show the mathematical procedure for generating a random sample from the same distribution as <span class="math inline">\(U\)</span>. The <a href="https://en.wikipedia.org/wiki/Cholesky_decomposition">Cholesky decompositon</a> will be used in order to break down the precision matrix in order to create a random sample from <span class="math inline">\(U\)</span>.</p>
-<p><span class="math display">\[\begin{align}
+<p><span class="math display">\[\begin{align} \label{sampling_math}
      W &amp;\sim N(\mu_W, Q_W^{-1}) \\
      \Rightarrow A^TW &amp;\sim N(A\mu_W, A^T Q_W^{-1} A) \\
      &amp;\sim N(A^T\mu_W, A^T (L_W L_W^T)^{-1} A) \\
@@ -601,7 +618,113 @@ div.tocify {
 \end{align}\]</span></p>
 </div>
 <div id="implementation" class="section level2">
-<h2><span class="header-section-number">2.3</span> Implementation</h2>
+<h2><span class="header-section-number">1.3</span> Implementation</h2>
+<p>In order to put these idea to work, it’s useful/practical to write R functions as to partition the work. From the previous section, it seems that the natural breakdown would be</p>
+<ol style="list-style-type: decimal">
+<li>Creating the transformation matrix <span class="math inline">\(A\)</span></li>
+<li>Performing the Cholesky decompositions to find <span class="math inline">\(\widetilde{L}\)</span></li>
+<li>Generating and transforming the standard normal to get the posterior sample</li>
+</ol>
+<p>To keep this as user friendly as possible, every function requires only the INLA object we are trying to extract random effects from, the name of the random effect, and the desired sample size. In order to test our function we will use a simulated data set inspired by Alex Stringer. An INLA model is fit where both random effects have a <a href="https://en.wikipedia.org/wiki/Random_walk#One-dimensional_random_walk">random walk</a> (specifically a RW1) model.</p>
+<pre class="r"><code># Generate some data
+n &lt;- 100
+set.seed(79687)
+u1 &lt;- 1:n # Covariates to be modelled smoothly, equally spaced
+u2 &lt;- seq(1, 2*n, by = 2)
+eta &lt;- cos(u1) + sin(u2) + rnorm(n,0,exp(-12)) 
+y &lt;- rnorm(n,eta,.1)
+
+df &lt;- tibble(y = y,u1 = u1, u2 = u2)
+
+# Constraints: to be used in later example
+# constr_A &lt;- matrix(c(1,rep(0,n-1)),nrow = 1)
+# constr_e &lt;- rep(0,nrow(constr_A))</code></pre>
+<pre class="r"><code># Fit INLA
+inlarw1 &lt;- INLA::inla(y ~ 1 + 
+                          f(u1,
+                            model = &quot;rw1&quot;, 
+                            initial = 0, 
+                            fixed = TRUE, 
+                            constr = TRUE) +
+                          f(u2, model = &quot;rw1&quot;, 
+                            initial = 1, 
+                            fixed = TRUE,
+                            constr = TRUE),
+      data = df,
+      family = &quot;gaussian&quot;,
+      control.family = list(initial = 0,fixed = TRUE),
+      control.inla = list(strategy=&#39;gaussian&#39;,int.strategy = &quot;eb&quot;,correct = FALSE),
+      control.compute=list(config=TRUE),
+      control.predictor = list(compute=TRUE,initial = 0,fixed = TRUE),
+      control.fixed = list(prec.intercept = 1,mean.intercept = 0)
+)
+
+# preview of the precision matrix 
+precision_mat &lt;- Matrix::forceSymmetric(inlarw1$misc$configs$config[[1]]$Q)
+precision_mat[1:20, 1:20]</code></pre>
+<pre><code>## 20 x 20 sparse Matrix of class &quot;dsCMatrix&quot;
+##                                              
+##  [1,] 2 . . . . . . . . . . . . . . . . . . .
+##  [2,] . 2 . . . . . . . . . . . . . . . . . .
+##  [3,] . . 2 . . . . . . . . . . . . . . . . .
+##  [4,] . . . 2 . . . . . . . . . . . . . . . .
+##  [5,] . . . . 2 . . . . . . . . . . . . . . .
+##  [6,] . . . . . 2 . . . . . . . . . . . . . .
+##  [7,] . . . . . . 2 . . . . . . . . . . . . .
+##  [8,] . . . . . . . 2 . . . . . . . . . . . .
+##  [9,] . . . . . . . . 2 . . . . . . . . . . .
+## [10,] . . . . . . . . . 2 . . . . . . . . . .
+## [11,] . . . . . . . . . . 2 . . . . . . . . .
+## [12,] . . . . . . . . . . . 2 . . . . . . . .
+## [13,] . . . . . . . . . . . . 2 . . . . . . .
+## [14,] . . . . . . . . . . . . . 2 . . . . . .
+## [15,] . . . . . . . . . . . . . . 2 . . . . .
+## [16,] . . . . . . . . . . . . . . . 2 . . . .
+## [17,] . . . . . . . . . . . . . . . . 2 . . .
+## [18,] . . . . . . . . . . . . . . . . . 2 . .
+## [19,] . . . . . . . . . . . . . . . . . . 2 .
+## [20,] . . . . . . . . . . . . . . . . . . . 2</code></pre>
+<p>Now that we have an idea of what the main object of our study, we can start writing the functions to break up our task.</p>
+<pre class="r"><code>re_id &lt;- function(inla_object, re_name){
+    ### return the indicies (row and column index) of the sub-matrix
+    ### corresponding to the named random effect (ONLY works for 1 effect)
+    name &lt;- grep(re_name,inla_object$misc$configs$contents$tag)
+    indicies &lt;- seq(inla_object$misc$configs$contents$start[name],
+            len = inla_object$misc$configs$contents$length[name])
+    
+    return(indicies)
+}
+
+create_transform &lt;- function(inla_object, re_index){
+    ### return the A matrix which selects the sub-matrix corresponding to
+    ### the named random effect 
+    
+    dimension &lt;- nrow(inla_object$misc$configs$config[[1]]$Q)
+    
+    top_block &lt;- Matrix::Matrix(0, 
+                                nrow = (min(re_index)-1)
+                                , ncol = length(re_index))
+    
+    mid_block &lt;- Matrix::Diagonal(n = max(re_index) - min(re_index) + 1)
+    
+    bot_block &lt;- Matrix::Matrix(0, 
+                                nrow = (dimension - max(re_index)),
+                                ncol = length(re_index))
+    
+    return(rbind(top_block, mid_block, bot_block))
+}
+
+transformation &lt;- function(inla_object, trans_mat){
+    ### return the lower-triangular by which to multiply the standard normal 
+    ### to get the appropraite covariance matrix
+    
+    Q_chol &lt;- Matrix::Cholesky(inla_object$misc$configs$config[[1]]$Q)
+    inv_Q_chol &lt;- Matrix::solve(Q_chol)
+    
+    transformation_mat &lt;- Matrix::crossprod(inv_Q_chol, trans_mat)
+    
+    return(transformation_mat)
+}</code></pre>
 </div>
 </div>
 
