@@ -658,7 +658,7 @@ precision_mat[1:10, 1:10]</code></pre>
 ##  [9,] . . . . . . . . 2 .
 ## [10,] . . . . . . . . . 2</code></pre>
 <p>Now that we have an idea of what the main object of our study, we can start writing the functions to break up our task.</p>
-<pre class="r"><code>re_id &lt;- function(inla_object, re_name){
+<pre class="r"><code>reID &lt;- function(inla_object, re_name){
     ### return the indicies (row and column index) of the sub-matrix
     ### corresponding to the named random effect (ONLY works for 1 effect)
     name &lt;- grep(re_name,inla_object$misc$configs$contents$tag)
@@ -668,7 +668,7 @@ precision_mat[1:10, 1:10]</code></pre>
     return(indicies)
 }
 
-create_transform &lt;- function(re_index, inla_object){
+createTransform &lt;- function(re_index, inla_object){
     ### return the A matrix which selects the sub-matrix corresponding to
     ### the named random effect 
     
@@ -702,6 +702,10 @@ transformation &lt;- function(trans_mat, inla_object){
     return(transformation_mat)
 }
 
+meanOffset &lt;- function(re_id, inla_object){
+    ### returns the mean of the latent field from the inla_object
+    return(inla_object$misc$configs$config[[1]]$mean)
+}
 sampler &lt;- function(other_mat, sample_size){
     ### returns a random sample of size sample_size with the same distribution 
     ### as the posterior distribution of the random effect 
@@ -722,11 +726,13 @@ sampler &lt;- function(other_mat, sample_size){
     ### inla_object - fitted INLA model with random effects
     ### random_effect - string containing name of of random effect to sample
     ### sample_size - how many samples to draw
+    thing2 &lt;- inla_object %&gt;% 
+        reID(random_effect) %&gt;%
+        createTransform(inla_object) %&gt;%
+        transformation(inla_object) %&gt;%
+        sampler(sample_size)
     
-    return(inla_object %&gt;% re_id(random_effect) %&gt;% 
-        create_transform(inla_object) %&gt;%
-        transformation(inla_object) %&gt;% 
-        sampler(sample_size))
+    return(thing2)
 }</code></pre>
 </div>
 <div id="evaluation" class="section level2">

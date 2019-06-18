@@ -801,7 +801,6 @@ summary(model1)</code></pre>
        y = &quot;y&quot;) +
   theme_minimal()
 LR1</code></pre>
-<pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
 <p><img src="STA130_tutorial_files/figure-html/Linear%20Regression-1.png" width="672" /></p>
 <pre class="r"><code># what if there is some underlying structure? 
 y2 &lt;- 0.527*x + rnorm(1000, mean = 0, sd = 1)
@@ -836,7 +835,6 @@ summary(model2)</code></pre>
        y = &quot;y&quot;) +
   theme_minimal()
 LR2</code></pre>
-<pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
 <p><img src="STA130_tutorial_files/figure-html/Linear%20Regression%202-1.png" width="672" /></p>
 <p>Because regression is a bit boring lets try to look at when it fails and how to fix that (note this is outside the scope of the course).</p>
 <pre class="r"><code># what if there is some underlying NON LINEAR structure? 
