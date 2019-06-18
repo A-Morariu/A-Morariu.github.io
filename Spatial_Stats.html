@@ -483,23 +483,6 @@ div.tocify {
 </div>
 
 
-<pre class="r"><code>library(gridExtra)
-library(MASS)
-library(ISLR)
-library(car)
-library(modelr)
-library(gapminder)
-library(broom)
-library(e1071)
-library(summarytools)
-library(tidyverse)
-library(knitr)
-library(png)
-library(jpeg)
-library(fdrtool)
-library(Matrix)
-
-set.seed(19971222)</code></pre>
 <div id="where-did-this-all-start" class="section level1 unnumbered">
 <h1>Where did this all start?</h1>
 <p>In my final year of my undergraduate degree, I took a course in spatial statistics taught by none other than <a href="https://scholar.google.co.uk/citations?user=oQIKmWUAAAAJ&amp;hl=en">Prof. Daniel Simpson</a>. As someone that’s always asked “what’s the point” to almost everything that I was taught, spatial statistics always provided a very clear answer to that. Every model that we use has a tangible underlying object, disease, species, or thing we are interested in looking at but also takes into account the **location* of these objects which has always been ignored. The assumption that where observations were made doesn’t matter has never sat well with me so this was a breadth of fresh air.</p>
@@ -661,29 +644,19 @@ inlarw1 &lt;- INLA::inla(y ~ 1 +
 
 # preview of the precision matrix 
 precision_mat &lt;- Matrix::forceSymmetric(inlarw1$misc$configs$config[[1]]$Q)
-precision_mat[1:20, 1:20]</code></pre>
-<pre><code>## 20 x 20 sparse Matrix of class &quot;dsCMatrix&quot;
-##                                              
-##  [1,] 2 . . . . . . . . . . . . . . . . . . .
-##  [2,] . 2 . . . . . . . . . . . . . . . . . .
-##  [3,] . . 2 . . . . . . . . . . . . . . . . .
-##  [4,] . . . 2 . . . . . . . . . . . . . . . .
-##  [5,] . . . . 2 . . . . . . . . . . . . . . .
-##  [6,] . . . . . 2 . . . . . . . . . . . . . .
-##  [7,] . . . . . . 2 . . . . . . . . . . . . .
-##  [8,] . . . . . . . 2 . . . . . . . . . . . .
-##  [9,] . . . . . . . . 2 . . . . . . . . . . .
-## [10,] . . . . . . . . . 2 . . . . . . . . . .
-## [11,] . . . . . . . . . . 2 . . . . . . . . .
-## [12,] . . . . . . . . . . . 2 . . . . . . . .
-## [13,] . . . . . . . . . . . . 2 . . . . . . .
-## [14,] . . . . . . . . . . . . . 2 . . . . . .
-## [15,] . . . . . . . . . . . . . . 2 . . . . .
-## [16,] . . . . . . . . . . . . . . . 2 . . . .
-## [17,] . . . . . . . . . . . . . . . . 2 . . .
-## [18,] . . . . . . . . . . . . . . . . . 2 . .
-## [19,] . . . . . . . . . . . . . . . . . . 2 .
-## [20,] . . . . . . . . . . . . . . . . . . . 2</code></pre>
+precision_mat[1:10, 1:10]</code></pre>
+<pre><code>## 10 x 10 sparse Matrix of class &quot;dsCMatrix&quot;
+##                          
+##  [1,] 2 . . . . . . . . .
+##  [2,] . 2 . . . . . . . .
+##  [3,] . . 2 . . . . . . .
+##  [4,] . . . 2 . . . . . .
+##  [5,] . . . . 2 . . . . .
+##  [6,] . . . . . 2 . . . .
+##  [7,] . . . . . . 2 . . .
+##  [8,] . . . . . . . 2 . .
+##  [9,] . . . . . . . . 2 .
+## [10,] . . . . . . . . . 2</code></pre>
 <p>Now that we have an idea of what the main object of our study, we can start writing the functions to break up our task.</p>
 <pre class="r"><code>re_id &lt;- function(inla_object, re_name){
     ### return the indicies (row and column index) of the sub-matrix
@@ -718,13 +691,39 @@ transformation &lt;- function(inla_object, trans_mat){
     ### return the lower-triangular by which to multiply the standard normal 
     ### to get the appropraite covariance matrix
     
-    Q_chol &lt;- Matrix::Cholesky(inla_object$misc$configs$config[[1]]$Q)
+    
+    Q_chol &lt;- Matrix::forceSymmetric(inla_object$misc$configs$config[[1]]$Q) %&gt;%
+        Matrix::Cholesky(LDL=FALSE, perm=TRUE)
+    
     inv_Q_chol &lt;- Matrix::solve(Q_chol)
     
     transformation_mat &lt;- Matrix::crossprod(inv_Q_chol, trans_mat)
     
     return(transformation_mat)
+}
+
+sampler &lt;- function(sample_size, other_mat){
+    random_MVN &lt;- matrix(rnorm(sample_size*nrow(other_mat)),
+                         ncol=sample_size,
+                         nrow=nrow(other_mat)
+                         )   
+    return(random_MVN)
 }</code></pre>
+<pre class="r"><code>### Use the mvrnorm(n, mu, Sigma) and just feed in the desired arguments based on our transformation
+### require(MASS)</code></pre>
+<p>Now that all the pieces are laid out, the simplest approach is to create a wrapper function which links the previously defined functions via the piping operator in order to streamline the sampling. The  function will take require all the (unique) parameters of each of the indivual pieces and be present as the front-end implementation of the above while outputting a dense matrix of samples from the posterior distribution of the random effect.</p>
+</div>
+<div id="evaluation" class="section level2">
+<h2><span class="header-section-number">1.4</span> Evaluation</h2>
+<p>This section is dedicated to testing the functions above to ensure they output appropriate results. Additionally, we dedicate a section to evaluating the computational costs for precision matricies of various sizes.</p>
+<div id="testing" class="section level3">
+<h3><span class="header-section-number">1.4.1</span> Testing</h3>
+<p>TO DO…</p>
+</div>
+<div id="computational-efficiency" class="section level3">
+<h3><span class="header-section-number">1.4.2</span> Computational efficiency</h3>
+<p>TO DO…</p>
+</div>
 </div>
 </div>
 
