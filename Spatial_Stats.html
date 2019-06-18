@@ -668,7 +668,7 @@ precision_mat[1:10, 1:10]</code></pre>
     return(indicies)
 }
 
-create_transform &lt;- function(inla_object, re_index){
+create_transform &lt;- function(re_index, inla_object){
     ### return the A matrix which selects the sub-matrix corresponding to
     ### the named random effect 
     
@@ -687,7 +687,7 @@ create_transform &lt;- function(inla_object, re_index){
     return(rbind(top_block, mid_block, bot_block))
 }
 
-transformation &lt;- function(inla_object, trans_mat){
+transformation &lt;- function(trans_mat, inla_object){
     ### return the lower-triangular by which to multiply the standard normal 
     ### to get the appropraite covariance matrix
     
@@ -702,20 +702,54 @@ transformation &lt;- function(inla_object, trans_mat){
     return(transformation_mat)
 }
 
-sampler &lt;- function(sample_size, other_mat){
+sampler &lt;- function(other_mat, sample_size){
+    ### returns a random sample of size sample_size with the same distribution 
+    ### as the posterior distribution of the random effect 
     random_MVN &lt;- matrix(rnorm(sample_size*nrow(other_mat)),
                          ncol=sample_size,
                          nrow=nrow(other_mat)
                          )   
+    
+    random_MVN &lt;- Matrix::crossprod(other_mat, random_MVN)
+    
     return(random_MVN)
 }</code></pre>
 <pre class="r"><code>### Use the mvrnorm(n, mu, Sigma) and just feed in the desired arguments based on our transformation
 ### require(MASS)</code></pre>
 <p>Now that all the pieces are laid out, the simplest approach is to create a wrapper function which links the previously defined functions via the piping operator in order to streamline the sampling. The  function will take require all the (unique) parameters of each of the indivual pieces and be present as the front-end implementation of the above while outputting a dense matrix of samples from the posterior distribution of the random effect.</p>
+<pre class="r"><code>rePosteriorSampler&lt;- function(inla_object, random_effect, sample_size){
+    ### wrapper function sampling the posterior random effect 
+    ### inla_object - fitted INLA model with random effects
+    ### random_effect - string containing name of of random effect to sample
+    ### sample_size - how many samples to draw
+    
+    return(inla_object %&gt;% re_id(random_effect) %&gt;% 
+        create_transform(inla_object) %&gt;%
+        transformation(inla_object) %&gt;% 
+        sampler(sample_size))
+}</code></pre>
 </div>
 <div id="evaluation" class="section level2">
 <h2><span class="header-section-number">1.4</span> Evaluation</h2>
 <p>This section is dedicated to testing the functions above to ensure they output appropriate results. Additionally, we dedicate a section to evaluating the computational costs for precision matricies of various sizes.</p>
+<pre class="r"><code># use the inlarw1 object
+result &lt;- rePosteriorSampler(inla_object = inlarw1,
+                             random_effect = &quot;u1&quot;,
+                             sample_size = 10)
+
+result[1:10, 1:5]</code></pre>
+<pre><code>## 10 x 5 Matrix of class &quot;dgeMatrix&quot;
+##            [,1]      [,2]     [,3]      [,4]      [,5]
+##  [1,] -6039.812 -4650.777 693.4809 -951.0524 -6417.125
+##  [2,] -6040.035 -4650.538 693.8372 -951.0640 -6417.673
+##  [3,] -6040.198 -4649.874 695.1721 -951.8791 -6417.963
+##  [4,] -6040.171 -4649.193 695.8040 -954.1954 -6418.856
+##  [5,] -6038.596 -4647.349 694.8415 -956.0556 -6419.664
+##  [6,] -6036.649 -4646.518 694.8138 -957.8432 -6421.271
+##  [7,] -6034.994 -4645.159 694.3258 -959.1092 -6421.296
+##  [8,] -6033.164 -4642.881 693.4838 -960.2345 -6421.551
+##  [9,] -6031.236 -4640.398 692.8360 -958.6611 -6421.419
+## [10,] -6029.306 -4638.897 692.2570 -957.6409 -6422.088</code></pre>
 <div id="testing" class="section level3">
 <h3><span class="header-section-number">1.4.1</span> Testing</h3>
 <p>TO DO…</p>
