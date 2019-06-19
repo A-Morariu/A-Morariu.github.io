@@ -719,7 +719,29 @@ sampler &lt;- function(other_mat, sample_size){
     return(random_MVN)
 }</code></pre>
 <pre class="r"><code>### Use the mvrnorm(n, mu, Sigma) and just feed in the desired arguments based on our transformation
-### require(MASS)</code></pre>
+### require(MASS)
+
+rePostSamp &lt;- function(inla_object,random_effect, sample_size = 1){
+  Amat &lt;- as.matrix(inla_object %&gt;% 
+        reID(random_effect) %&gt;%
+        createTransform(inla_object))
+  
+  mean_vec &lt;- as.vector(Matrix::crossprod(Amat, as.matrix(inla_object$misc$configs$config[[1]]$mean)))
+  covariance_mat &lt;- Matrix::crossprod(Amat,
+                                      solve(inla_object$misc$configs$config[[1]]$Q)
+                                      ) %*% Amat
+  
+  if(length(mean_vec) == nrow(covariance_mat)){
+    mvrnorm(n = sample_size,
+           mu = mean_vec,
+           Sigma = covariance_mat)
+    # each row of this corresponds to a sample from a dim(mu) MVN
+  } else{
+    return(&quot;Error: dimension of mean and covariance are not comformable!&quot;)
+  }
+}
+
+# preliminary tests show improved speed - sampling is slower but multiplication is much faster</code></pre>
 <p>Now that all the pieces are laid out, the simplest approach is to create a wrapper function which links the previously defined functions via the piping operator in order to streamline the sampling. The  function will take require all the (unique) parameters of each of the indivual pieces and be present as the front-end implementation of the above while outputting a dense matrix of samples from the posterior distribution of the random effect.</p>
 <pre class="r"><code>rePosteriorSampler&lt;- function(inla_object, random_effect, sample_size){
     ### wrapper function sampling the posterior random effect 
@@ -737,32 +759,128 @@ sampler &lt;- function(other_mat, sample_size){
 </div>
 <div id="evaluation" class="section level2">
 <h2><span class="header-section-number">1.4</span> Evaluation</h2>
-<p>This section is dedicated to testing the functions above to ensure they output appropriate results. Additionally, we dedicate a section to evaluating the computational costs for precision matricies of various sizes.</p>
-<pre class="r"><code># use the inlarw1 object
-result &lt;- rePosteriorSampler(inla_object = inlarw1,
-                             random_effect = &quot;u1&quot;,
-                             sample_size = 10)
-
-result[1:10, 1:5]</code></pre>
-<pre><code>## 10 x 5 Matrix of class &quot;dgeMatrix&quot;
-##            [,1]      [,2]     [,3]      [,4]      [,5]
-##  [1,] -6039.812 -4650.777 693.4809 -951.0524 -6417.125
-##  [2,] -6040.035 -4650.538 693.8372 -951.0640 -6417.673
-##  [3,] -6040.198 -4649.874 695.1721 -951.8791 -6417.963
-##  [4,] -6040.171 -4649.193 695.8040 -954.1954 -6418.856
-##  [5,] -6038.596 -4647.349 694.8415 -956.0556 -6419.664
-##  [6,] -6036.649 -4646.518 694.8138 -957.8432 -6421.271
-##  [7,] -6034.994 -4645.159 694.3258 -959.1092 -6421.296
-##  [8,] -6033.164 -4642.881 693.4838 -960.2345 -6421.551
-##  [9,] -6031.236 -4640.398 692.8360 -958.6611 -6421.419
-## [10,] -6029.306 -4638.897 692.2570 -957.6409 -6422.088</code></pre>
 <div id="testing" class="section level3">
 <h3><span class="header-section-number">1.4.1</span> Testing</h3>
-<p>TO DO…</p>
+<p>This section is dedicated to testing the functions above to ensure they output appropriate results. Additionally, we dedicate a section to evaluating the computational costs for precision matricies of various sizes.</p>
+<pre class="r"><code># use the inlarw1 object
+post_sample &lt;- rePostSamp(inlarw1, &quot;u1&quot;, 100)
+
+### The dimensions are ###
+dim(post_sample)</code></pre>
+<pre><code>## [1] 100 100</code></pre>
+<pre class="r"><code>### A preview of the sample ###
+as_tibble(round(post_sample[1:10, 1:10],3))</code></pre>
+<pre><code>## # A tibble: 10 x 10
+##        V1     V2     V3     V4     V5     V6     V7     V8     V9    V10
+##     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+##  1  0.341 -0.758  0.816  0.003  0.493 -0.219  0.929 -0.517 -0.183 -1.20 
+##  2  0.355  0.264 -1.00   0.414 -0.652  0.186 -0.517  0.46  -1.24   0.909
+##  3  0.053 -0.23   0.032 -0.083  0.644  0.079  0.494 -0.061 -0.741  0.063
+##  4 -1.45   0.855 -0.817  0.281  1.57  -0.974  0.3    0.399 -0.701 -0.849
+##  5 -0.254  0.395 -1.24   0.168 -0.317  1.13   0.444  0.573  0.134 -0.983
+##  6  0.057  0.2   -0.575  0.065  0.941 -0.308 -0.877 -0.344 -0.432 -0.401
+##  7  0.237  0.381  0.566 -0.291 -0.068  0.258  0.278  0.458  0.065  0.261
+##  8  0.295 -0.36   0.12   0.408  0.117  0.641  0.691 -0.337 -0.439 -0.031
+##  9 -0.02   0.714 -0.122  0.894 -0.109 -0.343  0.403  0.4   -0.321  0.972
+## 10  0.393  0.381  1.03  -0.371  0.504 -0.311 -0.451 -0.012 -0.566 -0.238</code></pre>
+<p>As expected,the number of columns equals the number of observations of the random effect (100). Further, the scale of the number is appropriate when compared to the mean (shown below).</p>
+<pre class="r"><code>as_tibble(round(t(inlarw1$misc$configs$config[[1]]$mean[1:10]),3))</code></pre>
+<pre><code>## # A tibble: 1 x 10
+##      V1     V2    V3    V4    V5    V6    V7    V8    V9    V10
+##   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+## 1  1.05 -0.133 -1.25 0.044 0.447 0.067 0.837 0.268 -1.31 -0.648</code></pre>
 </div>
 <div id="computational-efficiency" class="section level3">
 <h3><span class="header-section-number">1.4.2</span> Computational efficiency</h3>
-<p>TO DO…</p>
+<p>In order to evaluate this portion, we first look at the behavior of the  function as the sample size changes followed by an increase in the dimension of the precision matrix from the INLA model. This will require to the creation of additional toy models where we increase the size of u1).</p>
+<div id="increasing-sample-size" class="section level4">
+<h4><span class="header-section-number">1.4.2.1</span> Increasing Sample Size</h4>
+<pre class="r"><code>size &lt;- c(1:6)
+run_time &lt;- c()
+
+for (i in size) {
+  run_time&lt;- c(run_time, sum(system.time(rePostSamp(inlarw1, &quot;u1&quot;, 10^i))))
+}</code></pre>
+<pre class="r"><code>df_rt &lt;- data_frame(10^size, run_time)
+colnames(df_rt) &lt;- c(&quot;SampleSize&quot;, &quot;RunTime&quot;)
+
+df_rt_graph &lt;- df_rt %&gt;% ggplot(aes(SampleSize, RunTime)) +
+  geom_point(color = &quot;navy&quot;) +
+  geom_line(colour = &quot;steelblue&quot;) +
+  labs(title = &quot;System Run Time for Various Sample Sizes&quot;,
+       xlab = &quot;Number of Samples&quot;,
+       ylab = &quot;Run Time (sum of system.time()) (sec)&quot;) +
+  theme_minimal()
+df_rt_graph</code></pre>
+<p><img src="Spatial_Stats_files/figure-html/Increasing%20sample%20size%20P2-1.png" width="672" /></p>
+<p>The run time is linear with increases to the number of points being generated meaning we scale directly with .</p>
+</div>
+<div id="increasing-dimension" class="section level4">
+<h4><span class="header-section-number">1.4.2.2</span> Increasing Dimension</h4>
+<p>As mentioned earlier, the first step is to re-run the INLA models in order to increase the dimension of the precision matrix. This will make the multiplactions and inversion within the  more demanding. Ideally, the computation time doess not grow exponentially. The fitting was done behind the scenes using the same code as Section 1.3.</p>
+<pre class="r"><code>inlarw1_100 &lt;- inlarw1
+
+# preview of the original precision matrix - INLA 100
+precision_mat100 &lt;- Matrix::forceSymmetric(inlarw1_100$misc$configs$config[[1]]$Q)
+dim(precision_mat100)</code></pre>
+<pre><code>## [1] 301 301</code></pre>
+<pre class="r"><code>precision_mat100[1:10, 1:10]</code></pre>
+<pre><code>## 10 x 10 sparse Matrix of class &quot;dsCMatrix&quot;
+##                          
+##  [1,] 2 . . . . . . . . .
+##  [2,] . 2 . . . . . . . .
+##  [3,] . . 2 . . . . . . .
+##  [4,] . . . 2 . . . . . .
+##  [5,] . . . . 2 . . . . .
+##  [6,] . . . . . 2 . . . .
+##  [7,] . . . . . . 2 . . .
+##  [8,] . . . . . . . 2 . .
+##  [9,] . . . . . . . . 2 .
+## [10,] . . . . . . . . . 2</code></pre>
+<pre class="r"><code># preview of the precision matrix - INLA 1000 
+precision_mat1000 &lt;- Matrix::forceSymmetric(inlarw1_1000$misc$configs$config[[1]]$Q)
+dim(precision_mat1000)</code></pre>
+<pre><code>## [1] 3001 3001</code></pre>
+<pre class="r"><code>precision_mat1000[1:10, 1:10]</code></pre>
+<pre><code>## 10 x 10 sparse Matrix of class &quot;dsCMatrix&quot;
+##                          
+##  [1,] 2 . . . . . . . . .
+##  [2,] . 2 . . . . . . . .
+##  [3,] . . 2 . . . . . . .
+##  [4,] . . . 2 . . . . . .
+##  [5,] . . . . 2 . . . . .
+##  [6,] . . . . . 2 . . . .
+##  [7,] . . . . . . 2 . . .
+##  [8,] . . . . . . . 2 . .
+##  [9,] . . . . . . . . 2 .
+## [10,] . . . . . . . . . 2</code></pre>
+<pre class="r"><code># preview of the precision matrix - INLA 10000
+precision_mat10000 &lt;- Matrix::forceSymmetric(inlarw1_10000$misc$configs$config[[1]]$Q)
+dim(precision_mat10000)</code></pre>
+<pre><code>## [1] 30001 30001</code></pre>
+<pre class="r"><code>precision_mat10000[1:10, 1:10]</code></pre>
+<pre><code>## 10 x 10 sparse Matrix of class &quot;dsCMatrix&quot;
+##                          
+##  [1,] 2 . . . . . . . . .
+##  [2,] . 2 . . . . . . . .
+##  [3,] . . 2 . . . . . . .
+##  [4,] . . . 2 . . . . . .
+##  [5,] . . . . 2 . . . . .
+##  [6,] . . . . . 2 . . . .
+##  [7,] . . . . . . 2 . . .
+##  [8,] . . . . . . . 2 . .
+##  [9,] . . . . . . . . 2 .
+## [10,] . . . . . . . . . 2</code></pre>
+<p>Now we sample each of the posteriors and plot run times like before.</p>
+<pre class="r"><code>models &lt;- c(&quot;INLA-100&quot;,&quot;INLA-1000&quot;, &quot;INLA-10000&quot;)
+
+re &lt;- &quot;u1&quot;
+sample_size &lt;- 1000
+dim_inc_rt &lt;- c(sum(system.time(rePostSamp(inlarw1_100, re, sample_size))),
+                sum(system.time(rePostSamp(inlarw1_1000, re,sample_size))),
+                sum(system.time(rePostSamp(inlarw1_10000, re, sample_size)))
+                )</code></pre>
+</div>
 </div>
 </div>
 </div>
