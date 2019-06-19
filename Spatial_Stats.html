@@ -854,11 +854,11 @@ dim(precision_mat1000)</code></pre>
 ##  [8,] . . . . . . . 2 . .
 ##  [9,] . . . . . . . . 2 .
 ## [10,] . . . . . . . . . 2</code></pre>
-<pre class="r"><code># preview of the precision matrix - INLA 10000
-precision_mat10000 &lt;- Matrix::forceSymmetric(inlarw1_10000$misc$configs$config[[1]]$Q)
-dim(precision_mat10000)</code></pre>
-<pre><code>## [1] 30001 30001</code></pre>
-<pre class="r"><code>precision_mat10000[1:10, 1:10]</code></pre>
+<pre class="r"><code># preview of the precision matrix - INLA 1000 
+precision_mat2500 &lt;- Matrix::forceSymmetric(inlarw1_2500$misc$configs$config[[1]]$Q)
+dim(precision_mat2500)</code></pre>
+<pre><code>## [1] 7501 7501</code></pre>
+<pre class="r"><code>precision_mat2500[1:10, 1:10]</code></pre>
 <pre><code>## 10 x 10 sparse Matrix of class &quot;dsCMatrix&quot;
 ##                          
 ##  [1,] 2 . . . . . . . . .
@@ -871,15 +871,36 @@ dim(precision_mat10000)</code></pre>
 ##  [8,] . . . . . . . 2 . .
 ##  [9,] . . . . . . . . 2 .
 ## [10,] . . . . . . . . . 2</code></pre>
+<pre class="r"><code># preview of the precision matrix - INLA 10000
+#precision_mat10000 &lt;- Matrix::forceSymmetric(inlarw1_10000$misc$configs$config[[1]]$Q)
+#dim(precision_mat10000)
+#precision_mat10000[1:10, 1:10]</code></pre>
 <p>Now we sample each of the posteriors and plot run times like before.</p>
-<pre class="r"><code>models &lt;- c(&quot;INLA-100&quot;,&quot;INLA-1000&quot;, &quot;INLA-10000&quot;)
+<pre class="r"><code>models &lt;- c(&quot;NULL&quot;, &quot;INLA-100&quot;,&quot;INLA-1000&quot;, &quot;INLA-2500&quot;)
 
 re &lt;- &quot;u1&quot;
 sample_size &lt;- 1000
-dim_inc_rt &lt;- c(sum(system.time(rePostSamp(inlarw1_100, re, sample_size))),
-                sum(system.time(rePostSamp(inlarw1_1000, re,sample_size))),
-                sum(system.time(rePostSamp(inlarw1_10000, re, sample_size)))
-                )</code></pre>
+dim_inc_rt &lt;- c(0)
+
+dim_inc_rt &lt;- c(sum(system.time(rePostSamp(inlarw1_100, re, sample_size))))
+dim_inc_rt &lt;- c(dim_inc_rt, sum(system.time(rePostSamp(inlarw1_1000, re, sample_size))))
+dim_inc_rt &lt;- c(dim_inc_rt, sum(system.time(rePostSamp(inlarw1_2500, re, sample_size))))
+#dim_inc_rt &lt;- c(dim_inc_rt, sum(system.time(rePostSamp(inlarw1_10000, re, sample_size))))</code></pre>
+<pre class="r"><code>df_dim_inc &lt;- as_tibble(cbind(models, 
+                              size = c(0,100,1000,2500), 
+                              run_time =round(as.numeric(c(0,dim_inc_rt))),3)
+                        )
+
+dim_inc_graph &lt;- df_dim_inc %&gt;% ggplot(aes(size, run_time)) +
+  geom_point(color = &quot;navy&quot;) +
+  geom_step(color = &quot;steelblue&quot;) +
+  labs(title = &quot;System Run Time for Increasing Dimension&quot;,
+       xlab = &quot;Dimension of Block Matrix of Random Effect&quot;,
+       ylab = &quot;Run time (seconds)&quot;) +
+  theme_minimal()
+
+dim_inc_graph</code></pre>
+<p><img src="Spatial_Stats_files/figure-html/Dimension%20increase%20run%20times%20P2-1.png" width="672" /></p>
 </div>
 </div>
 </div>
