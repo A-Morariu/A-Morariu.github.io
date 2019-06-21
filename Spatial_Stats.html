@@ -818,90 +818,274 @@ df_rt_graph</code></pre>
 <div id="increasing-dimension" class="section level4">
 <h4><span class="header-section-number">1.4.2.2</span> Increasing Dimension</h4>
 <p>As mentioned earlier, the first step is to re-run the INLA models in order to increase the dimension of the precision matrix. This will make the multiplactions and inversion within the  more demanding. Ideally, the computation time doess not grow exponentially. The fitting was done behind the scenes using the same code as Section 1.3.</p>
-<pre class="r"><code>inlarw1_100 &lt;- inlarw1
+<pre class="r"><code>############################
+##### GET KAMAL TO RUN ##### 
+############################
+
+# Generate some data
+n &lt;- 500
+u1 &lt;- 1:n # Covariates to be modelled smoothly, equally spaced
+u2 &lt;- seq(1, 2*n, by = 2)
+eta &lt;- cos(u1) + sin(u2) + rnorm(n,0,exp(-12)) 
+y &lt;- rnorm(n,eta,.1)
+
+df_500 &lt;- tibble(y = y,u1 = u1, u2 = u2)
+
+# Fit INLA
+inlarw1_500 &lt;- INLA::inla(y ~ 1 + 
+                          f(u1,
+                            model = &quot;rw1&quot;, 
+                            initial = 0, 
+                            fixed = TRUE, 
+                            constr = TRUE) +
+                          f(u2, model = &quot;rw1&quot;, 
+                            initial = 1, 
+                            fixed = TRUE,
+                            constr = TRUE),
+      data = df_500,
+      family = &quot;gaussian&quot;,
+      control.family = list(initial = 0,fixed = TRUE),
+      control.inla = list(strategy=&#39;gaussian&#39;,int.strategy = &quot;eb&quot;,correct = FALSE),
+      control.compute=list(config=TRUE),
+      control.predictor = list(compute=TRUE,initial = 0,fixed = TRUE),
+      control.fixed = list(prec.intercept = 1,mean.intercept = 0)
+)
+
+# Generate some data
+n &lt;- 5000
+u1 &lt;- 1:n # Covariates to be modelled smoothly, equally spaced
+u2 &lt;- seq(1, 2*n, by = 2)
+eta &lt;- cos(u1) + sin(u2) + rnorm(n,0,exp(-12)) 
+y &lt;- rnorm(n,eta,.1)
+
+df_5000 &lt;- tibble(y = y,u1 = u1, u2 = u2)
+
+# Fit INLA
+inlarw1_5000 &lt;- INLA::inla(y ~ 1 + 
+                          f(u1,
+                            model = &quot;rw1&quot;, 
+                            initial = 0, 
+                            fixed = TRUE, 
+                            constr = TRUE) +
+                          f(u2, model = &quot;rw1&quot;, 
+                            initial = 1, 
+                            fixed = TRUE,
+                            constr = TRUE),
+      data = df_5000,
+      family = &quot;gaussian&quot;,
+      control.family = list(initial = 0,fixed = TRUE),
+      control.inla = list(strategy=&#39;gaussian&#39;,int.strategy = &quot;eb&quot;,correct = FALSE),
+      control.compute=list(config=TRUE),
+      control.predictor = list(compute=TRUE,initial = 0,fixed = TRUE),
+      control.fixed = list(prec.intercept = 1,mean.intercept = 0)
+)
+
+
+# Generate some data
+n &lt;- 20000
+u1 &lt;- 1:n # Covariates to be modelled smoothly, equally spaced
+u2 &lt;- seq(1, 2*n, by = 2)
+eta &lt;- cos(u1) + sin(u2) + rnorm(n,0,exp(-12)) 
+y &lt;- rnorm(n,eta,.1)
+
+df_20000 &lt;- tibble(y = y,u1 = u1, u2 = u2)
+
+# Fit INLA
+inlarw1_20000 &lt;- INLA::inla(y ~ 1 + 
+                          f(u1,
+                            model = &quot;rw1&quot;, 
+                            initial = 0, 
+                            fixed = TRUE, 
+                            constr = TRUE) +
+                          f(u2, model = &quot;rw1&quot;, 
+                            initial = 1, 
+                            fixed = TRUE,
+                            constr = TRUE),
+      data = df_20000,
+      family = &quot;gaussian&quot;,
+      control.family = list(initial = 0,fixed = TRUE),
+      control.inla = list(strategy=&#39;gaussian&#39;,int.strategy = &quot;eb&quot;,correct = FALSE),
+      control.compute=list(config=TRUE),
+      control.predictor = list(compute=TRUE,initial = 0,fixed = TRUE),
+      control.fixed = list(prec.intercept = 1,mean.intercept = 0)
+)
+
+# Generate some data
+n &lt;- 40000
+u1 &lt;- 1:n # Covariates to be modelled smoothly, equally spaced
+u2 &lt;- seq(1, 2*n, by = 2)
+eta &lt;- cos(u1) + sin(u2) + rnorm(n,0,exp(-12)) 
+y &lt;- rnorm(n,eta,.1)
+
+df_40000 &lt;- tibble(y = y,u1 = u1, u2 = u2)
+
+# Fit INLA
+inlarw1_40000 &lt;- INLA::inla(y ~ 1 + 
+                          f(u1,
+                            model = &quot;rw1&quot;, 
+                            initial = 0, 
+                            fixed = TRUE, 
+                            constr = TRUE) +
+                          f(u2, model = &quot;rw1&quot;, 
+                            initial = 1, 
+                            fixed = TRUE,
+                            constr = TRUE),
+      data = df_40000,
+      family = &quot;gaussian&quot;,
+      control.family = list(initial = 0,fixed = TRUE),
+      control.inla = list(strategy=&#39;gaussian&#39;,int.strategy = &quot;eb&quot;,correct = FALSE),
+      control.compute=list(config=TRUE),
+      control.predictor = list(compute=TRUE,initial = 0,fixed = TRUE),
+      control.fixed = list(prec.intercept = 1,mean.intercept = 0)
+)</code></pre>
+<pre class="r"><code>############################
+##### GET KAMAL TO RUN ##### 
+############################
+
+inlarw1_100 &lt;- inlarw1
 
 # preview of the original precision matrix - INLA 100
 precision_mat100 &lt;- Matrix::forceSymmetric(inlarw1_100$misc$configs$config[[1]]$Q)
-dim(precision_mat100)</code></pre>
-<pre><code>## [1] 301 301</code></pre>
-<pre class="r"><code>precision_mat100[1:10, 1:10]</code></pre>
-<pre><code>## 10 x 10 sparse Matrix of class &quot;dsCMatrix&quot;
-##                          
-##  [1,] 2 . . . . . . . . .
-##  [2,] . 2 . . . . . . . .
-##  [3,] . . 2 . . . . . . .
-##  [4,] . . . 2 . . . . . .
-##  [5,] . . . . 2 . . . . .
-##  [6,] . . . . . 2 . . . .
-##  [7,] . . . . . . 2 . . .
-##  [8,] . . . . . . . 2 . .
-##  [9,] . . . . . . . . 2 .
-## [10,] . . . . . . . . . 2</code></pre>
-<pre class="r"><code># preview of the precision matrix - INLA 1000 
+dim(precision_mat100)
+precision_mat100[1:10, 1:10]
+
+# preview of the original precision matrix - INLA 500
+precision_mat500 &lt;- Matrix::forceSymmetric(inlarw1_500$misc$configs$config[[1]]$Q)
+dim(precision_mat500)
+precision_mat500[1:10, 1:10]
+
+# preview of the precision matrix - INLA 1000 
 precision_mat1000 &lt;- Matrix::forceSymmetric(inlarw1_1000$misc$configs$config[[1]]$Q)
-dim(precision_mat1000)</code></pre>
-<pre><code>## [1] 3001 3001</code></pre>
-<pre class="r"><code>precision_mat1000[1:10, 1:10]</code></pre>
-<pre><code>## 10 x 10 sparse Matrix of class &quot;dsCMatrix&quot;
-##                          
-##  [1,] 2 . . . . . . . . .
-##  [2,] . 2 . . . . . . . .
-##  [3,] . . 2 . . . . . . .
-##  [4,] . . . 2 . . . . . .
-##  [5,] . . . . 2 . . . . .
-##  [6,] . . . . . 2 . . . .
-##  [7,] . . . . . . 2 . . .
-##  [8,] . . . . . . . 2 . .
-##  [9,] . . . . . . . . 2 .
-## [10,] . . . . . . . . . 2</code></pre>
-<pre class="r"><code># preview of the precision matrix - INLA 1000 
+dim(precision_mat1000)
+precision_mat1000[1:10, 1:10]
+
+# preview of the precision matrix - INLA 2500 
 precision_mat2500 &lt;- Matrix::forceSymmetric(inlarw1_2500$misc$configs$config[[1]]$Q)
-dim(precision_mat2500)</code></pre>
-<pre><code>## [1] 7501 7501</code></pre>
-<pre class="r"><code>precision_mat2500[1:10, 1:10]</code></pre>
-<pre><code>## 10 x 10 sparse Matrix of class &quot;dsCMatrix&quot;
-##                          
-##  [1,] 2 . . . . . . . . .
-##  [2,] . 2 . . . . . . . .
-##  [3,] . . 2 . . . . . . .
-##  [4,] . . . 2 . . . . . .
-##  [5,] . . . . 2 . . . . .
-##  [6,] . . . . . 2 . . . .
-##  [7,] . . . . . . 2 . . .
-##  [8,] . . . . . . . 2 . .
-##  [9,] . . . . . . . . 2 .
-## [10,] . . . . . . . . . 2</code></pre>
-<pre class="r"><code># preview of the precision matrix - INLA 10000
-#precision_mat10000 &lt;- Matrix::forceSymmetric(inlarw1_10000$misc$configs$config[[1]]$Q)
-#dim(precision_mat10000)
-#precision_mat10000[1:10, 1:10]</code></pre>
+dim(precision_mat2500)
+precision_mat2500[1:10, 1:10]
+
+# preview of the precision matrix - INLA 5000 
+precision_mat5000 &lt;- Matrix::forceSymmetric(inlarw1_5000$misc$configs$config[[1]]$Q)
+dim(precision_mat5000)
+precision_mat5000[1:10, 1:10]
+
+# preview of the precision matrix - INLA 10000
+precision_mat10000 &lt;- Matrix::forceSymmetric(inlarw1_10000$misc$configs$config[[1]]$Q)
+dim(precision_mat10000)
+precision_mat10000[1:10, 1:10]
+
+# preview of the precision matrix - INLA 20000
+precision_mat20000 &lt;- Matrix::forceSymmetric(inlarw1_20000$misc$configs$config[[1]]$Q)
+dim(precision_mat20000)
+precision_mat20000[1:10, 1:10]
+
+# preview of the precision matrix - INLA 40000
+precision_mat40000 &lt;- Matrix::forceSymmetric(inlarw1_40000$misc$configs$config[[1]]$Q)
+dim(precision_mat40000)
+precision_mat40000[1:10, 1:10]</code></pre>
 <p>Now we sample each of the posteriors and plot run times like before.</p>
-<pre class="r"><code>models &lt;- c(&quot;NULL&quot;, &quot;INLA-100&quot;,&quot;INLA-1000&quot;, &quot;INLA-2500&quot;)
+<pre class="r"><code># models &lt;- c(&quot;NULL&quot;, &quot;INLA-100&quot;,&quot;INLA-500&quot;, 
+#            &quot;INLA-1000&quot;, &quot;INLA-2500&quot;, &quot;INLA-5000&quot;,
+#            &quot;INLA-10000&quot;, &quot;INLA-20000&quot;, &quot;INLA-40000&quot;)
+models &lt;- c(&quot;NULL&quot;, &quot;INLA-100&quot;, &quot;INLA-1000&quot;, &quot;INLA-2500&quot;)
 
 re &lt;- &quot;u1&quot;
 sample_size &lt;- 1000
-dim_inc_rt &lt;- c(0)
+dim_inc_rt &lt;- c(0) # NULL case 
 
-dim_inc_rt &lt;- c(sum(system.time(rePostSamp(inlarw1_100, re, sample_size))))
-dim_inc_rt &lt;- c(dim_inc_rt, sum(system.time(rePostSamp(inlarw1_1000, re, sample_size))))
-dim_inc_rt &lt;- c(dim_inc_rt, sum(system.time(rePostSamp(inlarw1_2500, re, sample_size))))
-#dim_inc_rt &lt;- c(dim_inc_rt, sum(system.time(rePostSamp(inlarw1_10000, re, sample_size))))</code></pre>
-<pre class="r"><code>df_dim_inc &lt;- as_tibble(cbind(models, 
-                              size = c(0,100,1000,2500), 
-                              run_time =round(as.numeric(c(0,dim_inc_rt))),3)
+# don&#39;t do a loop here, run time isn&#39;t smooth
+dim_inc_rt &lt;- c(sum(system.time(rePostSamp(inlarw1_100, re, sample_size)))) #2
+#dim_inc_rt &lt;- c(sum(system.time(rePostSamp(inlarw1_500, re, sample_size)))) #3
+dim_inc_rt &lt;- c(dim_inc_rt, sum(system.time(rePostSamp(inlarw1_1000, re, sample_size)))) #4
+dim_inc_rt &lt;- c(dim_inc_rt, sum(system.time(rePostSamp(inlarw1_2500, re, sample_size)))) #5
+#dim_inc_rt &lt;- c(dim_inc_rt, sum(system.time(rePostSamp(inlarw1_5000, re, sample_size)))) #6
+#dim_inc_rt &lt;- c(dim_inc_rt, sum(system.time(rePostSamp(inlarw1_10000, re, sample_size)))) #7
+#dim_inc_rt &lt;- c(dim_inc_rt, sum(system.time(rePostSamp(inlarw1_20000, re, sample_size)))) #8
+#dim_inc_rt &lt;- c(dim_inc_rt, sum(system.time(rePostSamp(inlarw1_50000, re, sample_size)))) #9</code></pre>
+<pre class="r"><code>df_dim_inc &lt;- as_tibble(cbind(as.factor(models), 
+                              size = as.numeric(c(0,100,1000,2500)),
+                              run_time =as.numeric(c(0,dim_inc_rt))
+                              )
                         )
 
+                        # c(0, 100 ,500 1000, 2500, 5000, 10000, 20000, 40000))
 dim_inc_graph &lt;- df_dim_inc %&gt;% ggplot(aes(size, run_time)) +
   geom_point(color = &quot;navy&quot;) +
-  geom_step(color = &quot;steelblue&quot;) +
+  geom_line(color = &quot;steelblue&quot;) + 
+  geom_text_repel(aes(label=models),box.padding = unit(0.45, &quot;lines&quot;)) +
   labs(title = &quot;System Run Time for Increasing Dimension&quot;,
-       xlab = &quot;Dimension of Block Matrix of Random Effect&quot;,
-       ylab = &quot;Run time (seconds)&quot;) +
+       x = &quot;Dimension of Block Matrix of Random Effect&quot;,
+       y = &quot;Run time (seconds)&quot;) +
   theme_minimal()
 
 dim_inc_graph</code></pre>
 <p><img src="Spatial_Stats_files/figure-html/Dimension%20increase%20run%20times%20P2-1.png" width="672" /></p>
+<p>This exponential scaling is  ideal. As such, we attempt to make some improvements to avoid incurring additional computational costs. They are as follows:</p>
+<ul>
+<li>Use an R package to sample from a MVN using the precision matrix - avoids inverting the high dimensional Q matrix of the INLA object</li>
+<li>Use indexing from INLA to select submatrix of interest - avoids multiplication by the transformation matrix (Amat)</li>
+</ul>
 </div>
+</div>
+</div>
+<div id="improvements" class="section level2">
+<h2><span class="header-section-number">1.5</span> Improvements</h2>
+<div id="working-with-submatricies" class="section level3">
+<h3><span class="header-section-number">1.5.1</span> Working with Submatricies</h3>
+<pre class="r"><code># Use the inlarw1_1000 object as the basis of our tests
+
+re </code></pre>
+<pre><code>## [1] &quot;u1&quot;</code></pre>
+<pre class="r"><code>x1000_index &lt;- reID(inlarw1_1000, re)
+c(min(x1000_index), max(x1000_index))</code></pre>
+<pre><code>## [1] 1001 2000</code></pre>
+<pre class="r"><code># this will be 1000x1000 submatrix
+
+x1000_Amat &lt;- createTransform(x1000_index, inlarw1_1000)
+x1000_submat &lt;- Matrix::crossprod(x1000_Amat, inlarw1_1000$misc$configs$config[[1]]$Q) %*% x1000_Amat
+# check equality 
+1000^2 == sum(x1000_submat == inlarw1_1000$misc$configs$config[[1]]$Q[x1000_index, x1000_index])</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>### Conclusion: they are the same! </code></pre>
+<p>As a result we can avoid the cross products we previously needed.</p>
+<p> This trick does not work because <span class="math inline">\(A^T Q^{-1} A \neq (A^T Q^{-1} A)^{-1}\)</span> since <span class="math inline">\(A\)</span> is not a square matrix. Even in the case where we are working wtih the precision matrix, we have <span class="math inline">\(Q[,] = A^T Q A \Rightarrow Q[,]^{-1} \neq A^T Q^{-1} A\)</span> and therefore we won’t be sampling the same distribution. While this would be computationally advantageous, it does not have the same distribution.</p>
+</div>
+<div id="sampling-from-the-precision" class="section level3">
+<h3><span class="header-section-number">1.5.2</span> Sampling from the Precision</h3>
+<p>By using the <a href="https://cran.r-project.org/web/packages/sparseMVN/sparseMVN.pdf"></a> package in R, we can try to avoid using  function on the large precision matricies (this is always a slow step). Instead we can perform a Cholesky decomposition which takes advantage of the sparse nature of these matricies.</p>
+<pre class="r"><code>### IN PROGRESS ###
+### get matrix storage formats to agree
+
+rePostSamp_prec &lt;- function(inla_object,random_effect, sample_size = 1){
+  Amat &lt;- as.matrix(inla_object %&gt;% 
+        reID(random_effect) %&gt;%
+        createTransform(inla_object))
+  
+  # need to select the mean 
+  mean_vec &lt;- as.vector(inla_object$misc$configs$config[[1]]$mean[reID(inla_object, 
+                                                                       random_effect)])
+  # get the Cholesky of the precision matrix
+  
+  precision_mat &lt;-as(Matrix::forceSymmetric(
+    Matrix::crossprod(Amat,
+                      inla_object$misc$configs$config[[1]]$Q) 
+    %*% Amat ), # A^T Q A -&gt; the smaller precision matrix
+    &quot;dgCMatrix&quot;
+    )
+  precison_chol &lt;- precision_mat %&gt;% Matrix::Cholesky()
+  
+  if(length(mean_vec) == nrow(precision_chol)){
+   rmvn.sparse(n = sample_size,
+               mu = mean_vec, 
+               CH = precision_chol, 
+               prec = TRUE)
+   # each row of this corresponds to a sample from a dim(mu) MVN
+  }
+   else{
+   return(&quot;Error: dimension of mean and covariance are not comformable!&quot;)
+  }
+}</code></pre>
+<p>```</p>
 </div>
 </div>
 </div>
