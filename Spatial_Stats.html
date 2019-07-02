@@ -704,7 +704,7 @@ transformation &lt;- function(trans_mat, inla_object){
 
 meanOffset &lt;- function(re_id, inla_object){
     ### returns the mean of the latent field from the inla_object
-    return(inla_object$misc$configs$config[[1]]$mean)
+    return(as.vector(inla_object$misc$configs$config[[1]]$mean)[re_id])
 }
 sampler &lt;- function(other_mat, sample_size){
     ### returns a random sample of size sample_size with the same distribution 
@@ -718,6 +718,21 @@ sampler &lt;- function(other_mat, sample_size){
     
     return(random_MVN)
 }</code></pre>
+<pre class="r"><code>rePosteriorSampler&lt;- function(inla_object, random_effect, sample_size){
+    ### wrapper function sampling the posterior random effect 
+    ### inla_object - fitted INLA model with random effects
+    ### random_effect - string containing name of of random effect to sample
+    ### sample_size - how many samples to draw
+    thing2 &lt;- inla_object %&gt;% 
+        reID(random_effect) %&gt;%
+        createTransform(inla_object) %&gt;%
+        transformation(inla_object) %&gt;%
+        sampler(sample_size)
+    
+    return(thing2)
+}</code></pre>
+<pre class="r"><code>print(&quot;This is scrap work!&quot;)</code></pre>
+<pre><code>## [1] &quot;This is scrap work!&quot;</code></pre>
 <pre class="r"><code>### Use the mvrnorm(n, mu, Sigma) and just feed in the desired arguments based on our transformation
 ### require(MASS)
 
@@ -743,19 +758,6 @@ rePostSamp &lt;- function(inla_object,random_effect, sample_size = 1){
 
 # preliminary tests show improved speed - sampling is slower but multiplication is much faster</code></pre>
 <p>Now that all the pieces are laid out, the simplest approach is to create a wrapper function which links the previously defined functions via the piping operator in order to streamline the sampling. The  function will take require all the (unique) parameters of each of the indivual pieces and be present as the front-end implementation of the above while outputting a dense matrix of samples from the posterior distribution of the random effect.</p>
-<pre class="r"><code>rePosteriorSampler&lt;- function(inla_object, random_effect, sample_size){
-    ### wrapper function sampling the posterior random effect 
-    ### inla_object - fitted INLA model with random effects
-    ### random_effect - string containing name of of random effect to sample
-    ### sample_size - how many samples to draw
-    thing2 &lt;- inla_object %&gt;% 
-        reID(random_effect) %&gt;%
-        createTransform(inla_object) %&gt;%
-        transformation(inla_object) %&gt;%
-        sampler(sample_size)
-    
-    return(thing2)
-}</code></pre>
 </div>
 <div id="evaluation" class="section level2">
 <h2><span class="header-section-number">1.4</span> Evaluation</h2>
@@ -818,6 +820,96 @@ df_rt_graph</code></pre>
 <div id="increasing-dimension" class="section level4">
 <h4><span class="header-section-number">1.4.2.2</span> Increasing Dimension</h4>
 <p>As mentioned earlier, the first step is to re-run the INLA models in order to increase the dimension of the precision matrix. This will make the multiplactions and inversion within the  more demanding. Ideally, the computation time doess not grow exponentially. The fitting was done behind the scenes using the same code as Section 1.3.</p>
+<pre class="r"><code>#### FOR RUNNING ON A MAC ####
+
+inlarw1_100 &lt;- inlarw1
+
+# Generate some data
+n &lt;- 1000
+u1 &lt;- 1:n # Covariates to be modelled smoothly, equally spaced
+u2 &lt;- seq(1, 2*n, by = 2)
+eta &lt;- cos(u1) + sin(u2) + rnorm(n,0,exp(-12)) 
+y &lt;- rnorm(n,eta,.1)
+
+df_1000 &lt;- tibble(y = y,u1 = u1, u2 = u2)
+
+# Fit INLA
+inlarw1_1000 &lt;- INLA::inla(y ~ 1 + 
+                          f(u1,
+                            model = &quot;rw1&quot;, 
+                            initial = 0, 
+                            fixed = TRUE, 
+                            constr = TRUE) +
+                          f(u2, model = &quot;rw1&quot;, 
+                            initial = 1, 
+                            fixed = TRUE,
+                            constr = TRUE),
+      data = df_1000,
+      family = &quot;gaussian&quot;,
+      control.family = list(initial = 0,fixed = TRUE),
+      control.inla = list(strategy=&#39;gaussian&#39;,int.strategy = &quot;eb&quot;,correct = FALSE),
+      control.compute=list(config=TRUE),
+      control.predictor = list(compute=TRUE,initial = 0,fixed = TRUE),
+      control.fixed = list(prec.intercept = 1,mean.intercept = 0)
+)
+
+# Generate some data
+n &lt;- 2500
+u1 &lt;- 1:n # Covariates to be modelled smoothly, equally spaced
+u2 &lt;- seq(1, 2*n, by = 2)
+eta &lt;- cos(u1) + sin(u2) + rnorm(n,0,exp(-12)) 
+y &lt;- rnorm(n,eta,.1)
+
+df_2500 &lt;- tibble(y = y,u1 = u1, u2 = u2)
+
+# Fit INLA
+inlarw1_2500 &lt;- INLA::inla(y ~ 1 + 
+                          f(u1,
+                            model = &quot;rw1&quot;, 
+                            initial = 0, 
+                            fixed = TRUE, 
+                            constr = TRUE) +
+                          f(u2, model = &quot;rw1&quot;, 
+                            initial = 1, 
+                            fixed = TRUE,
+                            constr = TRUE),
+      data = df_2500,
+      family = &quot;gaussian&quot;,
+      control.family = list(initial = 0,fixed = TRUE),
+      control.inla = list(strategy=&#39;gaussian&#39;,int.strategy = &quot;eb&quot;,correct = FALSE),
+      control.compute=list(config=TRUE),
+      control.predictor = list(compute=TRUE,initial = 0,fixed = TRUE),
+      control.fixed = list(prec.intercept = 1,mean.intercept = 0)
+)
+
+# Generate some data
+n &lt;- 10000
+u1 &lt;- 1:n # Covariates to be modelled smoothly, equally spaced
+u2 &lt;- seq(1, 2*n, by = 2)
+eta &lt;- cos(u1) + sin(u2) + rnorm(n,0,exp(-12)) 
+y &lt;- rnorm(n,eta,.1)
+
+df_10000 &lt;- tibble(y = y,u1 = u1, u2 = u2)
+
+# Fit INLA
+inlarw1_10000 &lt;- INLA::inla(y ~ 1 + 
+                          f(u1,
+                            model = &quot;rw1&quot;, 
+                            initial = 0, 
+                            fixed = TRUE, 
+                            constr = TRUE) +
+                          f(u2, model = &quot;rw1&quot;, 
+                            initial = 1, 
+                            fixed = TRUE,
+                            constr = TRUE),
+      data = df_10000,
+      family = &quot;gaussian&quot;,
+      control.family = list(initial = 0,fixed = TRUE),
+      control.inla = list(strategy=&#39;gaussian&#39;,int.strategy = &quot;eb&quot;,correct = FALSE),
+      control.compute=list(config=TRUE),
+      control.predictor = list(compute=TRUE,initial = 0,fixed = TRUE),
+      control.fixed = list(prec.intercept = 1,mean.intercept = 0)
+) </code></pre>
 <pre class="r"><code>############################
 ##### GET KAMAL TO RUN ##### 
 ############################
@@ -908,41 +1000,10 @@ inlarw1_20000 &lt;- INLA::inla(y ~ 1 +
       control.compute=list(config=TRUE),
       control.predictor = list(compute=TRUE,initial = 0,fixed = TRUE),
       control.fixed = list(prec.intercept = 1,mean.intercept = 0)
-)
-
-# Generate some data
-n &lt;- 40000
-u1 &lt;- 1:n # Covariates to be modelled smoothly, equally spaced
-u2 &lt;- seq(1, 2*n, by = 2)
-eta &lt;- cos(u1) + sin(u2) + rnorm(n,0,exp(-12)) 
-y &lt;- rnorm(n,eta,.1)
-
-df_40000 &lt;- tibble(y = y,u1 = u1, u2 = u2)
-
-# Fit INLA
-inlarw1_40000 &lt;- INLA::inla(y ~ 1 + 
-                          f(u1,
-                            model = &quot;rw1&quot;, 
-                            initial = 0, 
-                            fixed = TRUE, 
-                            constr = TRUE) +
-                          f(u2, model = &quot;rw1&quot;, 
-                            initial = 1, 
-                            fixed = TRUE,
-                            constr = TRUE),
-      data = df_40000,
-      family = &quot;gaussian&quot;,
-      control.family = list(initial = 0,fixed = TRUE),
-      control.inla = list(strategy=&#39;gaussian&#39;,int.strategy = &quot;eb&quot;,correct = FALSE),
-      control.compute=list(config=TRUE),
-      control.predictor = list(compute=TRUE,initial = 0,fixed = TRUE),
-      control.fixed = list(prec.intercept = 1,mean.intercept = 0)
 )</code></pre>
 <pre class="r"><code>############################
 ##### GET KAMAL TO RUN ##### 
 ############################
-
-inlarw1_100 &lt;- inlarw1
 
 # preview of the original precision matrix - INLA 100
 precision_mat100 &lt;- Matrix::forceSymmetric(inlarw1_100$misc$configs$config[[1]]$Q)
@@ -977,38 +1038,38 @@ precision_mat10000[1:10, 1:10]
 # preview of the precision matrix - INLA 20000
 precision_mat20000 &lt;- Matrix::forceSymmetric(inlarw1_20000$misc$configs$config[[1]]$Q)
 dim(precision_mat20000)
-precision_mat20000[1:10, 1:10]
-
-# preview of the precision matrix - INLA 40000
-precision_mat40000 &lt;- Matrix::forceSymmetric(inlarw1_40000$misc$configs$config[[1]]$Q)
-dim(precision_mat40000)
-precision_mat40000[1:10, 1:10]</code></pre>
+precision_mat20000[1:10, 1:10]</code></pre>
 <p>Now we sample each of the posteriors and plot run times like before.</p>
 <pre class="r"><code># models &lt;- c(&quot;NULL&quot;, &quot;INLA-100&quot;,&quot;INLA-500&quot;, 
 #            &quot;INLA-1000&quot;, &quot;INLA-2500&quot;, &quot;INLA-5000&quot;,
-#            &quot;INLA-10000&quot;, &quot;INLA-20000&quot;, &quot;INLA-40000&quot;)
-models &lt;- c(&quot;NULL&quot;, &quot;INLA-100&quot;, &quot;INLA-1000&quot;, &quot;INLA-2500&quot;)
+#            &quot;INLA-10000&quot;, &quot;INLA-20000&quot;)
+models &lt;- c(&quot;NULL&quot;, &quot;INLA-100&quot;, &quot;INLA-1000&quot;, &quot;INLA-2500&quot;) # for running on a Mac
 
 re &lt;- &quot;u1&quot;
 sample_size &lt;- 1000
 dim_inc_rt &lt;- c(0) # NULL case 
 
 # don&#39;t do a loop here, run time isn&#39;t smooth
-dim_inc_rt &lt;- c(sum(system.time(rePostSamp(inlarw1_100, re, sample_size)))) #2
-#dim_inc_rt &lt;- c(sum(system.time(rePostSamp(inlarw1_500, re, sample_size)))) #3
+dim_inc_rt &lt;- c(dim_inc_rt, sum(system.time(rePostSamp(inlarw1_100, re, sample_size)))) #2
+#dim_inc_rt &lt;- c(dim_inc_rt, sum(system.time(rePostSamp(inlarw1_500, re, sample_size)))) #3
 dim_inc_rt &lt;- c(dim_inc_rt, sum(system.time(rePostSamp(inlarw1_1000, re, sample_size)))) #4
 dim_inc_rt &lt;- c(dim_inc_rt, sum(system.time(rePostSamp(inlarw1_2500, re, sample_size)))) #5
 #dim_inc_rt &lt;- c(dim_inc_rt, sum(system.time(rePostSamp(inlarw1_5000, re, sample_size)))) #6
 #dim_inc_rt &lt;- c(dim_inc_rt, sum(system.time(rePostSamp(inlarw1_10000, re, sample_size)))) #7
-#dim_inc_rt &lt;- c(dim_inc_rt, sum(system.time(rePostSamp(inlarw1_20000, re, sample_size)))) #8
-#dim_inc_rt &lt;- c(dim_inc_rt, sum(system.time(rePostSamp(inlarw1_50000, re, sample_size)))) #9</code></pre>
-<pre class="r"><code>df_dim_inc &lt;- as_tibble(cbind(as.factor(models), 
-                              size = as.numeric(c(0,100,1000,2500)),
-                              run_time =as.numeric(c(0,dim_inc_rt))
-                              )
-                        )
+#dim_inc_rt &lt;- c(dim_inc_rt, sum(system.time(rePostSamp(inlarw1_20000, re, sample_size)))) </code></pre>
+<pre class="r"><code>#df_dim_inc &lt;- as_tibble(cbind(as.factor(models), 
+#                              size = as.numeric(c(0, 100 ,500, 
+#                                                  1000, 2500, 5000,
+#                                                  10000, 20000)),
+#                              run_time =as.numeric(c(0,dim_inc_rt))
+#                              )
+#                        )
+df_dim_inc &lt;- data.frame(models = models, 
+                              size = as.numeric(c(0,100, 1000, 2500)),
+                              run_time = dim_inc_rt) # for running on a Mac
 
-                        # c(0, 100 ,500 1000, 2500, 5000, 10000, 20000, 40000))
+save(df_dim_inc, file = &quot;df_dim_inc.RData&quot;)
+
 dim_inc_graph &lt;- df_dim_inc %&gt;% ggplot(aes(size, run_time)) +
   geom_point(color = &quot;navy&quot;) +
   geom_line(color = &quot;steelblue&quot;) + 
@@ -1016,7 +1077,7 @@ dim_inc_graph &lt;- df_dim_inc %&gt;% ggplot(aes(size, run_time)) +
   labs(title = &quot;System Run Time for Increasing Dimension&quot;,
        x = &quot;Dimension of Block Matrix of Random Effect&quot;,
        y = &quot;Run time (seconds)&quot;) +
-  theme_minimal()
+     theme_minimal()
 
 dim_inc_graph</code></pre>
 <p><img src="Spatial_Stats_files/figure-html/Dimension%20increase%20run%20times%20P2-1.png" width="672" /></p>
@@ -1050,43 +1111,144 @@ x1000_submat &lt;- Matrix::crossprod(x1000_Amat, inlarw1_1000$misc$configs$confi
 <p>As a result we can avoid the cross products we previously needed.</p>
 <p> This trick does not work because <span class="math inline">\(A^T Q^{-1} A \neq (A^T Q^{-1} A)^{-1}\)</span> since <span class="math inline">\(A\)</span> is not a square matrix. Even in the case where we are working wtih the precision matrix, we have <span class="math inline">\(Q[,] = A^T Q A \Rightarrow Q[,]^{-1} \neq A^T Q^{-1} A\)</span> and therefore we won’t be sampling the same distribution. While this would be computationally advantageous, it does not have the same distribution.</p>
 </div>
-<div id="sampling-from-the-precision" class="section level3">
-<h3><span class="header-section-number">1.5.2</span> Sampling from the Precision</h3>
-<p>By using the <a href="https://cran.r-project.org/web/packages/sparseMVN/sparseMVN.pdf"></a> package in R, we can try to avoid using  function on the large precision matricies (this is always a slow step). Instead we can perform a Cholesky decomposition which takes advantage of the sparse nature of these matricies.</p>
-<pre class="r"><code>### IN PROGRESS ###
-### get matrix storage formats to agree
+</div>
+<div id="a-more-algebraic-approach" class="section level2">
+<h2><span class="header-section-number">1.6</span> A more algebraic approach</h2>
+<p>The remaining sections are dedicated to a more algebraic approach to the problem that exploits the sparse nature of the precision matrix from INLA. Some functions from above are used to generate the sample combined with a wrapper function that performs the remaining linear algebra. Afterwards, similar computational efficiency tests will be run in order to compare the results.</p>
+<pre class="r"><code>reID &lt;- function(inla_object, re_name){
+    ### return the indicies (row and column index) of the sub-matrix
+    ### corresponding to the named random effect (ONLY works for 1 effect)
+    name &lt;- grep(re_name,inla_object$misc$configs$contents$tag)
+    indicies &lt;- seq(inla_object$misc$configs$contents$start[name],
+            len = inla_object$misc$configs$contents$length[name])
+    
+    return(indicies)
+}
 
-rePostSamp_prec &lt;- function(inla_object,random_effect, sample_size = 1){
+meanOffset &lt;- function(re_id, inla_object){
+    ### returns the mean of the latent field from the inla_object
+    return(as.vector(inla_object$misc$configs$config[[1]]$mean)[re_id])
+}
+
+createTransform &lt;- function(re_index, inla_object, constraint_point){
+    ### return the A matrix which selects the sub-matrix corresponding to
+    ### the named random effect while placing a constraint at a single
+    ### point in the walk
+  
+    dimension &lt;- nrow(inla_object$misc$configs$config[[1]]$Q)
+    
+    ### Top
+    top_block &lt;- Matrix::Matrix(0, 
+                                  nrow = (min(re_index)-1), 
+                                  ncol = length(re_index))
+    
+    ### Bottom 
+    bot_block &lt;- Matrix::Matrix(0, 
+                                  nrow = (dimension - max(re_index)),
+                                  ncol = length(re_index))
+      
+    ### Middle 
+    if(is.null(constraint_point)){
+        mid_block &lt;- Matrix::Diagonal(n = max(re_index) - min(re_index) + 1)
+    } else{
+        ### Middle
+        differencing_mat &lt;- Matrix(0, 
+                                   nrow = max(re_index) - min(re_index) + 1, 
+                                   ncol = max(re_index) - min(re_index) + 1)
+        differencing_mat[,as.numeric(constraint_point)] &lt;- 1
+        
+        # get +/- 1 entries on each row except in at entry 
+        # [fixed_point, constraint_point] where we get a row of zeros
+        mid_block &lt;- Matrix::Diagonal(n = max(re_index) - min(re_index) + 1) - differencing_mat 
+    }
+    return(rbind(top_block, mid_block, bot_block))
+}
+
+PosteriorSampler &lt;- function(inla_object, effect_name, n=1, constraint_point){
+  Amat &lt;- inla_object %&gt;% 
+        reID(&quot;u1&quot;) %&gt;% 
+        createTransform(inla_object, constraint_point)
+  
+  mean_vec &lt;- as.vector(Matrix::crossprod(Amat, 
+                                   as.matrix(inla_object$misc$configs$config[[1]]$mean)))
+  
+  cov_mat &lt;- new(&quot;dsCMatrix&quot;, 
+               x = inla_object$misc$configs$config[[1]]$Q@x,
+               i = inla_object$misc$configs$config[[1]]$Q@i,
+               p = inla_object$misc$configs$config[[1]]$Q@p,
+               Dim = inla_object$misc$configs$config[[1]]$Q@Dim) %&gt;% 
+    Matrix::Cholesky(LDL = FALSE, perm = FALSE) %&gt;% 
+    Matrix::solve(Amat) %&gt;% 
+    Matrix::crossprod()
+  
+  mvrnorm(n=n, mu = mean_vec, Sigma = cov_mat)
+}</code></pre>
+<pre class="r"><code># models &lt;- c(&quot;NULL&quot;, &quot;INLA-100&quot;,&quot;INLA-500&quot;, 
+#             &quot;INLA-1000&quot;, &quot;INLA-2500&quot;, &quot;INLA-5000&quot;,
+#             &quot;INLA-10000&quot;, &quot;INLA-20000&quot;)
+ models &lt;- c(&quot;NULL&quot;, &quot;INLA-100&quot;, &quot;INLA-1000&quot;, &quot;INLA-2500&quot;) # for running on a Mac
+
+re &lt;- &quot;u1&quot;
+sample_size &lt;- 1000
+dim_inc_rt_f2 &lt;- c(0) # NULL case 
+
+dim_inc_rt_f2 &lt;- c(dim_inc_rt_f2, sum(system.time(PosteriorSampler(inlarw1_100, re, sample_size, 2)))) #2
+#dim_inc_rt_f2 &lt;- c(dim_inc_rt_f2, sum(system.time(PosteriorSampler(inlarw1_500, re, sample_size)))) #3
+dim_inc_rt_f2 &lt;- c(dim_inc_rt_f2, sum(system.time(PosteriorSampler(inlarw1_1000, re, sample_size, 2)))) #4
+dim_inc_rt_f2 &lt;- c(dim_inc_rt_f2, sum(system.time(PosteriorSampler(inlarw1_2500, re, sample_size, 2)))) #5
+#dim_inc_rt_f2 &lt;- c(dim_inc_rt_f2, sum(system.time(PosteriorSampler(inlarw1_5000, re, sample_size)))) #6
+#dim_inc_rt_f2 &lt;- c(dim_inc_rt_f2, sum(system.time(PosteriorSampler(inlarw1_10000, re, sample_size)))) #7
+#dim_inc_rt_f2 &lt;- c(dim_inc_rt_f2, sum(system.time(PosteriorSampler(inlarw1_20000, re, sample_size)))) #8
+
+#df_dim_inc_f2 &lt;- as_tibble(cbind(as.factor(models), 
+#                              size = as.numeric(c(0, 100 ,500, 
+#                                                  1000, 2500, 5000,
+#                                                  10000, 20000)),
+#                              run_time =as.numeric(c(0,dim_inc_rt))
+#                              )
+#                        )
+df_dim_inc_f2 &lt;- data.frame(models, 
+                              size = as.numeric(c(0, 100, 1000, 2500)),
+                              run_time = dim_inc_rt_f2
+                              ) # for running on a Mac
+
+save(df_dim_inc_f2, file = &quot;df_dim_inc_f2.RData&quot;)
+
+dim_inc_graph_f2 &lt;- df_dim_inc_f2 %&gt;% ggplot(aes(size, run_time)) +
+  geom_point(color = &quot;navy&quot;) +
+  geom_line(color = &quot;steelblue&quot;) + 
+  geom_text_repel(aes(label=models),box.padding = unit(0.45, &quot;lines&quot;)) +
+  labs(title = &quot;System Run Time for Increasing Dimension&quot;,
+       x = &quot;Dimension of Block Matrix of Random Effect&quot;,
+       y = &quot;Run time (seconds)&quot;) +
+  theme_minimal()
+
+dim_inc_graph_f2</code></pre>
+<p><img src="Spatial_Stats_files/figure-html/Run%20Time%20for%20Function%202-1.png" width="672" /></p>
+<p>This version of the function does not provide any significant computational advantages over the previous version and as such will not be used going forward. Below is the final version of the sampling function we use.</p>
+</div>
+<div id="final-function" class="section level2">
+<h2><span class="header-section-number">1.7</span> Final Function</h2>
+<pre class="r"><code>rePostSamp &lt;- function(inla_object,random_effect, sample_size = 1){
   Amat &lt;- as.matrix(inla_object %&gt;% 
         reID(random_effect) %&gt;%
         createTransform(inla_object))
   
-  # need to select the mean 
-  mean_vec &lt;- as.vector(inla_object$misc$configs$config[[1]]$mean[reID(inla_object, 
-                                                                       random_effect)])
-  # get the Cholesky of the precision matrix
+  mean_vec &lt;- as.vector(Matrix::crossprod(Amat, as.matrix(inla_object$misc$configs$config[[1]]$mean)))
   
-  precision_mat &lt;-as(Matrix::forceSymmetric(
-    Matrix::crossprod(Amat,
-                      inla_object$misc$configs$config[[1]]$Q) 
-    %*% Amat ), # A^T Q A -&gt; the smaller precision matrix
-    &quot;dgCMatrix&quot;
-    )
-  precison_chol &lt;- precision_mat %&gt;% Matrix::Cholesky()
+  covariance_mat &lt;- Matrix::crossprod(Amat,
+                                      solve(inla_object$misc$configs$config[[1]]$Q), Amat)  
   
-  if(length(mean_vec) == nrow(precision_chol)){
-   rmvn.sparse(n = sample_size,
-               mu = mean_vec, 
-               CH = precision_chol, 
-               prec = TRUE)
-   # each row of this corresponds to a sample from a dim(mu) MVN
-  }
-   else{
-   return(&quot;Error: dimension of mean and covariance are not comformable!&quot;)
+  if(length(mean_vec) == nrow(covariance_mat)){
+    mvrnorm(n = sample_size,
+           mu = mean_vec,
+           Sigma = covariance_mat)
+    # each row of this corresponds to a sample from a dim(mu) MVN
+  } else{
+    return(&quot;Error: dimension of mean and covariance are not comformable!&quot;)
   }
 }</code></pre>
-<p>```</p>
-</div>
+<p>The same quantities can be computed again but will be omitted. The next step involved wrapping this sampler in a function that allows us to sample from multiple configurations of an INLA model.</p>
 </div>
 </div>
 
