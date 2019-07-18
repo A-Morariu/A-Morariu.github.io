@@ -626,19 +626,16 @@ df &lt;- tibble(y = y,u1 = u1, u2 = u2)
 inlarw1 &lt;- INLA::inla(y ~ 1 + 
                           f(u1,
                             model = &quot;rw1&quot;, 
-                            initial = 0, 
-                            fixed = TRUE, 
                             constr = TRUE) +
-                          f(u2, model = &quot;rw1&quot;, 
-                            initial = 1, 
-                            fixed = TRUE,
+                          f(u2, 
+                            model = &quot;rw1&quot;, 
                             constr = TRUE),
       data = df,
       family = &quot;gaussian&quot;,
       control.family = list(initial = 0,fixed = TRUE),
-      control.inla = list(strategy=&#39;gaussian&#39;,int.strategy = &quot;eb&quot;,correct = FALSE),
+      control.inla = list(strategy=&#39;simplified.laplace&#39;, correct = FALSE),
       control.compute=list(config=TRUE),
-      control.predictor = list(compute=TRUE,initial = 0,fixed = TRUE),
+      control.predictor = list(compute=TRUE,initial = 0,fixed = TRUE, cdf = c(0,1)),
       control.fixed = list(prec.intercept = 1,mean.intercept = 0)
 )
 
@@ -775,22 +772,22 @@ as_tibble(round(post_sample[1:10, 1:10],3))</code></pre>
 <pre><code>## # A tibble: 10 x 10
 ##        V1     V2     V3     V4     V5     V6     V7     V8     V9    V10
 ##     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-##  1  0.341 -0.758  0.816  0.003  0.493 -0.219  0.929 -0.517 -0.183 -1.20 
-##  2  0.355  0.264 -1.00   0.414 -0.652  0.186 -0.517  0.46  -1.24   0.909
-##  3  0.053 -0.23   0.032 -0.083  0.644  0.079  0.494 -0.061 -0.741  0.063
-##  4 -1.45   0.855 -0.817  0.281  1.57  -0.974  0.3    0.399 -0.701 -0.849
-##  5 -0.254  0.395 -1.24   0.168 -0.317  1.13   0.444  0.573  0.134 -0.983
-##  6  0.057  0.2   -0.575  0.065  0.941 -0.308 -0.877 -0.344 -0.432 -0.401
-##  7  0.237  0.381  0.566 -0.291 -0.068  0.258  0.278  0.458  0.065  0.261
-##  8  0.295 -0.36   0.12   0.408  0.117  0.641  0.691 -0.337 -0.439 -0.031
-##  9 -0.02   0.714 -0.122  0.894 -0.109 -0.343  0.403  0.4   -0.321  0.972
-## 10  0.393  0.381  1.03  -0.371  0.504 -0.311 -0.451 -0.012 -0.566 -0.238</code></pre>
+##  1  0     -0.008  0.015  0.001  0.005 -0.004  0.009 -0.006  0.003 -0.011
+##  2  0.001  0.004 -0.007  0.006 -0.009  0.001 -0.009  0.006 -0.01   0.015
+##  3 -0.004 -0.002  0.006  0      0.007  0      0.004  0     -0.004  0.005
+##  4 -0.025  0.012 -0.005  0.005  0.019 -0.013  0.001  0.005 -0.003 -0.007
+##  5 -0.008  0.006 -0.01   0.003 -0.005  0.013  0.003  0.007  0.007 -0.008
+##  6 -0.004  0.004 -0.002  0.002  0.011 -0.005 -0.013 -0.004  0     -0.001
+##  7 -0.001  0.006  0.012 -0.002 -0.002  0.002  0.001  0.006  0.006  0.007
+##  8  0     -0.003  0.007  0.006  0      0.007  0.006 -0.004  0      0.003
+##  9 -0.005  0.01   0.004  0.012 -0.002 -0.005  0.002  0.005  0.002  0.016
+## 10  0.001  0.006  0.018 -0.003  0.005 -0.005 -0.008  0     -0.001  0.001</code></pre>
 <p>As expected,the number of columns equals the number of observations of the random effect (100). Further, the scale of the number is appropriate when compared to the mean (shown below).</p>
 <pre class="r"><code>as_tibble(round(t(inlarw1$misc$configs$config[[1]]$mean[1:10]),3))</code></pre>
 <pre><code>## # A tibble: 1 x 10
-##      V1     V2    V3    V4    V5    V6    V7    V8    V9    V10
-##   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
-## 1  1.05 -0.133 -1.25 0.044 0.447 0.067 0.837 0.268 -1.31 -0.648</code></pre>
+##      V1     V2     V3    V4    V5     V6    V7    V8     V9    V10
+##   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1 0.727 -0.106 -0.944 0.083 0.324 -0.044 0.605 0.239 -0.958 -0.428</code></pre>
 </div>
 <div id="computational-efficiency" class="section level3">
 <h3><span class="header-section-number">1.4.2</span> Computational efficiency</h3>
@@ -1206,13 +1203,13 @@ dim_inc_rt_f2 &lt;- c(dim_inc_rt_f2, sum(system.time(PosteriorSampler(inlarw1_25
 #                                                  10000, 20000)),
 #                              run_time =as.numeric(c(0,dim_inc_rt))
 #                              )
-#                        )
-df_dim_inc_f2 &lt;- data.frame(models, 
+#                        )</code></pre>
+<pre class="r"><code>df_dim_inc_f2 &lt;- data.frame(models, 
                               size = as.numeric(c(0, 100, 1000, 2500)),
                               run_time = dim_inc_rt_f2
                               ) # for running on a Mac
 
-save(df_dim_inc_f2, file = &quot;df_dim_inc_f2.RData&quot;)
+# save(df_dim_inc_f2, file = &quot;df_dim_inc_f2.RData&quot;)
 
 dim_inc_graph_f2 &lt;- df_dim_inc_f2 %&gt;% ggplot(aes(size, run_time)) +
   geom_point(color = &quot;navy&quot;) +
@@ -1224,31 +1221,71 @@ dim_inc_graph_f2 &lt;- df_dim_inc_f2 %&gt;% ggplot(aes(size, run_time)) +
   theme_minimal()
 
 dim_inc_graph_f2</code></pre>
-<p><img src="Spatial_Stats_files/figure-html/Run%20Time%20for%20Function%202-1.png" width="672" /></p>
-<p>This version of the function does not provide any significant computational advantages over the previous version and as such will not be used going forward. Below is the final version of the sampling function we use.</p>
+<p><img src="Spatial_Stats_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>This will be the final function that will be sample posterior distributions of the effects. The next step is to allow for sampling from each of the configurations INLA produces. This means applying the function to each of the objects in the list that INLA outputs.</p>
 </div>
-<div id="final-function" class="section level2">
-<h2><span class="header-section-number">1.7</span> Final Function</h2>
-<pre class="r"><code>rePostSamp &lt;- function(inla_object,random_effect, sample_size = 1){
-  Amat &lt;- as.matrix(inla_object %&gt;% 
-        reID(random_effect) %&gt;%
-        createTransform(inla_object))
-  
-  mean_vec &lt;- as.vector(Matrix::crossprod(Amat, as.matrix(inla_object$misc$configs$config[[1]]$mean)))
-  
-  covariance_mat &lt;- Matrix::crossprod(Amat,
-                                      solve(inla_object$misc$configs$config[[1]]$Q), Amat)  
-  
-  if(length(mean_vec) == nrow(covariance_mat)){
-    mvrnorm(n = sample_size,
-           mu = mean_vec,
-           Sigma = covariance_mat)
-    # each row of this corresponds to a sample from a dim(mu) MVN
-  } else{
-    return(&quot;Error: dimension of mean and covariance are not comformable!&quot;)
+<div id="proportional-sampling" class="section level2">
+<h2><span class="header-section-number">1.7</span> Proportional Sampling</h2>
+<p>When INLA produces the result for each of the configurations, it also computes the log-posterior of each on of the points. That is to say we know which points are more likely to occur and as such we would like to sample from the distributions at those points more often. This section is dedicated to creating a weighting vector by which we will multiply the desired posterior sample size.</p>
+<pre class="r"><code>inlarw1_configs &lt;- INLA::inla(y ~ 1 + 
+                          f(u1,
+                            model = &quot;rw1&quot;, 
+                            initial = 0, 
+                            fixed = TRUE, 
+                            constr = TRUE) +
+                          f(u2, model = &quot;rw1&quot;, 
+                            initial = 1, 
+                            fixed = TRUE,
+                            constr = TRUE),
+      data = df,
+      family = &quot;gaussian&quot;,
+      control.family = list(initial = 0,fixed = FALSE),
+      control.inla = list(strategy=&#39;laplace&#39;, correct = FALSE),
+      control.compute=list(config=TRUE),
+      control.predictor = list(compute=TRUE,initial = 0,fixed = TRUE),
+      control.fixed = list(prec.intercept = 1,mean.intercept = 0)
+)</code></pre>
+</div>
+<div id="sampling-from-all-configs" class="section level2">
+<h2><span class="header-section-number">1.8</span> Sampling from all Configs</h2>
+<p>Now that we know the weights for each  we can set up a function to produce the appropriately sized sample from each one. We take advantage of the highly optimzed  package by Hadley Wickham to iterate over the list.</p>
+<pre class="r"><code>#library(purrr)
+
+### Helper functions 
+# sample weights 
+
+s.weights &lt;- function(inla_object){
+  weights &lt;- c(0)
+  for (i in 1:inla_object$misc$configs$nconfig) {
+    weights[i] &lt;- inla_object$misc$configs$config[[i]]$log.posterior
   }
+  return(as.list(weights/sum(weights)))
+}
+
+# small modification to PosteriorSampler
+
+PosteriorSampler &lt;- function(inla_object, effect_name, n=1, constraint_point){
+  Amat &lt;- inla_object %&gt;% 
+        reID(&quot;u1&quot;) %&gt;% 
+        createTransform(inla_object, constraint_point)
+  
+  samp_size &lt;- ceiling(s.weights(inla_object)*n) # will display later
+  
+  # need the Q and mean from a config + Amat
+  mean_vec &lt;- as.vector(Matrix::crossprod(Amat, 
+                                   as.matrix(inla_object$misc$configs$config[[1]]$mean)))
+  
+  cov_mat &lt;- new(&quot;dsCMatrix&quot;, 
+               x = inla_object$misc$configs$config[[1]]$Q@x,
+               i = inla_object$misc$configs$config[[1]]$Q@i,
+               p = inla_object$misc$configs$config[[1]]$Q@p,
+               Dim = inla_object$misc$configs$config[[1]]$Q@Dim) %&gt;% 
+    Matrix::Cholesky(LDL = FALSE, perm = FALSE) %&gt;% 
+    Matrix::solve(Amat) %&gt;% 
+    Matrix::crossprod()
+  
+  mvrnorm(n=n, mu = mean_vec, Sigma = cov_mat)
 }</code></pre>
-<p>The same quantities can be computed again but will be omitted. The next step involved wrapping this sampler in a function that allows us to sample from multiple configurations of an INLA model.</p>
 </div>
 </div>
 

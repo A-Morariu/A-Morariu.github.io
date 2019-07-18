@@ -11,6 +11,7 @@ fontsize: 12pt
 header-includes:
    - \usepackage{amsmath}          
 ---
+
 ```{r Load Packages, eval=TRUE, echo=FALSE, message=FALSE, error=FALSE}
 library(gridExtra)
 library(MASS)
