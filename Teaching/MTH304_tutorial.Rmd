@@ -1,0 +1,35 @@
+---
+title: "MTH304"
+output:
+     html_document
+---
+```{r, include=FALSE}
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+```
+
+```{r Preamble, eval=TRUE, echo=FALSE, error=FALSE, message=FALSE}
+library(gridExtra)
+library(MASS)
+library(ISLR)
+library(car)
+library(modelr)
+library(gapminder)
+library(broom)
+library(e1071)
+library(summarytools)
+library(tidyverse)
+library(knitr)
+library(png)
+library(jpeg)
+
+set.seed(19971222)
+```
+
+# Course Description
+**Probability and Statistics I:** Topics include elements of Probability Theory. Discrete Probability Distribution. (Hyper-geometric, Binomial, Poisson). Normal Distribution and its applications. Lognormal Distribution, Multivariate Distributions, Covariance and Correlation, Moment Generating Functions, Central limit theorem and applications. A statistics computer package will be used in this course. As copied from the [Ryerson Calendar](https://www.ryerson.ca/calendar/2018-2019/courses/mathematics/MTH/304/).
+
+**Professor** [Dr. You Liang](https://math.ryerson.ca/people/yliang.html)
+
+# Week 1
+
+Coming soon...

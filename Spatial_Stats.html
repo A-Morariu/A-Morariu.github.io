@@ -399,24 +399,38 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="STA130_tutorial.html">
+      <a href="Teaching/STA130_tutorial.html">
         <span class="fa fa-book"></span>
          
         STA130 - Winter 2019
       </a>
     </li>
     <li>
-      <a href="STA302_tutorial.html">
+      <a href="Teaching/STA302_tutorial.html">
         <span class="fa fa-book"></span>
          
         STA302 - Summer 2019
       </a>
     </li>
     <li>
-      <a href="STA314_tutorial.html">
+      <a href="Teaching/STA314_tutorial.html">
         <span class="fa fa-book"></span>
          
         STA314 - Fall 2018
+      </a>
+    </li>
+    <li>
+      <a href="Teaching/MTH304_tutorial.html">
+        <span class="fa fa-book"></span>
+         
+        MTH304
+      </a>
+    </li>
+    <li>
+      <a href="Teaching/MTH380_tutorial.html">
+        <span class="fa fa-book"></span>
+         
+        MTH380
       </a>
     </li>
   </ul>
@@ -460,7 +474,14 @@ div.tocify {
   </ul>
 </li>
 <li>
-  <a href="Files/Resume_AMorariu_Cyan.pdf">
+  <a href="Presentations.html">
+    <span class="fa fa-chalkboard-teacher"></span>
+     
+    Presentations &amp; Talks
+  </a>
+</li>
+<li>
+  <a href="Files/Resume_AMorariu.pdf">
     <span class="fa fa-file-pdf-o"></span>
      
     Resume
@@ -1065,7 +1086,7 @@ df_dim_inc &lt;- data.frame(models = models,
                               size = as.numeric(c(0,100, 1000, 2500)),
                               run_time = dim_inc_rt) # for running on a Mac
 
-save(df_dim_inc, file = &quot;df_dim_inc.RData&quot;)
+# save(df_dim_inc, file = &quot;df_dim_inc.RData&quot;)
 
 dim_inc_graph &lt;- df_dim_inc %&gt;% ggplot(aes(size, run_time)) +
   geom_point(color = &quot;navy&quot;) +
@@ -1248,44 +1269,8 @@ dim_inc_graph_f2</code></pre>
 </div>
 <div id="sampling-from-all-configs" class="section level2">
 <h2><span class="header-section-number">1.8</span> Sampling from all Configs</h2>
-<p>Now that we know the weights for each  we can set up a function to produce the appropriately sized sample from each one. We take advantage of the highly optimzed  package by Hadley Wickham to iterate over the list.</p>
-<pre class="r"><code>#library(purrr)
-
-### Helper functions 
-# sample weights 
-
-s.weights &lt;- function(inla_object){
-  weights &lt;- c(0)
-  for (i in 1:inla_object$misc$configs$nconfig) {
-    weights[i] &lt;- inla_object$misc$configs$config[[i]]$log.posterior
-  }
-  return(as.list(weights/sum(weights)))
-}
-
-# small modification to PosteriorSampler
-
-PosteriorSampler &lt;- function(inla_object, effect_name, n=1, constraint_point){
-  Amat &lt;- inla_object %&gt;% 
-        reID(&quot;u1&quot;) %&gt;% 
-        createTransform(inla_object, constraint_point)
-  
-  samp_size &lt;- ceiling(s.weights(inla_object)*n) # will display later
-  
-  # need the Q and mean from a config + Amat
-  mean_vec &lt;- as.vector(Matrix::crossprod(Amat, 
-                                   as.matrix(inla_object$misc$configs$config[[1]]$mean)))
-  
-  cov_mat &lt;- new(&quot;dsCMatrix&quot;, 
-               x = inla_object$misc$configs$config[[1]]$Q@x,
-               i = inla_object$misc$configs$config[[1]]$Q@i,
-               p = inla_object$misc$configs$config[[1]]$Q@p,
-               Dim = inla_object$misc$configs$config[[1]]$Q@Dim) %&gt;% 
-    Matrix::Cholesky(LDL = FALSE, perm = FALSE) %&gt;% 
-    Matrix::solve(Amat) %&gt;% 
-    Matrix::crossprod()
-  
-  mvrnorm(n=n, mu = mean_vec, Sigma = cov_mat)
-}</code></pre>
+<p>Now that we know the weights for each  we can set up a function to produce the appropriately sized sample from each one. We take advantage of the highly optimzed  package by Hadley Wickham to iterate over the list. The code for this section can be found in the <a href="https://github.com/A-Morariu/psmplr">psmplr</a> page. It is worth noting that several functions have been changed and omitted to improve our ability to access key elements of the INLA output.</p>
+<p>A clean version of this page will be coming soon…</p>
 </div>
 </div>
 

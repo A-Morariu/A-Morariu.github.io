@@ -28,6 +28,7 @@ library(tidyverse)
 # Can be ANY integer number 
 set.seed(19971222) 
 ```
+
 \newpage 
 \section{Question 1}
 

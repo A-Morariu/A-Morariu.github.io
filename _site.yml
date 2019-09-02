@@ -10,13 +10,19 @@ navbar:
       menu:
         - text: "STA130 - Winter 2019"
           icon: fa-book
-          href: STA130_tutorial.html
+          href: Teaching/STA130_tutorial.html
         - text: "STA302 - Summer 2019"
           icon: fa-book
-          href: STA302_tutorial.html
+          href: Teaching/STA302_tutorial.html
         - text: "STA314 - Fall 2018"
           icon: fa-book
-          href: STA314_tutorial.html
+          href: Teaching/STA314_tutorial.html
+        - text: "MTH304"
+          icon: fa-book
+          href: Teaching/MTH304_tutorial.html
+        - text: "MTH380"
+          icon: fa-book
+          href: Teaching/MTH380_tutorial.html
     - text: "Coursework"
       icon: fa-book-open
       menu:
@@ -30,8 +36,11 @@ navbar:
         - text: "Spatial Statistics"
           icon: fa-map-marker
           href: Spatial_Stats.html
+    - text: "Presentations & Talks"
+      icon: fa-chalkboard-teacher
+      href: Presentations.html
     - text: "Resume"
       icon: fa-file-pdf-o
-      href: Files/Resume_AMorariu_Cyan.pdf
+      href: Files/Resume_AMorariu.pdf
     - text: "About Me"
       href: about.html

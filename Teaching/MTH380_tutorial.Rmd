@@ -1,0 +1,35 @@
+---
+title: "MTH380"
+output:
+     html_document
+---
+```{r, include=FALSE}
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+```
+
+```{r Preamble, eval=TRUE, echo=FALSE, error=FALSE, message=FALSE}
+library(gridExtra)
+library(MASS)
+library(ISLR)
+library(car)
+library(modelr)
+library(gapminder)
+library(broom)
+library(e1071)
+library(summarytools)
+library(tidyverse)
+library(knitr)
+library(png)
+library(jpeg)
+
+set.seed(19971222)
+```
+
+# Course Description
+**Probability and Statistics I:** Descriptive statistics. Probability (Laws of probability. Conditional probability. Discrete probability distributions (binomial, hypergeometric, Poisson). Continuous probability distributions, Normal, t-exponential, x². Applications of discrete and continuous distributions. Sampling distributions (sample mean, sample proportion, difference between two samples, difference between two sample proportions). Sampling distribution concerning mean variance and proportion for one or two populations. Estimation for large and small samples. Hypothesis testing concerning mean, variance and proportion for one or two populations, (large samples and small samples) including paired data testing. As copied from the [Ryerson Calendar](https://www.ryerson.ca/calendar/2018-2019/courses/mathematics/MTH/380/). 
+
+**Professor** [Dr. MD Abdur Rahman](https://math.ryerson.ca/people/mdrahman.html)
+
+# Week 1
+
+Coming soon...
