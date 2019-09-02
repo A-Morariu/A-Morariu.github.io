@@ -2,9 +2,11 @@
 title: "STA314"
 output: 
   html_document:
-    toc: true
-    toc_depth: 3
-    toc_float: true 
+    toc: TRUE 
+    toc_depth: 4
+    toc_float: TRUE  
+    fig_caption: TRUE 
+    df_print: tibble 
 ---
 ```{r, include=FALSE}
 htmltools::tagList(rmarkdown::html_dependency_font_awesome())
