@@ -10,25 +10,22 @@ navbar:
       menu:
         - text: "STA130 - Winter 2019"
           icon: fa-book
-          href: Teaching/STA130_tutorial.html
+          href: T_STA130_tutorial.html
         - text: "STA302 - Summer 2019"
           icon: fa-book
-          href: Teaching/STA302_tutorial.html
+          href: T_STA302_tutorial.html
         - text: "STA314 - Fall 2018"
           icon: fa-book
-          href: Teaching/STA314_tutorial.html
-        - text: "MTH304"
+          href: T_STA314_tutorial.html
+        - text: "MTH380 Fall 2019"
           icon: fa-book
-          href: Teaching/MTH304_tutorial.html
-        - text: "MTH380"
-          icon: fa-book
-          href: Teaching/MTH380_tutorial.html
+          href: T_MTH380_tutorial.html
     - text: "Coursework"
       icon: fa-book-open
       menu:
         - text: "STA355"
           icon: fa-book
-          href: STA355_coursework.html
+          href: C_STA355_coursework.html
   right: 
     - text: "Personal Projects"
       icon: fa-briefcase

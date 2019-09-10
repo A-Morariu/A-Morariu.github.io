@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>MTH380 Fall 2019</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">My Website</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-university"></span>
+     
+    Teaching
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="T_STA130_tutorial.html">
+        <span class="fa fa-book"></span>
+         
+        STA130 - Winter 2019
+      </a>
+    </li>
+    <li>
+      <a href="T_STA302_tutorial.html">
+        <span class="fa fa-book"></span>
+         
+        STA302 - Summer 2019
+      </a>
+    </li>
+    <li>
+      <a href="T_STA314_tutorial.html">
+        <span class="fa fa-book"></span>
+         
+        STA314 - Fall 2018
+      </a>
+    </li>
+    <li>
+      <a href="T_MTH380_tutorial.html">
+        <span class="fa fa-book"></span>
+         
+        MTH380 Fall 2019
+      </a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book-open"></span>
+     
+    Coursework
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="C_STA355_coursework.html">
+        <span class="fa fa-book"></span>
+         
+        STA355
+      </a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-briefcase"></span>
+     
+    Personal Projects
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Spatial_Stats.html">
+        <span class="fa fa-map-marker"></span>
+         
+        Spatial Statistics
+      </a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="Presentations.html">
+    <span class="fa fa-chalkboard-teacher"></span>
+     
+    Presentations &amp; Talks
+  </a>
+</li>
+<li>
+  <a href="Files/Resume_AMorariu.pdf">
+    <span class="fa fa-file-pdf-o"></span>
+     
+    Resume
+  </a>
+</li>
+<li>
+  <a href="about.html">About Me</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">MTH380 Fall 2019</h1>
+
+</div>
+
+
+<div id="course-description" class="section level1">
+<h1><span class="header-section-number">1</span> Course Description</h1>
+<p><strong>Probability and Statistics I:</strong> Descriptive statistics. Probability (Laws of probability. Conditional probability. Discrete probability distributions (binomial, hypergeometric, Poisson). Continuous probability distributions, Normal, t-exponential, x². Applications of discrete and continuous distributions. Sampling distributions (sample mean, sample proportion, difference between two samples, difference between two sample proportions). Sampling distribution concerning mean variance and proportion for one or two populations. Estimation for large and small samples. Hypothesis testing concerning mean, variance and proportion for one or two populations, (large samples and small samples) including paired data testing. As copied from the <a href="https://www.ryerson.ca/calendar/2018-2019/courses/mathematics/MTH/380/">Ryerson Calendar</a>.</p>
+<p><strong>Professor</strong> <a href="https://math.ryerson.ca/people/mdrahman.html">Dr. MD Abdur Rahman</a></p>
+</div>
+<div id="week-1" class="section level1">
+<h1><span class="header-section-number">2</span> Week 1</h1>
+<div id="welcome-to-mth380" class="section level2">
+<h2><span class="header-section-number">2.1</span> Welcome to MTH380!</h2>
+<p>First of, my apologies for not having a projector ready for this week’s class. It will not be an issue going forward. This tutorial is dedicated to introducing you to R, a statistical programing language, along side the R Studio IDE. <strong>NOTE: this course does NOT have a programing component to its evaluation. Any material covering R is exclusively for your knowledeg.</strong> Please do not be scared or drop the course based on this tutorial.</p>
+<p>With that out of the way, let’s begin.</p>
+<div id="installing-r" class="section level3">
+<h3><span class="header-section-number">2.1.1</span> Installing R</h3>
+<p>The first step is to install a version of R. The simplest way to go about this is to Google “R” and follow the links. I suggest you download the <a href="FILL%20IN%20LATER">CRAN</a> as it saves you some additional set up headaches. Follow this up by installing the <em>free</em> version <a href="FILL%20IN%20LATER">R Studio</a>. R Studio acts a “wrapper” for R which makes the user’s life much simpler by avoiding having to run scripts through your terminal. If you do prefer executing scripts in the terminal, then feel free to do so but for most its not a natural method of executing code.</p>
+</div>
+<div id="what-you-see-when-you-open-r-studio" class="section level3">
+<h3><span class="header-section-number">2.1.2</span> What you see when you open R Studio</h3>
+<p>Once you open up R Studio you will see 4 panes (in no particular order):</p>
+<ol style="list-style-type: decimal">
+<li><strong>Console</strong> - think of this as your playground; you can experiment with code and try things out without causing problems or introducting error into your main file</li>
+<li><strong>.Rmd or .R File</strong> - speaking of the main file, this is where your “real” work will happen. You will perform your computations, fit models, evaluate data sets, visualize data, and much more in this file. I have provided a <a href="INSERT%20LINK">template</a> for a rendering a PDF document (word and HTML documents are also supported, you can change this in the YAML header at the top of the document).</li>
+<li><strong>Environment</strong> - this is where you can see your global memory and what you have stored. Once you load in a dataset, it will show up here and you can start working with it.</li>
+<li><strong>File, Plots, Etc.</strong> - this last pane is used to browse your computer’s file structure, preview your plots, manage packages, amongst it’s other functionalities (not all of which will be useful to you).</li>
+</ol>
+<p>The first step to writing some R code is to create an R script or Rmarkdown file. I suggest going with an Rmarkdown file since you can’t output R scripts as a PDF. Here is the <a href="INSERT%20LINK">source code</a> for this week’s tutorial. Once you have a new file created, we can insert of a chunk of code from the <em>Code</em> drop down menu. Alternatively you can use the keyboard shortcuts (Cmd-Alt-I for Mac users, Ctrl-Alt-I for Windows). Inside these chunks will be executable R code which will be run and outputed.</p>
+</div>
+<div id="some-basics" class="section level3">
+<h3><span class="header-section-number">2.1.3</span> Some basics</h3>
+<p>Here is our first code of chunk going over some of the basic objects available for storing information in R.</p>
+<pre class="r"><code># creating R objects 
+# assign something a value with the &lt;- operator, set parameter values with =
+x &lt;- 42 # an integer
+class(x)</code></pre>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<pre class="r"><code>x1 &lt;- &quot;42&quot; # a character
+class(x1)</code></pre>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<pre class="r"><code>x2 &lt;- c(1, 42, 3, 59, 75, 35, 4, 42) # a vector
+class(x2)</code></pre>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<pre class="r"><code>x2[3:5] # subsetting vectors (this is very useful)</code></pre>
+<pre><code>## [1]  3 59 75</code></pre>
+<pre class="r"><code>x3 &lt;- list(x, x1, x2) # a list
+class(x3)</code></pre>
+<pre><code>## [1] &quot;list&quot;</code></pre>
+<pre class="r"><code>x3[[2]] # double brackets to access list elements</code></pre>
+<pre><code>## [1] &quot;42&quot;</code></pre>
+<pre class="r"><code>x3[[3]][2:5] # accessing elements of a list element </code></pre>
+<pre><code>## [1] 42  3 59 75</code></pre>
+<p>Once I leave my code chunk, I can go back to typing text to comment on the results of my code chunks. You can also include TeX when typing which makes this very nice for writing up assignments and paper (note that it is limited).</p>
+<pre class="r"><code>3+2</code></pre>
+<pre><code>## [1] 5</code></pre>
+<pre class="r"><code>3-1</code></pre>
+<pre><code>## [1] 2</code></pre>
+<pre class="r"><code>3*2</code></pre>
+<pre><code>## [1] 6</code></pre>
+<pre class="r"><code>3/2</code></pre>
+<pre><code>## [1] 1.5</code></pre>
+<pre class="r"><code>3^2</code></pre>
+<pre><code>## [1] 9</code></pre>
+<pre class="r"><code>log(3) # you can find more as you need</code></pre>
+<pre><code>## [1] 1.098612</code></pre>
+<pre class="r"><code># Matrix operations 
+
+c(1,2,3) %*% c(4,5,6) # standard matrix product (i.e. dot product)</code></pre>
+<pre><code>##      [,1]
+## [1,]   32</code></pre>
+<pre class="r"><code>class(c(1,2,3) %*% c(4,5,6))</code></pre>
+<pre><code>## [1] &quot;matrix&quot;</code></pre>
+<pre class="r"><code>c(1,2,3) %*% t(c(4,5,6)) # &quot;cross&quot; product since we have the transpose </code></pre>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    4    5    6
+## [2,]    8   10   12
+## [3,]   12   15   18</code></pre>
+<pre class="r"><code>class(c(1,2,3) %*% t(c(4,5,6)))</code></pre>
+<pre><code>## [1] &quot;matrix&quot;</code></pre>
+</div>
+<div id="r-packages" class="section level3">
+<h3><span class="header-section-number">2.1.4</span> R Packages</h3>
+<p>One of the nice things about R is that it is an open-source language meaning that anyone can contribute to it. This means that if there is something you’d like to do in R, someone has likely written code to do that for you already and all you have to do is pull in that code to use it. Useful code is often wrapped up as a package which we can install in the following way.</p>
+<pre class="r"><code>install.packages(&quot;Matrix&quot;) # only need to install the package once
+
+library(Matrix) # to use the package you have to call it via the library() function
+# you must call it once in ANY file you want to use the functions in the package </code></pre>
+<pre class="r"><code># using the functions 
+crossprod(c(1,2,3), c(4,5,6)) # R knows to search all functions</code></pre>
+<pre><code>##      [,1]
+## [1,]   32</code></pre>
+<pre class="r"><code>Matrix::crossprod(c(1,2,3), c(4,5,6)) # can specify which package to get a function from</code></pre>
+<pre><code>##      [,1]
+## [1,]   32</code></pre>
+<pre class="r"><code># this second method is great to produce more explicit code</code></pre>
+</div>
+<div id="extracting-information-from-data" class="section level3">
+<h3><span class="header-section-number">2.1.5</span> Extracting information from data</h3>
+<p>For this section, we will be working with the built in Iris data set created by Ronald Fisher and Edgar Anderson in the 1930s.</p>
+<pre class="r"><code># preview the data set
+head(iris, 10) # option 1 and my favourite</code></pre>
+<pre><code>## # A tibble: 10 x 5
+##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+##           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  
+##  1          5.1         3.5          1.4         0.2 setosa 
+##  2          4.9         3            1.4         0.2 setosa 
+##  3          4.7         3.2          1.3         0.2 setosa 
+##  4          4.6         3.1          1.5         0.2 setosa 
+##  5          5           3.6          1.4         0.2 setosa 
+##  6          5.4         3.9          1.7         0.4 setosa 
+##  7          4.6         3.4          1.4         0.3 setosa 
+##  8          5           3.4          1.5         0.2 setosa 
+##  9          4.4         2.9          1.4         0.2 setosa 
+## 10          4.9         3.1          1.5         0.1 setosa</code></pre>
+<pre class="r"><code>dplyr::glimpse(iris) # option 2, works better than head on larger data sets</code></pre>
+<pre><code>## Observations: 150
+## Variables: 5
+## $ Sepal.Length &lt;dbl&gt; 5.1, 4.9, 4.7, 4.6, 5.0, 5.4, 4.6, 5.0, 4.4, 4.9, 5…
+## $ Sepal.Width  &lt;dbl&gt; 3.5, 3.0, 3.2, 3.1, 3.6, 3.9, 3.4, 3.4, 2.9, 3.1, 3…
+## $ Petal.Length &lt;dbl&gt; 1.4, 1.4, 1.3, 1.5, 1.4, 1.7, 1.4, 1.5, 1.4, 1.5, 1…
+## $ Petal.Width  &lt;dbl&gt; 0.2, 0.2, 0.2, 0.2, 0.2, 0.4, 0.3, 0.2, 0.2, 0.1, 0…
+## $ Species      &lt;fct&gt; setosa, setosa, setosa, setosa, setosa, setosa, set…</code></pre>
+<pre class="r"><code>summary(iris) # summary statistics of Iris dataset</code></pre>
+<pre><code>##   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   
+##  Min.   :4.300   Min.   :2.000   Min.   :1.000   Min.   :0.100  
+##  1st Qu.:5.100   1st Qu.:2.800   1st Qu.:1.600   1st Qu.:0.300  
+##  Median :5.800   Median :3.000   Median :4.350   Median :1.300  
+##  Mean   :5.843   Mean   :3.057   Mean   :3.758   Mean   :1.199  
+##  3rd Qu.:6.400   3rd Qu.:3.300   3rd Qu.:5.100   3rd Qu.:1.800  
+##  Max.   :7.900   Max.   :4.400   Max.   :6.900   Max.   :2.500  
+##        Species  
+##  setosa    :50  
+##  versicolor:50  
+##  virginica :50  
+##                 
+##                 
+## </code></pre>
+<pre class="r"><code>summary(iris$Petal.Length) # summary statistics of a subset of Iris data set</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   1.000   1.600   4.350   3.758   5.100   6.900</code></pre>
+<pre class="r"><code>petal.summary &lt;- summary(iris$Petal.Length)
+class(petal.summary) # a vector! so we can access specific elements</code></pre>
+<pre><code>## [1] &quot;summaryDefault&quot; &quot;table&quot;</code></pre>
+<pre class="r"><code>length(petal.summary)</code></pre>
+<pre><code>## [1] 6</code></pre>
+<pre class="r"><code>petal.summary[1]</code></pre>
+<pre><code>## Min. 
+##    1</code></pre>
+<pre class="r"><code>petal.summary[2] # and so on unitl...</code></pre>
+<pre><code>## 1st Qu. 
+##     1.6</code></pre>
+<pre class="r"><code>petal.summary[6]</code></pre>
+<pre><code>## Max. 
+##  6.9</code></pre>
+<pre class="r"><code>petal.summary[7] # this doesn&#39;t exist! </code></pre>
+<pre><code>## &lt;NA&gt; 
+## </code></pre>
+</div>
+<div id="plotting-our-data" class="section level3">
+<h3><span class="header-section-number">2.1.6</span> Plotting our data</h3>
+<p>This section will focus on plotting the data from the Iris dataset with tidyverse. As a part of the tidyverse, there is a smaller packaged called <em>ggplot2</em> (stands for grammar of graphic) which is an incredibly powerful tool for data visualization. It is far superior to the base R plot function since it works off of tibbles (a tidyverse specific data structure) which allows for ggplot to build plots by layering. This gives the user much more control over what is and isn’t shown and makes for more generic code that can be used across many projects up to variable names.</p>
+<pre class="r"><code>library(ggplot2) 
+library(cowplot)
+
+iris &lt;- as_tibble(iris)
+head(iris)</code></pre>
+<pre><code>## # A tibble: 6 x 5
+##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+##          &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  
+## 1          5.1         3.5          1.4         0.2 setosa 
+## 2          4.9         3            1.4         0.2 setosa 
+## 3          4.7         3.2          1.3         0.2 setosa 
+## 4          4.6         3.1          1.5         0.2 setosa 
+## 5          5           3.6          1.4         0.2 setosa 
+## 6          5.4         3.9          1.7         0.4 setosa</code></pre>
+<pre class="r"><code># let&#39;s make a histogram
+iris.hist &lt;- ggplot(iris, aes(Sepal.Length)) + 
+     geom_histogram(bins = 10, color = &quot;navy&quot;, fill = &quot;steelblue&quot;) + 
+     labs(title = &quot;Histogram of Sepal Lengths&quot;,
+          subtitle = &quot;Data from R. Fisher and E. Anderson&quot;, 
+          xlab = &quot;Sepal Lenght (cm)&quot;,
+          ylab = &quot;Counts&quot;) + 
+     theme_minimal()
+iris.hist</code></pre>
+<p><img src="T_MTH380_tutorial_files/figure-html/ggplot%20introduction-1.png" width="672" /></p>
+<pre class="r"><code># let&#39;s make a bar graph (think about the difference between a bar graph and historgram)
+iris.bar &lt;- iris %&gt;% ggplot(aes(Species)) +
+     geom_bar(color = &quot;navy&quot;, fill = &quot;steelblue&quot;) + 
+     labs(title = &quot;Bar graph of Iris Species&quot;,
+          subtitle = &quot;Data from R. Fisher and E. Anderson&quot;, 
+          xlab = &quot;Species&quot;,
+          ylab = &quot;Counts&quot;) + 
+     theme_minimal()
+iris.bar </code></pre>
+<p><img src="T_MTH380_tutorial_files/figure-html/ggplot%20introduction-2.png" width="672" /></p>
+<pre class="r"><code># let&#39;s make a dot graph with a line of best fit
+iris.line &lt;- iris %&gt;% ggplot(aes(x = Sepal.Length, y = Sepal.Width)) + 
+     geom_point(aes(color = factor(Species)), color = &quot;steelblue&quot;) + 
+     geom_smooth(method=&#39;lm&#39;, color = &quot;gold&quot;) + 
+     labs(title = &quot;Sepal Width vs. Sepal Length&quot;,
+          subtitle = &quot;Data from R. Fisher and E. Anderson&quot;, 
+          xlab = &quot;Sepal Length&quot;,
+          ylab = &quot;Sepal Width&quot;) + 
+     theme_minimal()
+iris.line</code></pre>
+<p><img src="T_MTH380_tutorial_files/figure-html/ggplot%20introduction-3.png" width="672" /></p>
+<pre class="r"><code># since we stored each graph in memory we can arrange them nicely
+cowplot::plot_grid(iris.hist, iris.bar, iris.line, 
+     ncol =2, 
+     labels=LETTERS[1:3])</code></pre>
+<p><img src="T_MTH380_tutorial_files/figure-html/ggplot%20introduction-4.png" width="672" /></p>
+<p>For more examples on graphing with ggplot2, check out the <a href="https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html#1">ggplot flipbook</a> by Gina Reynolds.</p>
+</div>
+<div id="working-with-probability-distributions" class="section level3">
+<h3><span class="header-section-number">2.1.7</span> Working with probability distributions</h3>
+<p>For the purpose of this course, the most useful component of R is working with probability distributions. We will formally define probability distributions and provide examples throughout the duration of the course but as an example for today I will focus on the normal/Gaussian distribution which takes the following form</p>
+<p><span class="math display">\[\begin{align}
+     f(x) = \frac{1}{\sqrt{2 \pi \sigma^2}} \exp{ \left( - \frac{(x - \mu)^2}{2 \sigma^2} \right) }
+\end{align}\]</span></p>
+<p>Where <span class="math inline">\(\mu\)</span> is the mean of the distribution and <span class="math inline">\(\sigma\)</span> is the standard deviation. A multivariate form exists but will be left out for now (more on multivariate distributions in later tutorials). So now for how R can help us make sense of these distributions. We can evaluate them at various points and compute probabilities of certain events happening. Or we can generate random samples from a the distribution for simulation purposes.</p>
+<pre class="r"><code># generate random normals 
+round(rnorm(n = 25, mean = 4, sd = 1.2), 2)</code></pre>
+<pre><code>##  [1] 5.49 4.60 2.58 4.00 4.94 4.69 4.15 3.45 2.19 6.30 5.21 4.43 2.01 3.09
+## [15] 3.89 3.61 3.91 2.84 5.74 2.27 2.58 4.64 4.11 2.11 5.68</code></pre>
+<pre class="r"><code># compute probabilities 
+dnorm(4.67, mean = 4, sd = 1.2) # value of the density (i.e. plug in x = 4.67 into f(x))</code></pre>
+<pre><code>## [1] 0.2844698</code></pre>
+<pre class="r"><code>pnorm(4.67, mean = 4, sd = 1.2) # probability of x = 4.67 (i.e. the integral over f from - infinity to 4.67)</code></pre>
+<pre><code>## [1] 0.7116916</code></pre>
+<p>This should give you a solid idea regarding what you can do with R. Throughout the semester, I will try to highlight various theorems which you could verify empirically using these tools. Additionally, there will be more sample code added to this page for you to try out on your own and learn from.</p>
+</div>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

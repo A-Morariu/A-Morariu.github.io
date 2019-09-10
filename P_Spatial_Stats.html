@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Spatial Stats</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">My Website</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-university"></span>
+     
+    Teaching
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="T_STA130_tutorial.html">
+        <span class="fa fa-book"></span>
+         
+        STA130 - Winter 2019
+      </a>
+    </li>
+    <li>
+      <a href="T_STA302_tutorial.html">
+        <span class="fa fa-book"></span>
+         
+        STA302 - Summer 2019
+      </a>
+    </li>
+    <li>
+      <a href="T_STA314_tutorial.html">
+        <span class="fa fa-book"></span>
+         
+        STA314 - Fall 2018
+      </a>
+    </li>
+    <li>
+      <a href="T_MTH380_tutorial.html">
+        <span class="fa fa-book"></span>
+         
+        MTH380 Fall 2019
+      </a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book-open"></span>
+     
+    Coursework
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="C_STA355_coursework.html">
+        <span class="fa fa-book"></span>
+         
+        STA355
+      </a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-briefcase"></span>
+     
+    Personal Projects
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Spatial_Stats.html">
+        <span class="fa fa-map-marker"></span>
+         
+        Spatial Statistics
+      </a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="Presentations.html">
+    <span class="fa fa-chalkboard-teacher"></span>
+     
+    Presentations &amp; Talks
+  </a>
+</li>
+<li>
+  <a href="Files/Resume_AMorariu.pdf">
+    <span class="fa fa-file-pdf-o"></span>
+     
+    Resume
+  </a>
+</li>
+<li>
+  <a href="about.html">About Me</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Spatial Stats</h1>
+
+</div>
+
+
+<div id="where-did-this-all-start" class="section level1 unnumbered">
+<h1>Where did this all start?</h1>
+<p>In my final year of my undergraduate degree, I took a course in spatial statistics taught by none other than <a href="https://scholar.google.co.uk/citations?user=oQIKmWUAAAAJ&amp;hl=en">Prof. Daniel Simpson</a>. As someone that’s always asked “what’s the point” to almost everything that I was taught, spatial statistics always provided a very clear answer to that. Every model that we use has a tangible underlying object, disease, species, or thing we are interested in looking at but also takes into account the **location* of these objects which has always been ignored. The assumption that where observations were made doesn’t matter has never sat well with me so this was a breadth of fresh air.</p>
+<p>As a result, I created this blog post to showcase any work I’ve done in this field. I want to take this opportunity to mention that spatial statistics is heavily based on Bayesian methods so I recommend familarizing yourself with those before proceedig. My advice is to read <a href="http://www.stat.columbia.edu/~gelman/book/">Bayesian Data Analysis</a> by Gelman et. all. Further, most models are fit using <a href="http://www.r-inla.org/">R-INLA</a> or <a href="https://mc-stan.org/users/interfaces/rstan">R-Stan</a>; two statistical packages that are very powerful and very confusing but worth the struggle!</p>
+</div>
+<div id="posterior-sampling-of-random-effects-using-inla" class="section level1">
+<h1><span class="header-section-number">1</span> Posterior sampling of random effects using INLA</h1>
+<p>While working on an air pollution project during my time and St. Michael’s hospital, we were interested in sampling the poster distribution of a <a href="https://en.wikipedia.org/wiki/Random_effects_model">random effect</a> within a model. This exercise is broken down into three parts in order to explain the methodology.</p>
+<ol style="list-style-type: decimal">
+<li>Understanding INLA output</li>
+<li>Formal mathematical argument for sampling</li>
+<li>Implemenation/code</li>
+</ol>
+<div id="latent-field-representation-of-a-model" class="section level2">
+<h2><span class="header-section-number">1.1</span> Latent field representation of a model</h2>
+<p>If you’ve fit any model in INLA you know that it outputs a nested list that can be hard to navigate. Fortunately, thanks to <a href="http://pbrown.ca/">Prof. Patrick Brown</a> and his <a href="http://pbrown.ca/teaching/astwo/slides/?C=M;O=A">Applied Statistics II</a> we can find some clarity. We know that INLA provides estimates of the posterior distribution of the latent field of the model. The details of how it does this will be omitted as they require solving stochastic partial differential equations and that is a battle for a different day. Let’s begin with an example:</p>
+<div id="the-bacteria-dataset" class="section level3">
+<h3><span class="header-section-number">1.1.1</span> The Bacteria Dataset</h3>
+<p>The question we are asking is whether or not a given treatment reduces the probability that the bacteria is present in the subject’s body.</p>
+<pre class="r"><code>head(bacteria)</code></pre>
+<pre><code>##   y ap hilo week  ID     trt
+## 1 y  p   hi    0 X01 placebo
+## 2 y  p   hi    2 X01 placebo
+## 3 y  p   hi    4 X01 placebo
+## 4 y  p   hi   11 X01 placebo
+## 5 y  a   hi    0 X02   drug+
+## 6 y  a   hi    2 X02   drug+</code></pre>
+</div>
+<div id="the-model" class="section level3">
+<h3><span class="header-section-number">1.1.2</span> The Model</h3>
+<p>The variables are defined as follows:</p>
+<ul>
+<li><span class="math inline">\(y_{it}\)</span> is the presence of bacteria in individual <span class="math inline">\(i\)</span> at time <span class="math inline">\(t\)</span></li>
+<li><span class="math inline">\(X_{it}\)</span> is the design matrix for the indicator of the week the individual was examined</li>
+<li><span class="math inline">\(U_i\)</span> is the individual level random effect</li>
+</ul>
+<p>And the model is structured accordingly:</p>
+<p><span class="math display">\[\begin{align}
+     y_{it} &amp;\sim Bernoulli(\lambda_{it}) \\
+     logit(\lambda_{it}) &amp;= \mu + X_{it} \beta + U_i \\
+     U_i &amp;\sim N(0, \sigma^2)
+\end{align}\]</span></p>
+<p>Finally, setting the priors:</p>
+<p><span class="math display">\[\begin{align}
+     \mu &amp;\sim N(0, 10^2) \\
+     \beta &amp;\sim N(0, 3^2 I) \\
+     \sigma &amp;= 1
+\end{align}\]</span></p>
+<p>Now we can go ahead and fit this model using INLA… right? Not quite. Because we have repeated measurements from the same individual (the time component of our data) you no longer have independence between the data points. Furthermore, some people are naturally more succeptible to certain bacterias and don’t have any additional information to highlight those people. As a result, we will restructre our model into a more convenient form for INLA to work with (and luckily for us to understand). From theory on <a href="https://en.wikipedia.org/wiki/Generalized_linear_model">GLMs</a>, specifically the link functions, we know that <span class="math inline">\(logit(\lambda_{it}) \sim N(\cdot, \cdot)\)</span> resulting in the following equivalent model:</p>
+<p><span class="math display">\[\begin{align}
+     y_{it} &amp;\sim Bernoulli(\lambda_{it}) \\
+     logit(\lambda_{it}) &amp;= \eta_{it} = X_{it} \beta + U_i \\
+     U_i &amp;\sim N(0, \sigma^2)
+\end{align}\]</span></p>
+<p>And the reformulated priors: <span class="math display">\[\begin{align}
+     \beta_0 &amp;\sim N(0, 10^2) \\
+     \{\beta_p ; p &gt; 1 \} &amp;\overset{ind}{\sim} N(0, 3^2 I) \\
+     \sigma &amp;= 1
+\end{align}\]</span></p>
+<p>In doing this, the propertie of multivariate normals can be exploited (which is what INLA needs to work it’s magic). The key result here is:</p>
+<p><span class="math display">\[\begin{equation}
+     W = (\eta, U, \beta)^T \sim MVN
+\end{equation}\]</span></p>
+<p>Which allows INLA to create a Gaussian approximation of this latent field. It is worth noting that the the dimensions of the field <span class="math inline">\(W\)</span>.</p>
+<p><span class="math display">\[\begin{align}
+     dim(W) &amp;= ncol(\eta) + ncol(U) + ncol(\beta) \\
+     &amp;= \text{Number of observations} + \text{Number of individuals} + \text{number of treatments}
+\end{align}\]</span></p>
+<p>The latent field is composed of submatricies of every observation (<span class="math inline">\(\eta\)</span>), random effects (how many <span class="math inline">\(U_i\)</span>’s there are), and fixed effects (how many <span class="math inline">\(\beta\)</span>’s there are) which are in the model. Because we are using the multivariate normal, we need to write our priors in a vectorized form too. <span class="math display">\[\begin{align}
+     \eta \vert \beta, U &amp;\sim N(X\beta + AU, \epsilon I) \\
+     \beta &amp;\sim N(0,\Gamma) \\
+     U \vert \sigma &amp;\sim N(0, \Sigma_\sigma) \\
+     \sigma &amp;= 1
+\end{align}\]</span></p>
+<p><span class="math display">\[\begin{equation}
+     W \vert \sigma \sim N \left( 0, 
+          \begin{pmatrix} 
+              A\Sigma_\sigma A^T + X \Gamma X^T &amp; A^T &amp; X^T \\
+              A &amp; \Sigma_\sigma &amp; 0 \\
+              X &amp; 0 &amp; \Gamma
+          \end{pmatrix}
+     \right)
+\end{equation}\]</span></p>
+<p>And this is the estimate which INLA gives us. The latent field can become quite large very quickly since each new data point adds a row and a column to the precision matrix of <span class="math inline">\(W\)</span> (due to the increase of the dimension of <span class="math inline">\(\eta\)</span>); however, the precision matrix tends to be quite sparse which makes further computations signifcantly faster.</p>
+<p>This is a good opportunity to take a look back at our initial goal: taking posterior samples of the random effects in the model. Knowing the structure of <span class="math inline">\(W\)</span>, it is clear that the we are interested in the submatrix <span class="math inline">\(U\)</span>. All that’s required is to take transform <span class="math inline">\(W\)</span> by some matrix <span class="math inline">\(A\)</span> which leaves us with just <span class="math inline">\(U\)</span>.</p>
+<p><span class="math display">\[\begin{align}
+     A &amp;= 
+     \begin{pmatrix}
+          0_\eta \\
+          \hline
+          I \\
+          \hline
+          0_\beta
+     \end{pmatrix} \\
+     0_\eta &amp;\in \mathbb{R}^{nrow(U) \times ncol(\eta)} \\
+     I &amp;\in \mathbb{R}^{nrow(U) \times ncol(U)} \\
+     0_\beta &amp;\in \mathbb{R}^{nrow(U) \times ncol(\beta)}
+\end{align}\]</span></p>
+</div>
+</div>
+<div id="transforming-a-mulivariate-normal-for-selective-sampling" class="section level2">
+<h2><span class="header-section-number">1.2</span> Transforming a mulivariate normal for selective sampling</h2>
+<p>Unfortunately, sampling <span class="math inline">\(U\)</span> is not as simple as pulling it out of <span class="math inline">\(W\)</span>. In this section, we show the mathematical procedure for generating a random sample from the same distribution as <span class="math inline">\(U\)</span>. The <a href="https://en.wikipedia.org/wiki/Cholesky_decomposition">Cholesky decompositon</a> will be used in order to break down the precision matrix in order to create a random sample from <span class="math inline">\(U\)</span>.</p>
+<p><span class="math display">\[\begin{align} \label{sampling_math}
+     W &amp;\sim N(\mu_W, Q_W^{-1}) \\
+     \Rightarrow A^TW &amp;\sim N(A\mu_W, A^T Q_W^{-1} A) \\
+     &amp;\sim N(A^T\mu_W, A^T (L_W L_W^T)^{-1} A) \\
+     &amp;\sim N(A^T\mu_W, A^T (L_W^{-1})^T (L_W)^{-1} A) \\
+     &amp;\sim N(A^T\mu_W, (L_W^{-1} A)^T ((L_W)^{-1} A)) \\
+     &amp;\sim N(A^T\mu_W, \widetilde{L}^T \widetilde{L} ) \\
+     &amp;\sim N(A^T\mu_W, \Sigma_U)
+\end{align}\]</span></p>
+<p>Taking a random sample from the standard multivariate normal <span class="math inline">\(Z\)</span> and applying the following transformation we get a sample from the desired distribution</p>
+<p><span class="math display">\[\begin{align}
+    A^T \mu_x + \widetilde{L}Z \sim N_p (A^T\mu_x, \Sigma_U) \Leftrightarrow A^T \mu_x + \widetilde{L}Z &amp;\overset{d}{=} U
+\end{align}\]</span></p>
+</div>
+<div id="implementation" class="section level2">
+<h2><span class="header-section-number">1.3</span> Implementation</h2>
+<p>In order to put these idea to work, it’s useful/practical to write R functions as to partition the work. From the previous section, it seems that the natural breakdown would be</p>
+<ol style="list-style-type: decimal">
+<li>Creating the transformation matrix <span class="math inline">\(A\)</span></li>
+<li>Performing the Cholesky decompositions to find <span class="math inline">\(\widetilde{L}\)</span></li>
+<li>Generating and transforming the standard normal to get the posterior sample</li>
+</ol>
+<p>To keep this as user friendly as possible, every function requires only the INLA object we are trying to extract random effects from, the name of the random effect, and the desired sample size. In order to test our function we will use a simulated data set inspired by Alex Stringer. An INLA model is fit where both random effects have a <a href="https://en.wikipedia.org/wiki/Random_walk#One-dimensional_random_walk">random walk</a> (specifically a RW1) model.</p>
+<pre class="r"><code># Generate some data
+n &lt;- 100
+set.seed(79687)
+u1 &lt;- 1:n # Covariates to be modelled smoothly, equally spaced
+u2 &lt;- seq(1, 2*n, by = 2)
+eta &lt;- cos(u1) + sin(u2) + rnorm(n,0,exp(-12)) 
+y &lt;- rnorm(n,eta,.1)
+
+df &lt;- tibble(y = y,u1 = u1, u2 = u2)
+
+# Constraints: to be used in later example
+# constr_A &lt;- matrix(c(1,rep(0,n-1)),nrow = 1)
+# constr_e &lt;- rep(0,nrow(constr_A))</code></pre>
+<pre class="r"><code># Fit INLA
+inlarw1 &lt;- INLA::inla(y ~ 1 + 
+                          f(u1,
+                            model = &quot;rw1&quot;, 
+                            constr = TRUE) +
+                          f(u2, 
+                            model = &quot;rw1&quot;, 
+                            constr = TRUE),
+      data = df,
+      family = &quot;gaussian&quot;,
+      control.family = list(initial = 0,fixed = TRUE),
+      control.inla = list(strategy=&#39;simplified.laplace&#39;, correct = FALSE),
+      control.compute=list(config=TRUE),
+      control.predictor = list(compute=TRUE,initial = 0,fixed = TRUE, cdf = c(0,1)),
+      control.fixed = list(prec.intercept = 1,mean.intercept = 0)
+)
+
+# preview of the precision matrix 
+precision_mat &lt;- Matrix::forceSymmetric(inlarw1$misc$configs$config[[1]]$Q)
+precision_mat[1:10, 1:10]</code></pre>
+<pre><code>## 10 x 10 sparse Matrix of class &quot;dsCMatrix&quot;
+##                          
+##  [1,] 2 . . . . . . . . .
+##  [2,] . 2 . . . . . . . .
+##  [3,] . . 2 . . . . . . .
+##  [4,] . . . 2 . . . . . .
+##  [5,] . . . . 2 . . . . .
+##  [6,] . . . . . 2 . . . .
+##  [7,] . . . . . . 2 . . .
+##  [8,] . . . . . . . 2 . .
+##  [9,] . . . . . . . . 2 .
+## [10,] . . . . . . . . . 2</code></pre>
+<p>Now that we have an idea of what the main object of our study, we can start writing the functions to break up our task.</p>
+<pre class="r"><code>reID &lt;- function(inla_object, re_name){
+    ### return the indicies (row and column index) of the sub-matrix
+    ### corresponding to the named random effect (ONLY works for 1 effect)
+    name &lt;- grep(re_name,inla_object$misc$configs$contents$tag)
+    indicies &lt;- seq(inla_object$misc$configs$contents$start[name],
+            len = inla_object$misc$configs$contents$length[name])
+    
+    return(indicies)
+}
+
+createTransform &lt;- function(re_index, inla_object){
+    ### return the A matrix which selects the sub-matrix corresponding to
+    ### the named random effect 
+    
+    dimension &lt;- nrow(inla_object$misc$configs$config[[1]]$Q)
+    
+    top_block &lt;- Matrix::Matrix(0, 
+                                nrow = (min(re_index)-1)
+                                , ncol = length(re_index))
+    
+    mid_block &lt;- Matrix::Diagonal(n = max(re_index) - min(re_index) + 1)
+    
+    bot_block &lt;- Matrix::Matrix(0, 
+                                nrow = (dimension - max(re_index)),
+                                ncol = length(re_index))
+    
+    return(rbind(top_block, mid_block, bot_block))
+}
+
+transformation &lt;- function(trans_mat, inla_object){
+    ### return the lower-triangular by which to multiply the standard normal 
+    ### to get the appropraite covariance matrix
+    
+    
+    Q_chol &lt;- Matrix::forceSymmetric(inla_object$misc$configs$config[[1]]$Q) %&gt;%
+        Matrix::Cholesky(LDL=FALSE, perm=TRUE)
+    
+    inv_Q_chol &lt;- Matrix::solve(Q_chol)
+    
+    transformation_mat &lt;- Matrix::crossprod(inv_Q_chol, trans_mat)
+    
+    return(transformation_mat)
+}
+
+meanOffset &lt;- function(re_id, inla_object){
+    ### returns the mean of the latent field from the inla_object
+    return(as.vector(inla_object$misc$configs$config[[1]]$mean)[re_id])
+}
+sampler &lt;- function(other_mat, sample_size){
+    ### returns a random sample of size sample_size with the same distribution 
+    ### as the posterior distribution of the random effect 
+    random_MVN &lt;- matrix(rnorm(sample_size*nrow(other_mat)),
+                         ncol=sample_size,
+                         nrow=nrow(other_mat)
+                         )   
+    
+    random_MVN &lt;- Matrix::crossprod(other_mat, random_MVN)
+    
+    return(random_MVN)
+}</code></pre>
+<pre class="r"><code>rePosteriorSampler&lt;- function(inla_object, random_effect, sample_size){
+    ### wrapper function sampling the posterior random effect 
+    ### inla_object - fitted INLA model with random effects
+    ### random_effect - string containing name of of random effect to sample
+    ### sample_size - how many samples to draw
+    thing2 &lt;- inla_object %&gt;% 
+        reID(random_effect) %&gt;%
+        createTransform(inla_object) %&gt;%
+        transformation(inla_object) %&gt;%
+        sampler(sample_size)
+    
+    return(thing2)
+}</code></pre>
+<pre class="r"><code>print(&quot;This is scrap work!&quot;)</code></pre>
+<pre><code>## [1] &quot;This is scrap work!&quot;</code></pre>
+<pre class="r"><code>### Use the mvrnorm(n, mu, Sigma) and just feed in the desired arguments based on our transformation
+### require(MASS)
+
+rePostSamp &lt;- function(inla_object,random_effect, sample_size = 1){
+  Amat &lt;- as.matrix(inla_object %&gt;% 
+        reID(random_effect) %&gt;%
+        createTransform(inla_object))
+  
+  mean_vec &lt;- as.vector(Matrix::crossprod(Amat, as.matrix(inla_object$misc$configs$config[[1]]$mean)))
+  covariance_mat &lt;- Matrix::crossprod(Amat,
+                                      solve(inla_object$misc$configs$config[[1]]$Q)
+                                      ) %*% Amat
+  
+  if(length(mean_vec) == nrow(covariance_mat)){
+    mvrnorm(n = sample_size,
+           mu = mean_vec,
+           Sigma = covariance_mat)
+    # each row of this corresponds to a sample from a dim(mu) MVN
+  } else{
+    return(&quot;Error: dimension of mean and covariance are not comformable!&quot;)
+  }
+}
+
+# preliminary tests show improved speed - sampling is slower but multiplication is much faster</code></pre>
+<p>Now that all the pieces are laid out, the simplest approach is to create a wrapper function which links the previously defined functions via the piping operator in order to streamline the sampling. The  function will take require all the (unique) parameters of each of the indivual pieces and be present as the front-end implementation of the above while outputting a dense matrix of samples from the posterior distribution of the random effect.</p>
+</div>
+<div id="evaluation" class="section level2">
+<h2><span class="header-section-number">1.4</span> Evaluation</h2>
+<div id="testing" class="section level3">
+<h3><span class="header-section-number">1.4.1</span> Testing</h3>
+<p>This section is dedicated to testing the functions above to ensure they output appropriate results. Additionally, we dedicate a section to evaluating the computational costs for precision matricies of various sizes.</p>
+<pre class="r"><code># use the inlarw1 object
+post_sample &lt;- rePostSamp(inlarw1, &quot;u1&quot;, 100)
+
+### The dimensions are ###
+dim(post_sample)</code></pre>
+<pre><code>## [1] 100 100</code></pre>
+<pre class="r"><code>### A preview of the sample ###
+as_tibble(round(post_sample[1:10, 1:10],3))</code></pre>
+<pre><code>## # A tibble: 10 x 10
+##        V1     V2     V3     V4     V5     V6     V7     V8     V9    V10
+##     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+##  1  0     -0.008  0.015  0.001  0.005 -0.004  0.009 -0.006  0.003 -0.011
+##  2  0.001  0.004 -0.007  0.006 -0.009  0.001 -0.009  0.006 -0.01   0.015
+##  3 -0.004 -0.002  0.006  0      0.007  0      0.004  0     -0.004  0.005
+##  4 -0.025  0.012 -0.005  0.005  0.019 -0.013  0.001  0.005 -0.003 -0.007
+##  5 -0.008  0.006 -0.01   0.003 -0.005  0.013  0.003  0.007  0.007 -0.008
+##  6 -0.004  0.004 -0.002  0.002  0.011 -0.005 -0.013 -0.004  0     -0.001
+##  7 -0.001  0.006  0.012 -0.002 -0.002  0.002  0.001  0.006  0.006  0.007
+##  8  0     -0.003  0.007  0.006  0      0.007  0.006 -0.004  0      0.003
+##  9 -0.005  0.01   0.004  0.012 -0.002 -0.005  0.002  0.005  0.002  0.016
+## 10  0.001  0.006  0.018 -0.003  0.005 -0.005 -0.008  0     -0.001  0.001</code></pre>
+<p>As expected,the number of columns equals the number of observations of the random effect (100). Further, the scale of the number is appropriate when compared to the mean (shown below).</p>
+<pre class="r"><code>as_tibble(round(t(inlarw1$misc$configs$config[[1]]$mean[1:10]),3))</code></pre>
+<pre><code>## # A tibble: 1 x 10
+##      V1     V2     V3    V4    V5     V6    V7    V8     V9    V10
+##   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1 0.727 -0.106 -0.944 0.083 0.324 -0.044 0.605 0.239 -0.958 -0.428</code></pre>
+</div>
+<div id="computational-efficiency" class="section level3">
+<h3><span class="header-section-number">1.4.2</span> Computational efficiency</h3>
+<p>In order to evaluate this portion, we first look at the behavior of the  function as the sample size changes followed by an increase in the dimension of the precision matrix from the INLA model. This will require to the creation of additional toy models where we increase the size of u1).</p>
+<div id="increasing-sample-size" class="section level4">
+<h4><span class="header-section-number">1.4.2.1</span> Increasing Sample Size</h4>
+<pre class="r"><code>size &lt;- c(1:6)
+run_time &lt;- c()
+
+for (i in size) {
+  run_time&lt;- c(run_time, sum(system.time(rePostSamp(inlarw1, &quot;u1&quot;, 10^i))))
+}</code></pre>
+<pre class="r"><code>df_rt &lt;- data_frame(10^size, run_time)
+colnames(df_rt) &lt;- c(&quot;SampleSize&quot;, &quot;RunTime&quot;)
+
+df_rt_graph &lt;- df_rt %&gt;% ggplot(aes(SampleSize, RunTime)) +
+  geom_point(color = &quot;navy&quot;) +
+  geom_line(colour = &quot;steelblue&quot;) +
+  labs(title = &quot;System Run Time for Various Sample Sizes&quot;,
+       xlab = &quot;Number of Samples&quot;,
+       ylab = &quot;Run Time (sum of system.time()) (sec)&quot;) +
+  theme_minimal()
+df_rt_graph</code></pre>
+<p><img src="P_Spatial_Stats_files/figure-html/Increasing%20sample%20size%20P2-1.png" width="672" /></p>
+<p>The run time is linear with increases to the number of points being generated meaning we scale directly with .</p>
+</div>
+<div id="increasing-dimension" class="section level4">
+<h4><span class="header-section-number">1.4.2.2</span> Increasing Dimension</h4>
+<p>As mentioned earlier, the first step is to re-run the INLA models in order to increase the dimension of the precision matrix. This will make the multiplactions and inversion within the  more demanding. Ideally, the computation time doess not grow exponentially. The fitting was done behind the scenes using the same code as Section 1.3.</p>
+<pre class="r"><code>#### FOR RUNNING ON A MAC ####
+
+inlarw1_100 &lt;- inlarw1
+
+# Generate some data
+n &lt;- 1000
+u1 &lt;- 1:n # Covariates to be modelled smoothly, equally spaced
+u2 &lt;- seq(1, 2*n, by = 2)
+eta &lt;- cos(u1) + sin(u2) + rnorm(n,0,exp(-12)) 
+y &lt;- rnorm(n,eta,.1)
+
+df_1000 &lt;- tibble(y = y,u1 = u1, u2 = u2)
+
+# Fit INLA
+inlarw1_1000 &lt;- INLA::inla(y ~ 1 + 
+                          f(u1,
+                            model = &quot;rw1&quot;, 
+                            initial = 0, 
+                            fixed = TRUE, 
+                            constr = TRUE) +
+                          f(u2, model = &quot;rw1&quot;, 
+                            initial = 1, 
+                            fixed = TRUE,
+                            constr = TRUE),
+      data = df_1000,
+      family = &quot;gaussian&quot;,
+      control.family = list(initial = 0,fixed = TRUE),
+      control.inla = list(strategy=&#39;gaussian&#39;,int.strategy = &quot;eb&quot;,correct = FALSE),
+      control.compute=list(config=TRUE),
+      control.predictor = list(compute=TRUE,initial = 0,fixed = TRUE),
+      control.fixed = list(prec.intercept = 1,mean.intercept = 0)
+)
+
+# Generate some data
+n &lt;- 2500
+u1 &lt;- 1:n # Covariates to be modelled smoothly, equally spaced
+u2 &lt;- seq(1, 2*n, by = 2)
+eta &lt;- cos(u1) + sin(u2) + rnorm(n,0,exp(-12)) 
+y &lt;- rnorm(n,eta,.1)
+
+df_2500 &lt;- tibble(y = y,u1 = u1, u2 = u2)
+
+# Fit INLA
+inlarw1_2500 &lt;- INLA::inla(y ~ 1 + 
+                          f(u1,
+                            model = &quot;rw1&quot;, 
+                            initial = 0, 
+                            fixed = TRUE, 
+                            constr = TRUE) +
+                          f(u2, model = &quot;rw1&quot;, 
+                            initial = 1, 
+                            fixed = TRUE,
+                            constr = TRUE),
+      data = df_2500,
+      family = &quot;gaussian&quot;,
+      control.family = list(initial = 0,fixed = TRUE),
+      control.inla = list(strategy=&#39;gaussian&#39;,int.strategy = &quot;eb&quot;,correct = FALSE),
+      control.compute=list(config=TRUE),
+      control.predictor = list(compute=TRUE,initial = 0,fixed = TRUE),
+      control.fixed = list(prec.intercept = 1,mean.intercept = 0)
+)
+
+# Generate some data
+n &lt;- 10000
+u1 &lt;- 1:n # Covariates to be modelled smoothly, equally spaced
+u2 &lt;- seq(1, 2*n, by = 2)
+eta &lt;- cos(u1) + sin(u2) + rnorm(n,0,exp(-12)) 
+y &lt;- rnorm(n,eta,.1)
+
+df_10000 &lt;- tibble(y = y,u1 = u1, u2 = u2)
+
+# Fit INLA
+inlarw1_10000 &lt;- INLA::inla(y ~ 1 + 
+                          f(u1,
+                            model = &quot;rw1&quot;, 
+                            initial = 0, 
+                            fixed = TRUE, 
+                            constr = TRUE) +
+                          f(u2, model = &quot;rw1&quot;, 
+                            initial = 1, 
+                            fixed = TRUE,
+                            constr = TRUE),
+      data = df_10000,
+      family = &quot;gaussian&quot;,
+      control.family = list(initial = 0,fixed = TRUE),
+      control.inla = list(strategy=&#39;gaussian&#39;,int.strategy = &quot;eb&quot;,correct = FALSE),
+      control.compute=list(config=TRUE),
+      control.predictor = list(compute=TRUE,initial = 0,fixed = TRUE),
+      control.fixed = list(prec.intercept = 1,mean.intercept = 0)
+) </code></pre>
+<pre class="r"><code>############################
+##### GET KAMAL TO RUN ##### 
+############################
+
+# Generate some data
+n &lt;- 500
+u1 &lt;- 1:n # Covariates to be modelled smoothly, equally spaced
+u2 &lt;- seq(1, 2*n, by = 2)
+eta &lt;- cos(u1) + sin(u2) + rnorm(n,0,exp(-12)) 
+y &lt;- rnorm(n,eta,.1)
+
+df_500 &lt;- tibble(y = y,u1 = u1, u2 = u2)
+
+# Fit INLA
+inlarw1_500 &lt;- INLA::inla(y ~ 1 + 
+                          f(u1,
+                            model = &quot;rw1&quot;, 
+                            initial = 0, 
+                            fixed = TRUE, 
+                            constr = TRUE) +
+                          f(u2, model = &quot;rw1&quot;, 
+                            initial = 1, 
+                            fixed = TRUE,
+                            constr = TRUE),
+      data = df_500,
+      family = &quot;gaussian&quot;,
+      control.family = list(initial = 0,fixed = TRUE),
+      control.inla = list(strategy=&#39;gaussian&#39;,int.strategy = &quot;eb&quot;,correct = FALSE),
+      control.compute=list(config=TRUE),
+      control.predictor = list(compute=TRUE,initial = 0,fixed = TRUE),
+      control.fixed = list(prec.intercept = 1,mean.intercept = 0)
+)
+
+# Generate some data
+n &lt;- 5000
+u1 &lt;- 1:n # Covariates to be modelled smoothly, equally spaced
+u2 &lt;- seq(1, 2*n, by = 2)
+eta &lt;- cos(u1) + sin(u2) + rnorm(n,0,exp(-12)) 
+y &lt;- rnorm(n,eta,.1)
+
+df_5000 &lt;- tibble(y = y,u1 = u1, u2 = u2)
+
+# Fit INLA
+inlarw1_5000 &lt;- INLA::inla(y ~ 1 + 
+                          f(u1,
+                            model = &quot;rw1&quot;, 
+                            initial = 0, 
+                            fixed = TRUE, 
+                            constr = TRUE) +
+                          f(u2, model = &quot;rw1&quot;, 
+                            initial = 1, 
+                            fixed = TRUE,
+                            constr = TRUE),
+      data = df_5000,
+      family = &quot;gaussian&quot;,
+      control.family = list(initial = 0,fixed = TRUE),
+      control.inla = list(strategy=&#39;gaussian&#39;,int.strategy = &quot;eb&quot;,correct = FALSE),
+      control.compute=list(config=TRUE),
+      control.predictor = list(compute=TRUE,initial = 0,fixed = TRUE),
+      control.fixed = list(prec.intercept = 1,mean.intercept = 0)
+)
+
+
+# Generate some data
+n &lt;- 20000
+u1 &lt;- 1:n # Covariates to be modelled smoothly, equally spaced
+u2 &lt;- seq(1, 2*n, by = 2)
+eta &lt;- cos(u1) + sin(u2) + rnorm(n,0,exp(-12)) 
+y &lt;- rnorm(n,eta,.1)
+
+df_20000 &lt;- tibble(y = y,u1 = u1, u2 = u2)
+
+# Fit INLA
+inlarw1_20000 &lt;- INLA::inla(y ~ 1 + 
+                          f(u1,
+                            model = &quot;rw1&quot;, 
+                            initial = 0, 
+                            fixed = TRUE, 
+                            constr = TRUE) +
+                          f(u2, model = &quot;rw1&quot;, 
+                            initial = 1, 
+                            fixed = TRUE,
+                            constr = TRUE),
+      data = df_20000,
+      family = &quot;gaussian&quot;,
+      control.family = list(initial = 0,fixed = TRUE),
+      control.inla = list(strategy=&#39;gaussian&#39;,int.strategy = &quot;eb&quot;,correct = FALSE),
+      control.compute=list(config=TRUE),
+      control.predictor = list(compute=TRUE,initial = 0,fixed = TRUE),
+      control.fixed = list(prec.intercept = 1,mean.intercept = 0)
+)</code></pre>
+<pre class="r"><code>############################
+##### GET KAMAL TO RUN ##### 
+############################
+
+# preview of the original precision matrix - INLA 100
+precision_mat100 &lt;- Matrix::forceSymmetric(inlarw1_100$misc$configs$config[[1]]$Q)
+dim(precision_mat100)
+precision_mat100[1:10, 1:10]
+
+# preview of the original precision matrix - INLA 500
+precision_mat500 &lt;- Matrix::forceSymmetric(inlarw1_500$misc$configs$config[[1]]$Q)
+dim(precision_mat500)
+precision_mat500[1:10, 1:10]
+
+# preview of the precision matrix - INLA 1000 
+precision_mat1000 &lt;- Matrix::forceSymmetric(inlarw1_1000$misc$configs$config[[1]]$Q)
+dim(precision_mat1000)
+precision_mat1000[1:10, 1:10]
+
+# preview of the precision matrix - INLA 2500 
+precision_mat2500 &lt;- Matrix::forceSymmetric(inlarw1_2500$misc$configs$config[[1]]$Q)
+dim(precision_mat2500)
+precision_mat2500[1:10, 1:10]
+
+# preview of the precision matrix - INLA 5000 
+precision_mat5000 &lt;- Matrix::forceSymmetric(inlarw1_5000$misc$configs$config[[1]]$Q)
+dim(precision_mat5000)
+precision_mat5000[1:10, 1:10]
+
+# preview of the precision matrix - INLA 10000
+precision_mat10000 &lt;- Matrix::forceSymmetric(inlarw1_10000$misc$configs$config[[1]]$Q)
+dim(precision_mat10000)
+precision_mat10000[1:10, 1:10]
+
+# preview of the precision matrix - INLA 20000
+precision_mat20000 &lt;- Matrix::forceSymmetric(inlarw1_20000$misc$configs$config[[1]]$Q)
+dim(precision_mat20000)
+precision_mat20000[1:10, 1:10]</code></pre>
+<p>Now we sample each of the posteriors and plot run times like before.</p>
+<pre class="r"><code># models &lt;- c(&quot;NULL&quot;, &quot;INLA-100&quot;,&quot;INLA-500&quot;, 
+#            &quot;INLA-1000&quot;, &quot;INLA-2500&quot;, &quot;INLA-5000&quot;,
+#            &quot;INLA-10000&quot;, &quot;INLA-20000&quot;)
+models &lt;- c(&quot;NULL&quot;, &quot;INLA-100&quot;, &quot;INLA-1000&quot;, &quot;INLA-2500&quot;) # for running on a Mac
+
+re &lt;- &quot;u1&quot;
+sample_size &lt;- 1000
+dim_inc_rt &lt;- c(0) # NULL case 
+
+# don&#39;t do a loop here, run time isn&#39;t smooth
+dim_inc_rt &lt;- c(dim_inc_rt, sum(system.time(rePostSamp(inlarw1_100, re, sample_size)))) #2
+#dim_inc_rt &lt;- c(dim_inc_rt, sum(system.time(rePostSamp(inlarw1_500, re, sample_size)))) #3
+dim_inc_rt &lt;- c(dim_inc_rt, sum(system.time(rePostSamp(inlarw1_1000, re, sample_size)))) #4
+dim_inc_rt &lt;- c(dim_inc_rt, sum(system.time(rePostSamp(inlarw1_2500, re, sample_size)))) #5
+#dim_inc_rt &lt;- c(dim_inc_rt, sum(system.time(rePostSamp(inlarw1_5000, re, sample_size)))) #6
+#dim_inc_rt &lt;- c(dim_inc_rt, sum(system.time(rePostSamp(inlarw1_10000, re, sample_size)))) #7
+#dim_inc_rt &lt;- c(dim_inc_rt, sum(system.time(rePostSamp(inlarw1_20000, re, sample_size)))) </code></pre>
+<pre class="r"><code>#df_dim_inc &lt;- as_tibble(cbind(as.factor(models), 
+#                              size = as.numeric(c(0, 100 ,500, 
+#                                                  1000, 2500, 5000,
+#                                                  10000, 20000)),
+#                              run_time =as.numeric(c(0,dim_inc_rt))
+#                              )
+#                        )
+df_dim_inc &lt;- data.frame(models = models, 
+                              size = as.numeric(c(0,100, 1000, 2500)),
+                              run_time = dim_inc_rt) # for running on a Mac
+
+# save(df_dim_inc, file = &quot;df_dim_inc.RData&quot;)
+
+dim_inc_graph &lt;- df_dim_inc %&gt;% ggplot(aes(size, run_time)) +
+  geom_point(color = &quot;navy&quot;) +
+  geom_line(color = &quot;steelblue&quot;) + 
+  geom_text_repel(aes(label=models),box.padding = unit(0.45, &quot;lines&quot;)) +
+  labs(title = &quot;System Run Time for Increasing Dimension&quot;,
+       x = &quot;Dimension of Block Matrix of Random Effect&quot;,
+       y = &quot;Run time (seconds)&quot;) +
+     theme_minimal()
+
+dim_inc_graph</code></pre>
+<p><img src="P_Spatial_Stats_files/figure-html/Dimension%20increase%20run%20times%20P2-1.png" width="672" /></p>
+<p>This exponential scaling is  ideal. As such, we attempt to make some improvements to avoid incurring additional computational costs. They are as follows:</p>
+<ul>
+<li>Use an R package to sample from a MVN using the precision matrix - avoids inverting the high dimensional Q matrix of the INLA object</li>
+<li>Use indexing from INLA to select submatrix of interest - avoids multiplication by the transformation matrix (Amat)</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="improvements" class="section level2">
+<h2><span class="header-section-number">1.5</span> Improvements</h2>
+<div id="working-with-submatricies" class="section level3">
+<h3><span class="header-section-number">1.5.1</span> Working with Submatricies</h3>
+<pre class="r"><code># Use the inlarw1_1000 object as the basis of our tests
+
+re </code></pre>
+<pre><code>## [1] &quot;u1&quot;</code></pre>
+<pre class="r"><code>x1000_index &lt;- reID(inlarw1_1000, re)
+c(min(x1000_index), max(x1000_index))</code></pre>
+<pre><code>## [1] 1001 2000</code></pre>
+<pre class="r"><code># this will be 1000x1000 submatrix
+
+x1000_Amat &lt;- createTransform(x1000_index, inlarw1_1000)
+x1000_submat &lt;- Matrix::crossprod(x1000_Amat, inlarw1_1000$misc$configs$config[[1]]$Q) %*% x1000_Amat
+# check equality 
+1000^2 == sum(x1000_submat == inlarw1_1000$misc$configs$config[[1]]$Q[x1000_index, x1000_index])</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>### Conclusion: they are the same! </code></pre>
+<p>As a result we can avoid the cross products we previously needed.</p>
+<p> This trick does not work because <span class="math inline">\(A^T Q^{-1} A \neq (A^T Q^{-1} A)^{-1}\)</span> since <span class="math inline">\(A\)</span> is not a square matrix. Even in the case where we are working wtih the precision matrix, we have <span class="math inline">\(Q[,] = A^T Q A \Rightarrow Q[,]^{-1} \neq A^T Q^{-1} A\)</span> and therefore we won’t be sampling the same distribution. While this would be computationally advantageous, it does not have the same distribution.</p>
+</div>
+</div>
+<div id="a-more-algebraic-approach" class="section level2">
+<h2><span class="header-section-number">1.6</span> A more algebraic approach</h2>
+<p>The remaining sections are dedicated to a more algebraic approach to the problem that exploits the sparse nature of the precision matrix from INLA. Some functions from above are used to generate the sample combined with a wrapper function that performs the remaining linear algebra. Afterwards, similar computational efficiency tests will be run in order to compare the results.</p>
+<pre class="r"><code>reID &lt;- function(inla_object, re_name){
+    ### return the indicies (row and column index) of the sub-matrix
+    ### corresponding to the named random effect (ONLY works for 1 effect)
+    name &lt;- grep(re_name,inla_object$misc$configs$contents$tag)
+    indicies &lt;- seq(inla_object$misc$configs$contents$start[name],
+            len = inla_object$misc$configs$contents$length[name])
+    
+    return(indicies)
+}
+
+meanOffset &lt;- function(re_id, inla_object){
+    ### returns the mean of the latent field from the inla_object
+    return(as.vector(inla_object$misc$configs$config[[1]]$mean)[re_id])
+}
+
+createTransform &lt;- function(re_index, inla_object, constraint_point){
+    ### return the A matrix which selects the sub-matrix corresponding to
+    ### the named random effect while placing a constraint at a single
+    ### point in the walk
+  
+    dimension &lt;- nrow(inla_object$misc$configs$config[[1]]$Q)
+    
+    ### Top
+    top_block &lt;- Matrix::Matrix(0, 
+                                  nrow = (min(re_index)-1), 
+                                  ncol = length(re_index))
+    
+    ### Bottom 
+    bot_block &lt;- Matrix::Matrix(0, 
+                                  nrow = (dimension - max(re_index)),
+                                  ncol = length(re_index))
+      
+    ### Middle 
+    if(is.null(constraint_point)){
+        mid_block &lt;- Matrix::Diagonal(n = max(re_index) - min(re_index) + 1)
+    } else{
+        ### Middle
+        differencing_mat &lt;- Matrix(0, 
+                                   nrow = max(re_index) - min(re_index) + 1, 
+                                   ncol = max(re_index) - min(re_index) + 1)
+        differencing_mat[,as.numeric(constraint_point)] &lt;- 1
+        
+        # get +/- 1 entries on each row except in at entry 
+        # [fixed_point, constraint_point] where we get a row of zeros
+        mid_block &lt;- Matrix::Diagonal(n = max(re_index) - min(re_index) + 1) - differencing_mat 
+    }
+    return(rbind(top_block, mid_block, bot_block))
+}
+
+PosteriorSampler &lt;- function(inla_object, effect_name, n=1, constraint_point){
+  Amat &lt;- inla_object %&gt;% 
+        reID(&quot;u1&quot;) %&gt;% 
+        createTransform(inla_object, constraint_point)
+  
+  mean_vec &lt;- as.vector(Matrix::crossprod(Amat, 
+                                   as.matrix(inla_object$misc$configs$config[[1]]$mean)))
+  
+  cov_mat &lt;- new(&quot;dsCMatrix&quot;, 
+               x = inla_object$misc$configs$config[[1]]$Q@x,
+               i = inla_object$misc$configs$config[[1]]$Q@i,
+               p = inla_object$misc$configs$config[[1]]$Q@p,
+               Dim = inla_object$misc$configs$config[[1]]$Q@Dim) %&gt;% 
+    Matrix::Cholesky(LDL = FALSE, perm = FALSE) %&gt;% 
+    Matrix::solve(Amat) %&gt;% 
+    Matrix::crossprod()
+  
+  mvrnorm(n=n, mu = mean_vec, Sigma = cov_mat)
+}</code></pre>
+<pre class="r"><code># models &lt;- c(&quot;NULL&quot;, &quot;INLA-100&quot;,&quot;INLA-500&quot;, 
+#             &quot;INLA-1000&quot;, &quot;INLA-2500&quot;, &quot;INLA-5000&quot;,
+#             &quot;INLA-10000&quot;, &quot;INLA-20000&quot;)
+ models &lt;- c(&quot;NULL&quot;, &quot;INLA-100&quot;, &quot;INLA-1000&quot;, &quot;INLA-2500&quot;) # for running on a Mac
+
+re &lt;- &quot;u1&quot;
+sample_size &lt;- 1000
+dim_inc_rt_f2 &lt;- c(0) # NULL case 
+
+dim_inc_rt_f2 &lt;- c(dim_inc_rt_f2, sum(system.time(PosteriorSampler(inlarw1_100, re, sample_size, 2)))) #2
+#dim_inc_rt_f2 &lt;- c(dim_inc_rt_f2, sum(system.time(PosteriorSampler(inlarw1_500, re, sample_size)))) #3
+dim_inc_rt_f2 &lt;- c(dim_inc_rt_f2, sum(system.time(PosteriorSampler(inlarw1_1000, re, sample_size, 2)))) #4
+dim_inc_rt_f2 &lt;- c(dim_inc_rt_f2, sum(system.time(PosteriorSampler(inlarw1_2500, re, sample_size, 2)))) #5
+#dim_inc_rt_f2 &lt;- c(dim_inc_rt_f2, sum(system.time(PosteriorSampler(inlarw1_5000, re, sample_size)))) #6
+#dim_inc_rt_f2 &lt;- c(dim_inc_rt_f2, sum(system.time(PosteriorSampler(inlarw1_10000, re, sample_size)))) #7
+#dim_inc_rt_f2 &lt;- c(dim_inc_rt_f2, sum(system.time(PosteriorSampler(inlarw1_20000, re, sample_size)))) #8
+
+#df_dim_inc_f2 &lt;- as_tibble(cbind(as.factor(models), 
+#                              size = as.numeric(c(0, 100 ,500, 
+#                                                  1000, 2500, 5000,
+#                                                  10000, 20000)),
+#                              run_time =as.numeric(c(0,dim_inc_rt))
+#                              )
+#                        )</code></pre>
+<pre class="r"><code>df_dim_inc_f2 &lt;- data.frame(models, 
+                              size = as.numeric(c(0, 100, 1000, 2500)),
+                              run_time = dim_inc_rt_f2
+                              ) # for running on a Mac
+
+# save(df_dim_inc_f2, file = &quot;df_dim_inc_f2.RData&quot;)
+
+dim_inc_graph_f2 &lt;- df_dim_inc_f2 %&gt;% ggplot(aes(size, run_time)) +
+  geom_point(color = &quot;navy&quot;) +
+  geom_line(color = &quot;steelblue&quot;) + 
+  geom_text_repel(aes(label=models),box.padding = unit(0.45, &quot;lines&quot;)) +
+  labs(title = &quot;System Run Time for Increasing Dimension&quot;,
+       x = &quot;Dimension of Block Matrix of Random Effect&quot;,
+       y = &quot;Run time (seconds)&quot;) +
+  theme_minimal()
+
+dim_inc_graph_f2</code></pre>
+<p><img src="P_Spatial_Stats_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>This will be the final function that will be sample posterior distributions of the effects. The next step is to allow for sampling from each of the configurations INLA produces. This means applying the function to each of the objects in the list that INLA outputs.</p>
+</div>
+<div id="proportional-sampling" class="section level2">
+<h2><span class="header-section-number">1.7</span> Proportional Sampling</h2>
+<p>When INLA produces the result for each of the configurations, it also computes the log-posterior of each on of the points. That is to say we know which points are more likely to occur and as such we would like to sample from the distributions at those points more often. This section is dedicated to creating a weighting vector by which we will multiply the desired posterior sample size.</p>
+<pre class="r"><code>inlarw1_configs &lt;- INLA::inla(y ~ 1 + 
+                          f(u1,
+                            model = &quot;rw1&quot;, 
+                            initial = 0, 
+                            fixed = TRUE, 
+                            constr = TRUE) +
+                          f(u2, model = &quot;rw1&quot;, 
+                            initial = 1, 
+                            fixed = TRUE,
+                            constr = TRUE),
+      data = df,
+      family = &quot;gaussian&quot;,
+      control.family = list(initial = 0,fixed = FALSE),
+      control.inla = list(strategy=&#39;laplace&#39;, correct = FALSE),
+      control.compute=list(config=TRUE),
+      control.predictor = list(compute=TRUE,initial = 0,fixed = TRUE),
+      control.fixed = list(prec.intercept = 1,mean.intercept = 0)
+)</code></pre>
+</div>
+<div id="sampling-from-all-configs" class="section level2">
+<h2><span class="header-section-number">1.8</span> Sampling from all Configs</h2>
+<p>Now that we know the weights for each  we can set up a function to produce the appropriately sized sample from each one. We take advantage of the highly optimzed  package by Hadley Wickham to iterate over the list. The code for this section can be found in the <a href="https://github.com/A-Morariu/psmplr">psmplr</a> page. It is worth noting that several functions have been changed and omitted to improve our ability to access key elements of the INLA output.</p>
+<p>A clean version of this page will be coming soon…</p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
