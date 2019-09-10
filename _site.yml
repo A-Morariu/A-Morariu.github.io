@@ -17,7 +17,7 @@ navbar:
         - text: "STA314 - Fall 2018"
           icon: fa-book
           href: T_STA314_tutorial.html
-        - text: "MTH380 Fall 2019"
+        - text: "MTH380 - Fall 2019"
           icon: fa-book
           href: T_MTH380_tutorial.html
     - text: "Coursework"
