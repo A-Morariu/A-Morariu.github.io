@@ -13,16 +13,17 @@ header-includes:
 ---
 
 ```{r Load Packages, eval=TRUE, echo=FALSE, message=FALSE, error=FALSE}
+library(tidyverse)
 library(gridExtra)
 library(MASS)
-library(ISLR)
 library(car)
+
+library(ISLR)
 library(modelr)
 library(gapminder)
 library(broom)
 library(e1071)
 library(summarytools)
-library(tidyverse)
 
 # Choose the number you want as the basis of all your random number generation
 # Can be ANY integer number 
