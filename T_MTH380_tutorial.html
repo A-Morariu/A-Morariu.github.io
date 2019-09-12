@@ -506,7 +506,7 @@ div.tocify {
 <h1><span class="header-section-number">2</span> Week 1</h1>
 <div id="welcome-to-mth380" class="section level2">
 <h2><span class="header-section-number">2.1</span> Welcome to MTH380!</h2>
-<p>First of, my apologies for not having a projector ready for this week’s class. It will not be an issue going forward. This tutorial is dedicated to introducing you to R, a statistical programing language, along side the R Studio IDE. <strong>NOTE: this course does NOT have a programing component to its evaluation. Any material covering R is exclusively for your knowledeg.</strong> Please do not be scared or drop the course based on this tutorial.</p>
+<p>First of, my apologies for not having a projector ready for this week’s class. It will not be an issue going forward. This tutorial is dedicated to introducing you to R, a statistical programing language, along side the R Studio IDE.</p>
 <p>With that out of the way, let’s begin.</p>
 <div id="installing-r" class="section level3">
 <h3><span class="header-section-number">2.1.1</span> Installing R</h3>
@@ -595,19 +595,17 @@ crossprod(c(1,2,3), c(4,5,6)) # R knows to search all functions</code></pre>
 <p>For this section, we will be working with the built in Iris data set created by Ronald Fisher and Edgar Anderson in the 1930s.</p>
 <pre class="r"><code># preview the data set
 head(iris, 10) # option 1 and my favourite</code></pre>
-<pre><code>## # A tibble: 10 x 5
-##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-##           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  
-##  1          5.1         3.5          1.4         0.2 setosa 
-##  2          4.9         3            1.4         0.2 setosa 
-##  3          4.7         3.2          1.3         0.2 setosa 
-##  4          4.6         3.1          1.5         0.2 setosa 
-##  5          5           3.6          1.4         0.2 setosa 
-##  6          5.4         3.9          1.7         0.4 setosa 
-##  7          4.6         3.4          1.4         0.3 setosa 
-##  8          5           3.4          1.5         0.2 setosa 
-##  9          4.4         2.9          1.4         0.2 setosa 
-## 10          4.9         3.1          1.5         0.1 setosa</code></pre>
+<pre><code>##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+## 1           5.1         3.5          1.4         0.2  setosa
+## 2           4.9         3.0          1.4         0.2  setosa
+## 3           4.7         3.2          1.3         0.2  setosa
+## 4           4.6         3.1          1.5         0.2  setosa
+## 5           5.0         3.6          1.4         0.2  setosa
+## 6           5.4         3.9          1.7         0.4  setosa
+## 7           4.6         3.4          1.4         0.3  setosa
+## 8           5.0         3.4          1.5         0.2  setosa
+## 9           4.4         2.9          1.4         0.2  setosa
+## 10          4.9         3.1          1.5         0.1  setosa</code></pre>
 <pre class="r"><code>dplyr::glimpse(iris) # option 2, works better than head on larger data sets</code></pre>
 <pre><code>## Observations: 150
 ## Variables: 5
@@ -656,9 +654,13 @@ class(petal.summary) # a vector! so we can access specific elements</code></pre>
 <h3><span class="header-section-number">2.1.6</span> Plotting our data</h3>
 <p>This section will focus on plotting the data from the Iris dataset with tidyverse. As a part of the tidyverse, there is a smaller packaged called <em>ggplot2</em> (stands for grammar of graphic) which is an incredibly powerful tool for data visualization. It is far superior to the base R plot function since it works off of tibbles (a tidyverse specific data structure) which allows for ggplot to build plots by layering. This gives the user much more control over what is and isn’t shown and makes for more generic code that can be used across many projects up to variable names.</p>
 <pre class="r"><code>library(ggplot2) 
-library(cowplot)
-
-iris &lt;- as_tibble(iris)
+library(cowplot)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;cowplot&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
+## 
+##     ggsave</code></pre>
+<pre class="r"><code>iris &lt;- as_tibble(iris)
 head(iris)</code></pre>
 <pre><code>## # A tibble: 6 x 5
 ##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
