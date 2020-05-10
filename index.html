@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
@@ -86,7 +86,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -235,6 +234,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -246,18 +246,6 @@ $(document).ready(function () {
   display: none;
 }
 </style>
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
 
 <!-- code folding -->
 
@@ -362,10 +350,17 @@ $(document).ready(function () {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="Spatial_Stats.html">
+      <a href="P_Spatial_Stats.html">
         <span class="fa fa-map-marker"></span>
          
         Spatial Statistics
+      </a>
+    </li>
+    <li>
+      <a href="P_Bayesian_TS.html">
+        <span class="fa fa-stream"></span>
+         
+        Bayesian Time Series with Stan
       </a>
     </li>
   </ul>
@@ -413,15 +408,15 @@ text-align: justify}
 <p>Throughout the site you will find examples of my course work and personal project along side material that I use to teach in any of my tutorials/office hours. The latter will be sorted by courses, semester and finally section.</p>
 <div id="currently-ta-ing" class="section level2">
 <h2>Currently TA-ing:</h2>
-<p><a href="https://a-morariu.github.io/Teaching/MTH380_tutorial.html">MTH380 - Fall 2019</a>: Probability and Statistics 1</p>
+<p><a href="https://a-morariu.github.io/T_MTH380_tutorial.html">MTH380 - Fall 2019</a>: Probability and Statistics 1</p>
 <div id="previously-tad" class="section level3">
 <h3>Previously TA’d:</h3>
 <div id="university-of-toronto" class="section level4">
 <h4>University of Toronto</h4>
-<p><a href="https://a-morariu.github.io/STA302_tutorial.html">STA302 - Summer 2019</a>: Methods for Data Analysis 1</p>
-<p><a href="https://a-morariu.github.io/STA130_tutorial.html">STA130 - Winter 2019</a>: An Introduction to Statistical Reasoning and Data Science</p>
+<p><a href="https://a-morariu.github.io/T_STA302_tutorial.html">STA302 - Summer 2019</a>: Methods for Data Analysis 1</p>
+<p><a href="https://a-morariu.github.io/T_STA130_tutorial.html">STA130 - Winter 2019</a>: An Introduction to Statistical Reasoning and Data Science</p>
 <p><a href="https://ntaback.github.io/UofT_STA130/STA130syllabus2018S.html">STA130 - Winter 2018</a>: An Introduction to Statistical Reasoning and Data Science</p>
-<p><a href="https://a-morariu.github.io/STA314_Tutorial.html">STA314 - Fall 2018</a>: Statistical Methods for Machine Learning I</p>
+<p><a href="https://a-morariu.github.io/T_STA314_tutorial.html">STA314 - Fall 2018</a>: Statistical Methods for Machine Learning I</p>
 </div>
 </div>
 </div>
@@ -458,6 +453,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

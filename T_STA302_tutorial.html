@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
@@ -88,7 +88,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -237,6 +236,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -249,48 +249,9 @@ $(document).ready(function () {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 
 
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3,h4",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <style type="text/css">
 
@@ -304,6 +265,12 @@ $(document).ready(function ()  {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -458,10 +425,17 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="Spatial_Stats.html">
+      <a href="P_Spatial_Stats.html">
         <span class="fa fa-map-marker"></span>
          
         Spatial Statistics
+      </a>
+    </li>
+    <li>
+      <a href="P_Bayesian_TS.html">
+        <span class="fa fa-stream"></span>
+         
+        Bayesian Time Series with Stan
       </a>
     </li>
   </ul>
@@ -537,6 +511,52 @@ div.tocify {
 <p>When reading this, you will notice the deliberate omission of any particular distribution we are evaluating. All that was required was that <span class="math inline">\(F\)</span> and <span class="math inline">\(G\)</span> are <strong>some</strong> valid probability distribution. This makes QQ plots such a versatile tool because we can test for any distribution we are curious about. In our case, we are intersted in whether or not the errors come from the normal distribution in equation  1. But we can just replace that with your favourite student’s t distribution, or F distribution, chi-squared, gamma, or any other you want. You even have the power to blindly compare two ECDF’s by letting <span class="math inline">\(F\)</span> be an ECDF. If all you are intereted in is whether or not two datasets follow the same (all be it unkown) distribution this is a solid method to explore that making this a very robust tool.</p>
 </div>
 </div>
+<div id="creating-the-plots" class="section level2">
+<h2><span class="header-section-number">1.3</span> Creating the Plots</h2>
+<p>In order to generate these plots with the desired flexibility to verify (empirically) the claims above, it is worth investing the time to code a function that outputs the QQ plot that allows you to change the theoretical distribution of plot. More explicitly, we should be able to output a normal QQ plot, a student’s T QQ plot, an F QQ plot, or any other distribution.</p>
+<pre class="r"><code>my_qq_plot &lt;- function(empirical_sample, theoretical_dist, extra_param = 2){
+  # take a sample of the theoretical distribution provided 
+  if(theoretical_dist == &quot;normal&quot;) {
+    theoretical_sample &lt;- rnorm(length(empirical_sample))
+  } else if (theoretical_dist == &quot;t&quot;){
+    theoretical_sample &lt;- rt(length(empirical_sample), df = extra_param)
+  } else if (theoretical_dist == &quot;F&quot;){
+    theoretical_sample &lt;- rf(length(empirical_sample), df1 = extra_param, df2 = 1/empirical_sample)
+  } else if (theoretical_dist == &quot;gamma&quot;){
+    theoretical_sample &lt;- rgamma(length(empirical_sample), shape = 1)
+  } else if (theoretical_dist == &quot;exp&quot;){
+    theoretical_sample &lt;- rexp(length(empirical_sample))
+  } 
+  
+  empirical_sample &lt;- sort(empirical_sample)/diff(range(empirical_sample))
+  theoretical_sample&lt;- sort(theoretical_sample)/diff(range(theoretical_sample))
+  
+  df &lt;- as_tibble(cbind(empirical_sample, theoretical_sample))
+  
+  df %&gt;% ggplot(aes(x = empirical_sample, y = theoretical_sample)) + 
+    geom_point(color = &quot;steelblue&quot;, alpha = 0.5) +
+    geom_smooth(method = &quot;lm&quot;, se = FALSE, color = &quot;gold&quot;, linetype = &quot;longdash&quot;, alpha = 0.7) + 
+    #xlim(c(-5,5)) + ylim(c(-5,5)) +
+    labs(title =&quot;QQ Plot&quot;, x = &quot;Empirical Quantiles&quot;, y = &quot;Theoretical Quantiles&quot;) +
+    theme_minimal()
+}</code></pre>
+<p>Now that we have the function let’s see some graphs</p>
+<pre class="r"><code># a random sample from a normal distribution 
+set.seed(19960523)
+rand_normal &lt;- rnorm(1000, mean = 2, sd = 0.5)
+
+# the plots
+my_qq_plot(rand_normal, &quot;normal&quot;)</code></pre>
+<p><img src="T_STA302_tutorial_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<pre class="r"><code>my_qq_plot(rand_normal, &quot;t&quot;)</code></pre>
+<p><img src="T_STA302_tutorial_files/figure-html/unnamed-chunk-2-2.png" width="672" /></p>
+<pre class="r"><code>my_qq_plot(rand_normal, &quot;F&quot;)</code></pre>
+<p><img src="T_STA302_tutorial_files/figure-html/unnamed-chunk-2-3.png" width="672" /></p>
+<pre class="r"><code>my_qq_plot(rand_normal, &quot;gamma&quot;) </code></pre>
+<p><img src="T_STA302_tutorial_files/figure-html/unnamed-chunk-2-4.png" width="672" /></p>
+<pre class="r"><code>my_qq_plot(rand_normal, &quot;exp&quot;)</code></pre>
+<p><img src="T_STA302_tutorial_files/figure-html/unnamed-chunk-2-5.png" width="672" /></p>
+</div>
 </div>
 
 
@@ -557,6 +577,49 @@ $(document).ready(function () {
 });
 
 
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

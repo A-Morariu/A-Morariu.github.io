@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
-<title>MTH380 Fall 2019</title>
+<title>T_MTH380_tutorial.utf8</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -88,7 +88,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -237,6 +236,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -249,48 +249,9 @@ $(document).ready(function () {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 
 
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <style type="text/css">
 
@@ -304,6 +265,12 @@ $(document).ready(function ()  {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -458,10 +425,17 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="Spatial_Stats.html">
+      <a href="P_Spatial_Stats.html">
         <span class="fa fa-map-marker"></span>
          
         Spatial Statistics
+      </a>
+    </li>
+    <li>
+      <a href="P_Bayesian_TS.html">
+        <span class="fa fa-stream"></span>
+         
+        Bayesian Time Series with Stan
       </a>
     </li>
   </ul>
@@ -492,11 +466,32 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">MTH380 Fall 2019</h1>
 
 </div>
 
 
+<table>
+<tbody>
+<tr class="odd">
+<td>itle: “MTH380 Fall 2019”</td>
+</tr>
+<tr class="even">
+<td>utput:</td>
+</tr>
+<tr class="odd">
+<td>html_document:</td>
+</tr>
+<tr class="even">
+<td>toc: true</td>
+</tr>
+<tr class="odd">
+<td>toc_depth: 3</td>
+</tr>
+<tr class="even">
+<td>toc_float: true</td>
+</tr>
+</tbody>
+</table>
 <div id="course-description" class="section level1">
 <h1><span class="header-section-number">1</span> Course Description</h1>
 <p><strong>Probability and Statistics I:</strong> Descriptive statistics. Probability (Laws of probability. Conditional probability. Discrete probability distributions (binomial, hypergeometric, Poisson). Continuous probability distributions, Normal, t-exponential, x². Applications of discrete and continuous distributions. Sampling distributions (sample mean, sample proportion, difference between two samples, difference between two sample proportions). Sampling distribution concerning mean variance and proportion for one or two populations. Estimation for large and small samples. Hypothesis testing concerning mean, variance and proportion for one or two populations, (large samples and small samples) including paired data testing. As copied from the <a href="https://www.ryerson.ca/calendar/2018-2019/courses/mathematics/MTH/380/">Ryerson Calendar</a>.</p>
@@ -565,14 +560,14 @@ c(1,2,3) %*% c(4,5,6) # standard matrix product (i.e. dot product)</code></pre>
 <pre><code>##      [,1]
 ## [1,]   32</code></pre>
 <pre class="r"><code>class(c(1,2,3) %*% c(4,5,6))</code></pre>
-<pre><code>## [1] &quot;matrix&quot;</code></pre>
+<pre><code>## [1] &quot;matrix&quot; &quot;array&quot;</code></pre>
 <pre class="r"><code>c(1,2,3) %*% t(c(4,5,6)) # &quot;cross&quot; product since we have the transpose </code></pre>
 <pre><code>##      [,1] [,2] [,3]
 ## [1,]    4    5    6
 ## [2,]    8   10   12
 ## [3,]   12   15   18</code></pre>
 <pre class="r"><code>class(c(1,2,3) %*% t(c(4,5,6)))</code></pre>
-<pre><code>## [1] &quot;matrix&quot;</code></pre>
+<pre><code>## [1] &quot;matrix&quot; &quot;array&quot;</code></pre>
 </div>
 <div id="r-packages" class="section level3">
 <h3><span class="header-section-number">2.1.4</span> R Packages</h3>
@@ -595,40 +590,35 @@ crossprod(c(1,2,3), c(4,5,6)) # R knows to search all functions</code></pre>
 <p>For this section, we will be working with the built in Iris data set created by Ronald Fisher and Edgar Anderson in the 1930s.</p>
 <pre class="r"><code># preview the data set
 head(iris, 10) # option 1 and my favourite</code></pre>
-<pre><code>##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-## 1           5.1         3.5          1.4         0.2  setosa
-## 2           4.9         3.0          1.4         0.2  setosa
-## 3           4.7         3.2          1.3         0.2  setosa
-## 4           4.6         3.1          1.5         0.2  setosa
-## 5           5.0         3.6          1.4         0.2  setosa
-## 6           5.4         3.9          1.7         0.4  setosa
-## 7           4.6         3.4          1.4         0.3  setosa
-## 8           5.0         3.4          1.5         0.2  setosa
-## 9           4.4         2.9          1.4         0.2  setosa
-## 10          4.9         3.1          1.5         0.1  setosa</code></pre>
+<pre><code>## # A tibble: 10 x 5
+##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+##           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  
+##  1          5.1         3.5          1.4         0.2 setosa 
+##  2          4.9         3            1.4         0.2 setosa 
+##  3          4.7         3.2          1.3         0.2 setosa 
+##  4          4.6         3.1          1.5         0.2 setosa 
+##  5          5           3.6          1.4         0.2 setosa 
+##  6          5.4         3.9          1.7         0.4 setosa 
+##  7          4.6         3.4          1.4         0.3 setosa 
+##  8          5           3.4          1.5         0.2 setosa 
+##  9          4.4         2.9          1.4         0.2 setosa 
+## 10          4.9         3.1          1.5         0.1 setosa</code></pre>
 <pre class="r"><code>dplyr::glimpse(iris) # option 2, works better than head on larger data sets</code></pre>
-<pre><code>## Observations: 150
-## Variables: 5
-## $ Sepal.Length &lt;dbl&gt; 5.1, 4.9, 4.7, 4.6, 5.0, 5.4, 4.6, 5.0, 4.4, 4.9, 5…
-## $ Sepal.Width  &lt;dbl&gt; 3.5, 3.0, 3.2, 3.1, 3.6, 3.9, 3.4, 3.4, 2.9, 3.1, 3…
-## $ Petal.Length &lt;dbl&gt; 1.4, 1.4, 1.3, 1.5, 1.4, 1.7, 1.4, 1.5, 1.4, 1.5, 1…
-## $ Petal.Width  &lt;dbl&gt; 0.2, 0.2, 0.2, 0.2, 0.2, 0.4, 0.3, 0.2, 0.2, 0.1, 0…
-## $ Species      &lt;fct&gt; setosa, setosa, setosa, setosa, setosa, setosa, set…</code></pre>
+<pre><code>## Rows: 150
+## Columns: 5
+## $ Sepal.Length &lt;dbl&gt; 5.1, 4.9, 4.7, 4.6, 5.0, 5.4, 4.6, 5.0, 4.4, 4.9, 5.4, 4.8, 4.8, 4.3, 5.8, 5.7, 5.4, …
+## $ Sepal.Width  &lt;dbl&gt; 3.5, 3.0, 3.2, 3.1, 3.6, 3.9, 3.4, 3.4, 2.9, 3.1, 3.7, 3.4, 3.0, 3.0, 4.0, 4.4, 3.9, …
+## $ Petal.Length &lt;dbl&gt; 1.4, 1.4, 1.3, 1.5, 1.4, 1.7, 1.4, 1.5, 1.4, 1.5, 1.5, 1.6, 1.4, 1.1, 1.2, 1.5, 1.3, …
+## $ Petal.Width  &lt;dbl&gt; 0.2, 0.2, 0.2, 0.2, 0.2, 0.4, 0.3, 0.2, 0.2, 0.1, 0.2, 0.2, 0.1, 0.1, 0.2, 0.4, 0.4, …
+## $ Species      &lt;fct&gt; setosa, setosa, setosa, setosa, setosa, setosa, setosa, setosa, setosa, setosa, setos…</code></pre>
 <pre class="r"><code>summary(iris) # summary statistics of Iris dataset</code></pre>
-<pre><code>##   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   
-##  Min.   :4.300   Min.   :2.000   Min.   :1.000   Min.   :0.100  
-##  1st Qu.:5.100   1st Qu.:2.800   1st Qu.:1.600   1st Qu.:0.300  
-##  Median :5.800   Median :3.000   Median :4.350   Median :1.300  
-##  Mean   :5.843   Mean   :3.057   Mean   :3.758   Mean   :1.199  
-##  3rd Qu.:6.400   3rd Qu.:3.300   3rd Qu.:5.100   3rd Qu.:1.800  
-##  Max.   :7.900   Max.   :4.400   Max.   :6.900   Max.   :2.500  
-##        Species  
-##  setosa    :50  
-##  versicolor:50  
-##  virginica :50  
-##                 
-##                 
-## </code></pre>
+<pre><code>##   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width          Species  
+##  Min.   :4.300   Min.   :2.000   Min.   :1.000   Min.   :0.100   setosa    :50  
+##  1st Qu.:5.100   1st Qu.:2.800   1st Qu.:1.600   1st Qu.:0.300   versicolor:50  
+##  Median :5.800   Median :3.000   Median :4.350   Median :1.300   virginica :50  
+##  Mean   :5.843   Mean   :3.057   Mean   :3.758   Mean   :1.199                  
+##  3rd Qu.:6.400   3rd Qu.:3.300   3rd Qu.:5.100   3rd Qu.:1.800                  
+##  Max.   :7.900   Max.   :4.400   Max.   :6.900   Max.   :2.500</code></pre>
 <pre class="r"><code>summary(iris$Petal.Length) # summary statistics of a subset of Iris data set</code></pre>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ##   1.000   1.600   4.350   3.758   5.100   6.900</code></pre>
@@ -654,13 +644,9 @@ class(petal.summary) # a vector! so we can access specific elements</code></pre>
 <h3><span class="header-section-number">2.1.6</span> Plotting our data</h3>
 <p>This section will focus on plotting the data from the Iris dataset with tidyverse. As a part of the tidyverse, there is a smaller packaged called <em>ggplot2</em> (stands for grammar of graphic) which is an incredibly powerful tool for data visualization. It is far superior to the base R plot function since it works off of tibbles (a tidyverse specific data structure) which allows for ggplot to build plots by layering. This gives the user much more control over what is and isn’t shown and makes for more generic code that can be used across many projects up to variable names.</p>
 <pre class="r"><code>library(ggplot2) 
-library(cowplot)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;cowplot&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
-## 
-##     ggsave</code></pre>
-<pre class="r"><code>iris &lt;- as_tibble(iris)
+library(cowplot)
+
+iris &lt;- as_tibble(iris)
 head(iris)</code></pre>
 <pre><code>## # A tibble: 6 x 5
 ##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
@@ -718,8 +704,8 @@ cowplot::plot_grid(iris.hist, iris.bar, iris.line,
 <p>Where <span class="math inline">\(\mu\)</span> is the mean of the distribution and <span class="math inline">\(\sigma\)</span> is the standard deviation. A multivariate form exists but will be left out for now (more on multivariate distributions in later tutorials). So now for how R can help us make sense of these distributions. We can evaluate them at various points and compute probabilities of certain events happening. Or we can generate random samples from a the distribution for simulation purposes.</p>
 <pre class="r"><code># generate random normals 
 round(rnorm(n = 25, mean = 4, sd = 1.2), 2)</code></pre>
-<pre><code>##  [1] 5.49 4.60 2.58 4.00 4.94 4.69 4.15 3.45 2.19 6.30 5.21 4.43 2.01 3.09
-## [15] 3.89 3.61 3.91 2.84 5.74 2.27 2.58 4.64 4.11 2.11 5.68</code></pre>
+<pre><code>##  [1] 5.49 4.60 2.58 4.00 4.94 4.69 4.15 3.45 2.19 6.30 5.21 4.43 2.01 3.09 3.89 3.61 3.91 2.84 5.74 2.27 2.58
+## [22] 4.64 4.11 2.11 5.68</code></pre>
 <pre class="r"><code># compute probabilities 
 dnorm(4.67, mean = 4, sd = 1.2) # value of the density (i.e. plug in x = 4.67 into f(x))</code></pre>
 <pre><code>## [1] 0.2844698</code></pre>
@@ -727,6 +713,18 @@ dnorm(4.67, mean = 4, sd = 1.2) # value of the density (i.e. plug in x = 4.67 in
 <pre><code>## [1] 0.7116916</code></pre>
 <p>This should give you a solid idea regarding what you can do with R. Throughout the semester, I will try to highlight various theorems which you could verify empirically using these tools. Additionally, there will be more sample code added to this page for you to try out on your own and learn from.</p>
 </div>
+</div>
+</div>
+<div id="week-2" class="section level1">
+<h1><span class="header-section-number">3</span> Week 2</h1>
+<p>This week we begin looking at summary statistics and plots for visualizing data. That being said, let us first establish what “data” will look like for us. Any data set <span class="math inline">\(D\)</span> can be thought of a a sequence of realizations of some random variable (RV). <span class="math display">\[ D = \{ x_1, x_2, \ldots, x_n \} = \{ x_i \}_{i=1}^n \]</span> A RV is simply something you are observing/studying in the real world. This can be something like taking a measurement (how much an elephant weighs), stock price at a given time, number of purchases per hour for an online clothing brand, etc. Now that we have some “data”, we can begin to summarize it with some numerical values.</p>
+<div id="measures-of-centrality" class="section level2">
+<h2><span class="header-section-number">3.1</span> Measures of Centrality</h2>
+<p>The centre of our observations tends to be of great interest to us. 1. <strong>Mean</strong>:</p>
+<ol start="2" style="list-style-type: decimal">
+<li><p><strong>Median</strong>:</p></li>
+<li><p><strong>Mode</strong>:</p></li>
+</ol>
 </div>
 </div>
 
@@ -748,6 +746,49 @@ $(document).ready(function () {
 });
 
 
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

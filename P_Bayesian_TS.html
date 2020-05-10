@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Alin Morariu" />
+
+
+<title>Bayesian Time Series</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">My Website</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-university"></span>
+     
+    Teaching
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="T_STA130_tutorial.html">
+        <span class="fa fa-book"></span>
+         
+        STA130 - Winter 2019
+      </a>
+    </li>
+    <li>
+      <a href="T_STA302_tutorial.html">
+        <span class="fa fa-book"></span>
+         
+        STA302 - Summer 2019
+      </a>
+    </li>
+    <li>
+      <a href="T_STA314_tutorial.html">
+        <span class="fa fa-book"></span>
+         
+        STA314 - Fall 2018
+      </a>
+    </li>
+    <li>
+      <a href="T_MTH380_tutorial.html">
+        <span class="fa fa-book"></span>
+         
+        MTH380 - Fall 2019
+      </a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book-open"></span>
+     
+    Coursework
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="C_STA355_coursework.html">
+        <span class="fa fa-book"></span>
+         
+        STA355
+      </a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-briefcase"></span>
+     
+    Personal Projects
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="P_Spatial_Stats.html">
+        <span class="fa fa-map-marker"></span>
+         
+        Spatial Statistics
+      </a>
+    </li>
+    <li>
+      <a href="P_Bayesian_TS.html">
+        <span class="fa fa-stream"></span>
+         
+        Bayesian Time Series with Stan
+      </a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="Presentations.html">
+    <span class="fa fa-chalkboard-teacher"></span>
+     
+    Presentations &amp; Talks
+  </a>
+</li>
+<li>
+  <a href="Files/Resume_AMorariu.pdf">
+    <span class="fa fa-file-pdf-o"></span>
+     
+    Resume
+  </a>
+</li>
+<li>
+  <a href="about.html">About Me</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Bayesian Time Series</h1>
+<h4 class="author">Alin Morariu</h4>
+<h4 class="date">29/04/2020</h4>
+
+</div>
+
+
+<!-- Introduction -->
+<div id="a-note-to-the-reader" class="section level2">
+<h2><span class="header-section-number">0.1</span> A Note to the Reader</h2>
+<p>This document is  a time series tutorial. The focus is not performing an in-depth and appropriate time series analysis but simply using Markov Chain Monte Carlo (MCMC) methods for the purpose of . As such, all things considering modeling checking and forecasting are omitted. All material below is to be viewed through a purely computational lens which shows how models are coded/structured in Stan and understanding the output.</p>
+</div>
+<div id="bayesian-framework" class="section level2">
+<h2><span class="header-section-number">0.2</span> Bayesian Framework</h2>
+<p>Unlike the frequentist approach where point estimates are computed for parameter values, the Bayesian framework allows us to specify a distribution for the parameter value  the data. This distribution is referred to as the posterior distribution of the parameter and is a function of the data.</p>
+<span class="math display">\[\begin{equation}
+\mathbb{P}(\theta | \text{data}) \propto \mathcal{L}(\text{data} | \theta) \cdot \mathbb{P}(\theta)
+\end{equation}\]</span> The quantities above will be referred to as:
+
+<p>Parameter estimates correspond to the mode of the posterior distribution and this distribution is precisely what Stan explores with it’s various MCMC algorithms.</p>
+<!-- Why and how of stan -->
+</div>
+<div id="stan-and-its-samplers" class="section level2">
+<h2><span class="header-section-number">0.3</span> Stan and it’s Samplers</h2>
+<p>Stan is a language used for (amongst other things) full Bayesian statistical inference with MCMC sampling. It implements two MCMC methods; Hamiltonian Monte Carlo (HMC) and No U-Turn Sampling (NUTS). This section provides a high level summary of both algorithms. The key thing to keep in mind is that in order to have a “good” estimate of the model parameters we need to fully explore the posterior density of the parameters. These algorithms add certain contraints to the basic randomly generated steps of a vanilla Metropolis-Hastings (this is what we mean by MCMC algorithm) which makes them more efficient in exploring “new” parts of the space.</p>
+<p>The set up of any MCMC method is that we want to have an estimate for a parameter vector <span class="math inline">\(\theta\)</span>. Based on our data, we compute the unnormalized posterior distribution, <span class="math inline">\(\mathbb{P}(\theta | X)\)</span>, of the parameter vector. Now, we must sample from this distribution. MCMC work by creating a Markov chain which has the same distribution as posterior. Since this distribution will not always be known we take a second distribution <span class="math inline">\(f(x)\)</span> such taht <span class="math inline">\(f(\theta) \propto k \mathbb{P}(\theta | X)\)</span> where <span class="math inline">\(k\)</span> is some constant. Now we initialize the algorithm at some point <span class="math inline">\(\theta_0\)</span> then sample a potential next step <span class="math inline">\(\theta&#39;\)</span> from some proposed density <span class="math inline">\(g(\theta&#39; | \theta_t)\)</span> (note since we are taking samples of <span class="math inline">\(\theta\)</span> over time we create a Markov chain). We typically take <span class="math inline">\(g\)</span> to be a Gaussian distribution centered at <span class="math inline">\(x_t\)</span> as to keep the proposed steps relatively close to our intial point. Once we have a proposal, we verify that this is a “good” step. To do so, we compute <span class="math inline">\(\alpha = \frac{f(\theta&#39;)}{f(\theta_t)} = \frac{\mathbb{P}(\theta&#39; | X)}{\mathbb{P}(\theta_ | X)}\)</span> and accept only if <span class="math inline">\(\alpha \geq u \sim U(0,1)\)</span>. We will always accept if the next step is more probable (i.e. in the right direction) since that ratio will be above 1. Manipulating this error is precisely what HMC and NUTS attempt to do by exploiting some additional information about the posterior (namely gradients).</p>
+<div id="hamiltonian-monte-carlo" class="section level3">
+<h3><span class="header-section-number">0.3.1</span> Hamiltonian Monte Carlo</h3>
+<p>HMC differs from the standard version of Metropolis-Hastings by introducing an additional variable referred to as the . We will denote this with <span class="math inline">\(\rho\)</span>. Much like with everything else in the Bayesian world this will be specified by a probability distribution. <span class="math display">\[\begin{align}
+     \mathbb{P}(\rho, \theta) &amp;= \mathbb{P}(\rho | \theta) \cdot \mathbb{P}(\theta) \\
+     \rho &amp;\sim MVN (0, \text{diag}(\Sigma_\theta)^{-1})
+\end{align}\]</span> The covariance matrix <span class="math inline">\(\Sigma_\theta\)</span> is computed during the warm up stage of the algorithm (think of this as a stage in the sampling where we go from no knowledge of the posterior to some knowledge of the posterior).</p>
+<p>This auxiliary momentum is then used to compute the Hamiltonian of the posterior. The Hamiltonian is a matrix describing the level sets of the distribution in high dimensional space. Much like planets orbit in a set eliptical path, each level set of a distribution is a possible elipse for an object to move along and the collection of these level sets form a dynamical system. <span class="math display">\[\begin{align}
+     H(\rho, \theta) &amp;= - \log\mathbb{P}(\rho, \theta) \\
+     &amp;= - \log\mathbb{P}(\rho | \theta) - \log \mathbb{P}(\theta)
+\end{align}\]</span> where we denote the  of the system as <span class="math inline">\(T(\rho | \theta) = \log\mathbb{P}(\rho | \theta)\)</span> and the  as <span class="math inline">\(V(\theta) = \log\mathbb{P}(\theta)\)</span>. The proposal <span class="math inline">\(\theta&#39;\)</span> now turns into a 2 stage process.</p>
+
+<p>The estimate is then computed by drawing a new sample of <span class="math inline">\(\rho\)</span>, taking a <span class="math inline">\(\frac{1}{2}\)</span> step update in the momentum, a full step in the parameter value and another <span class="math inline">\(\frac{1}{2}\)</span> step in the momentum before computing <span class="math inline">\(\alpha\)</span>. <span class="math display">\[\begin{align}
+     \rho^* &amp;\leftarrow \rho - \frac{\epsilon}{2} \frac{dV}{d\theta} \\
+     \theta^* &amp;\leftarrow \theta + \epsilon \text{diag}(\Sigma_\theta)^{-1} \rho* \\
+     \rho^* &amp;\leftarrow \rho - \frac{\epsilon}{2} \frac{dV}{d\theta} \\
+     \Rightarrow &amp;(\rho^*, \theta^*) 
+\end{align}\]</span> Where the pair <span class="math inline">\((\rho^*, \theta^*)\)</span> is the new proposal. Now we apply the Metroplois step and get an acceptance probability of <span class="math inline">\(p_{\text{accept}} = \min{1 , \exp \{ H(p,\theta) - H(p^*, \theta^*) \} }\)</span></p>
+</div>
+<div id="no-u-turn-sampler" class="section level3">
+<h3><span class="header-section-number">0.3.2</span> No U-Turn Sampler</h3>
+<p>One downfall of the HMC algorithm is that you may end up with a situation where you are going around in circles around the posterior and returning to where you started. This creates some inefficiencies that the NUTS aims fix this by taking steps in both the positive and negative directions as dictated by the differential system. It continues to take steps until the gradients change direction. Once those points are detected, an average is choosen as the proposal.</p>
+<p>This algorithm is much more complex and is thus omitted from this discussion. If you’d like more details, <a href="https://arxiv.org/abs/1701.02434">this paper</a> by Michael Betancourt will provide more details.</p>
+</div>
+</div>
+<div id="stan-code-structure" class="section level2">
+<h2><span class="header-section-number">0.4</span> Stan Code Structure</h2>
+<p>The way we use Stan is by encoding a model in Stan code (a .stan file) then running it through R. Models are laid out in an almost heirarchical structure. First is a data chunk listing all of the variables which will be inputted. Next is a parameters section which we use for specifying the quantities we want to estimate. Lastly, we need a section to specify the structure of the model, namely the priors and likelihood functions.</p>
+<div id="necessary-packages" class="section level3">
+<h3><span class="header-section-number">0.4.1</span> Necessary Packages</h3>
+<p>This section is simply for loading the base R packages we will be using to perform our Bayesian Inference.</p>
+<pre class="r"><code>### PACKAGES ####
+library(tidyverse)            # data processing
+library(rstan)                # R version of Stan
+library(parallel)             # enable parallel computing 
+library(timeDate)
+
+### OPTIONS ####
+# Choose one of the below
+options(mc.cores = 1)                             # all chains computed on 1 core
+#options(mc.cores = parallel::detectCores())       # chains run in parallel
+
+rstan_options(auto_write = TRUE)</code></pre>
+<!-- modeling -->
+</div>
+</div>
+<div id="time-series-models" class="section level2">
+<h2><span class="header-section-number">0.5</span> Time Series Models</h2>
+<p>Now that we have an understanding of how Stan computes the estimates, let’s write some Stan code.  All of the models are assumed to have Gaussian noise components and will be fitted based on the JohnsonJohnson data set.</p>
+<pre class="r"><code>data(&quot;JohnsonJohnson&quot;)
+
+JJ_data &lt;- data_frame(time = time(JohnsonJohnson), returns = JohnsonJohnson)
+head(JJ_data)</code></pre>
+<pre><code>## # A tibble: 6 x 2
+##   time    returns
+##   &lt;ts&gt;    &lt;ts&gt;   
+## 1 1960.00 0.71   
+## 2 1960.25 0.63   
+## 3 1960.50 0.85   
+## 4 1960.75 0.44   
+## 5 1961.00 0.61   
+## 6 1961.25 0.69</code></pre>
+<pre class="r"><code>p_JJ_ts &lt;- JJ_data %&gt;% ggplot(aes(x = time, y = returns)) + 
+     geom_line(color = &quot;navy&quot;, alpha = 0.7) + 
+     geom_smooth(color = &quot;gold&quot;, method = &quot;lm&quot;, se = FALSE) + 
+     labs(title = &quot;Time Series Plot&quot;, x = &quot;Time&quot;, y = &quot;Returns (%)&quot;) + 
+     theme_minimal()
+p_JJ_ts</code></pre>
+<p><img src="P_Bayesian_TS_files/figure-html/Data-1.png" width="672" /></p>
+<pre class="r"><code>returns &lt;- JohnsonJohnson</code></pre>
+<div id="auto-regressive-model" class="section level3">
+<h3><span class="header-section-number">0.5.1</span> Auto-regressive Model</h3>
+<p>Auto-regressive models of order p, denoted AR(p), take the form: <span class="math display">\[\begin{align}
+     y_t &amp;= \phi_1 y_{t-1} + \ldots + \phi_p y_{t-p} + \epsilon_t \\
+     \epsilon_t &amp;\sim N(0, \sigma^2)
+\end{align}\]</span> The parameters we need to estimate are <span class="math inline">\((\phi_1, \ldots, \phi_p, \sigma)\)</span>. We begin with a simple AR(1) model before generalizing the Stan code to allow for the user to input the order of the model as part of the data.</p>
+<div id="ar1" class="section level4">
+<h4><span class="header-section-number">0.5.1.1</span> AR(1)</h4>
+<p>The Stan code is as follows:</p>
+<pre class="stan"><code>data {
+int&lt;lower=0&gt; N;               // length of TS
+vector[N] returns;            // name of the vector/column we feed in
+}
+parameters {
+real phi_0;                 // estimate the mean 
+real phi_1;                 // estimate the first order parameter
+real&lt;lower=0&gt; sigma;          // estimate the std dev of the Gaussian noise
+}
+model {
+// priors
+phi_0 ~ normal(0,4);
+phi_1 ~ normal(0,2);
+
+returns[2:N] ~ normal(phi_0 + phi_1 * returns[1:(N-1)], sigma);
+// note: improper/default priors are used here. We specify priors later
+}
+</code></pre>
+<pre class="r"><code># Set up data like the data section of stan code
+AR1_data &lt;- list(N = length(returns),
+                 returns = returns)
+
+AR1_fit &lt;- rstan::stan(&quot;Stan_files/AR1.stan&quot;, 
+                       data = AR1_data,
+                       iter = 2000,
+                       chains = 4, 
+                       refresh = 500)</code></pre>
+<pre><code>## 
+## SAMPLING FOR MODEL &#39;AR1&#39; NOW (CHAIN 1).
+## Chain 1: 
+## Chain 1: Gradient evaluation took 1.6e-05 seconds
+## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+## Chain 1: Adjust your expectations accordingly!
+## Chain 1: 
+## Chain 1: 
+## Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 1: Iteration:  500 / 2000 [ 25%]  (Warmup)
+## Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 1: Iteration: 1500 / 2000 [ 75%]  (Sampling)
+## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 1: 
+## Chain 1:  Elapsed Time: 0.055072 seconds (Warm-up)
+## Chain 1:                0.051779 seconds (Sampling)
+## Chain 1:                0.106851 seconds (Total)
+## Chain 1: 
+## 
+## SAMPLING FOR MODEL &#39;AR1&#39; NOW (CHAIN 2).
+## Chain 2: 
+## Chain 2: Gradient evaluation took 6e-06 seconds
+## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
+## Chain 2: Adjust your expectations accordingly!
+## Chain 2: 
+## Chain 2: 
+## Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 2: Iteration:  500 / 2000 [ 25%]  (Warmup)
+## Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 2: Iteration: 1500 / 2000 [ 75%]  (Sampling)
+## Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 2: 
+## Chain 2:  Elapsed Time: 0.058262 seconds (Warm-up)
+## Chain 2:                0.048113 seconds (Sampling)
+## Chain 2:                0.106375 seconds (Total)
+## Chain 2: 
+## 
+## SAMPLING FOR MODEL &#39;AR1&#39; NOW (CHAIN 3).
+## Chain 3: 
+## Chain 3: Gradient evaluation took 7e-06 seconds
+## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
+## Chain 3: Adjust your expectations accordingly!
+## Chain 3: 
+## Chain 3: 
+## Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 3: Iteration:  500 / 2000 [ 25%]  (Warmup)
+## Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 3: Iteration: 1500 / 2000 [ 75%]  (Sampling)
+## Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 3: 
+## Chain 3:  Elapsed Time: 0.060109 seconds (Warm-up)
+## Chain 3:                0.054297 seconds (Sampling)
+## Chain 3:                0.114406 seconds (Total)
+## Chain 3: 
+## 
+## SAMPLING FOR MODEL &#39;AR1&#39; NOW (CHAIN 4).
+## Chain 4: 
+## Chain 4: Gradient evaluation took 6e-06 seconds
+## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
+## Chain 4: Adjust your expectations accordingly!
+## Chain 4: 
+## Chain 4: 
+## Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 4: Iteration:  500 / 2000 [ 25%]  (Warmup)
+## Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 4: Iteration: 1500 / 2000 [ 75%]  (Sampling)
+## Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 4: 
+## Chain 4:  Elapsed Time: 0.058601 seconds (Warm-up)
+## Chain 4:                0.060499 seconds (Sampling)
+## Chain 4:                0.1191 seconds (Total)
+## Chain 4:</code></pre>
+<pre class="r"><code># the model 
+AR1_fit</code></pre>
+<pre><code>## Inference for Stan model: AR1.
+## 4 chains, each with iter=2000; warmup=1000; thin=1; 
+## post-warmup draws per chain=1000, total post-warmup draws=4000.
+## 
+##           mean se_mean   sd   2.5%    25%    50%    75%  97.5% n_eff Rhat
+## theta_0   0.34    0.01 0.24  -0.11   0.19   0.34   0.51   0.82  2076    1
+## theta_1   0.95    0.00 0.04   0.88   0.93   0.95   0.98   1.03  2111    1
+## sigma     1.45    0.00 0.12   1.24   1.36   1.44   1.52   1.70  2626    1
+## lp__    -70.80    0.03 1.25 -73.92 -71.39 -70.49 -69.86 -69.35  1829    1
+## 
+## Samples were drawn using NUTS(diag_e) at Sun May 10 00:55:13 2020.
+## For each parameter, n_eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor on split chains (at 
+## convergence, Rhat=1).</code></pre>
+<pre class="r"><code># posterior plots
+stan_plot(AR1_fit, 
+          point_est = &quot;mean&quot;, 
+          show_density = TRUE) + 
+     labs(title = &#39;AR(1) Posterior Plots&#39;,
+          subtitle = &#39;of Johnson&amp;Johnson Dataset&#39;)  </code></pre>
+<p><img src="P_Bayesian_TS_files/figure-html/AR1%20outputs-1.png" width="672" /></p>
+</div>
+<div id="arp" class="section level4">
+<h4><span class="header-section-number">0.5.1.2</span> AR(p)</h4>
+<p>The Stan code is as follows:</p>
+<pre class="stan"><code>data {
+int&lt;lower=0&gt; P;                           // order of the model
+int&lt;lower=0&gt; N;                           // length of TS
+vector[N] returns;                          // name of TS vector 
+}
+
+parameters {
+real mu;                                    // mean of TS
+real phi[P];                              // real valued theta vector of length p
+real &lt;lower = 0&gt; sigma;                     // std dev of Gaussian noise 
+}
+
+model { 
+// specify priors 
+mu ~ normal(0,4);
+phi ~ normal(0, 2);
+sigma ~ exponential(2);
+
+// use for loops to set up the likelihood
+
+for (n in (P+1):N){
+real average = mu;
+
+for (p in 1:P) 
+average += phi[p] * returns[n - p];
+
+returns[n] ~ normal(average, sigma);    // mean is the combo of previous P steps in the process 
+}
+}
+</code></pre>
+<pre class="r"><code># Set up data like the data section of stan code
+model_order &lt;- 3
+ARp_data &lt;- list(P = model_order, # order of AR model
+                 N = length(returns), # length of TS 
+                 returns = returns # the data
+) 
+
+ARp_fit &lt;- rstan::stan(&quot;Stan_files/ARp.stan&quot;, 
+                       data = ARp_data,
+                       iter = 2000,
+                       chains = 2, 
+                       refresh = 0)</code></pre>
+<pre class="r"><code># the model 
+ARp_fit</code></pre>
+<pre><code>## Inference for Stan model: ARp.
+## 2 chains, each with iter=2000; warmup=1000; thin=1; 
+## post-warmup draws per chain=1000, total post-warmup draws=2000.
+## 
+##            mean se_mean   sd   2.5%    25%    50%    75%  97.5% n_eff Rhat
+## mu         0.20    0.00 0.20  -0.19   0.06   0.20   0.33   0.57  1652 1.00
+## theta[1]   0.26    0.00 0.12   0.02   0.18   0.26   0.33   0.50  1173 1.00
+## theta[2]   0.56    0.00 0.11   0.34   0.49   0.56   0.63   0.78  1250 1.00
+## theta[3]   0.21    0.00 0.12  -0.03   0.13   0.21   0.29   0.45  1172 1.00
+## sigma      1.17    0.00 0.09   1.00   1.10   1.16   1.22   1.37  1429 1.00
+## lp__     -55.96    0.06 1.67 -60.18 -56.73 -55.62 -54.79 -53.86   793 1.01
+## 
+## Samples were drawn using NUTS(diag_e) at Sun May 10 00:55:15 2020.
+## For each parameter, n_eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor on split chains (at 
+## convergence, Rhat=1).</code></pre>
+<pre class="r"><code># posterior plots
+stan_plot(ARp_fit, 
+          point_est = &quot;mean&quot;, 
+          show_density = TRUE) + 
+     labs(title = &#39;AR(3) Posterior Plots&#39;,
+          subtitle = &#39;of Johnson&amp;Johnson Dataset&#39;)  </code></pre>
+<p><img src="P_Bayesian_TS_files/figure-html/ARp%20outputs-1.png" width="672" /> ### Autoregressive Conditional Heteroskedasticty Model This section is limited to ARCH(1) models but this can be extended to an ARCH(p) model with a for loop on the variance parameter in the likelihood. The ARCH(p) model is set up as follows:</p>
+<p><span class="math display">\[\begin{align}
+     r_t &amp;= \mu + \omega_t \\
+     \omega_t &amp;= \sigma_t \epsilon_t \\
+     \sigma_t^2 &amp;= \alpha_0 + \alpha_1 a_{t-1}^2 \\
+     \epsilon_t &amp;\sim N(0, \sigma^2)
+\end{align}\]</span></p>
+<p>The Stan code is as follows.</p>
+<pre class="stan"><code>data{
+int&lt;lower = 0&gt; N;                           // length of time series
+vector[N] returns;                          // the time series
+}
+
+parameters{
+real mu;                                    // a constant - average return
+real&lt;lower = 0&gt; alpha_0;                    // parameter of ARCH portion - intercept of noise
+real&lt;lower = 0, upper = 1&gt; alpha_1;         // another parameter of ARCH - slope of noise
+real&lt;lower = 0&gt; sigma;
+}
+
+model{
+// priors
+mu ~ normal(0,2);
+alpha_0 ~ normal(0, 2);
+alpha_1 ~ normal(0,1);
+sigma ~ normal(0,2);
+
+// likelihood - can be vectorized instead of a loop
+for(n in 2:N)
+returns[n] ~ normal(mu,  sqrt(alpha_0 + alpha_1 * sigma * pow(returns[n-1] - mu,2)));
+}
+</code></pre>
+<pre class="r"><code># Set up data like the data section of stan code
+ARCH1_data &lt;- list(N = length(returns),
+                   returns = returns)
+
+ARCH1_fit &lt;- rstan::stan(&quot;Stan_files/ARCH1.stan&quot;, 
+                         data = ARCH1_data,
+                         iter = 2000,
+                         chains = 2, 
+                         refresh = 0,
+                         control = list(adapt_delta = 0.99))</code></pre>
+<pre class="r"><code># the model 
+ARCH1_fit</code></pre>
+<pre><code>## Inference for Stan model: ARCH1.
+## 2 chains, each with iter=2000; warmup=1000; thin=1; 
+## post-warmup draws per chain=1000, total post-warmup draws=2000.
+## 
+##            mean se_mean   sd    2.5%     25%     50%    75%  97.5% n_eff Rhat
+## mu         1.03    0.01 0.22    0.75    0.85    0.99   1.17   1.55   483 1.01
+## alpha_0    0.07    0.00 0.04    0.02    0.04    0.06   0.09   0.18   805 1.01
+## alpha_1    0.62    0.01 0.21    0.25    0.46    0.62   0.78   0.98   484 1.00
+## sigma      2.12    0.03 0.88    1.02    1.48    1.90   2.51   4.39   670 1.00
+## lp__    -100.58    0.07 1.48 -104.29 -101.35 -100.24 -99.49 -98.60   444 1.01
+## 
+## Samples were drawn using NUTS(diag_e) at Sun May 10 00:55:18 2020.
+## For each parameter, n_eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor on split chains (at 
+## convergence, Rhat=1).</code></pre>
+<pre class="r"><code># posterior plots
+stan_plot(ARCH1_fit, 
+          point_est = &quot;mean&quot;, 
+          show_density = TRUE) + 
+     labs(title = &#39;ARCH(1) Posterior Plots&#39;,
+          subtitle = &#39;of Johnson&amp;Johnson Dataset&#39;)  </code></pre>
+<p><img src="P_Bayesian_TS_files/figure-html/ARCH1%20outputs-1.png" width="672" /></p>
+</div>
+</div>
+<div id="moving-average-model" class="section level3">
+<h3><span class="header-section-number">0.5.2</span> Moving Average Model</h3>
+<p>Moving average models of order q, denoted MA(q), take the form: <span class="math display">\[\begin{align}
+     y_t &amp;= \theta_1 y\epsilon_{t-1} + \ldots + \theta_p epsilon_{t-q} + \epsilon_t \\
+     \epsilon_t &amp;\sim N(0, \sigma^2)
+\end{align}\]</span> The parameters we need to estimate are <span class="math inline">\((\theta_1, \ldots, \theta_p, \sigma)\)</span>. The Stan code is as follows.</p>
+<pre class="stan"><code>data {
+int&lt;lower = 0&gt; Q;                                   // order of model 
+int&lt;lower = 1&gt; T;                                   // length of time series
+vector[T] returns;                                  // time series vector
+}
+parameters {
+real mu;                                            // mean of the time series
+real theta[Q];                                      // the coefficients
+real&lt;lower = 0&gt; sigma;                              // noise scale parameter
+}
+model {
+// useful parameters
+vector[T] previous_steps;                           // prediction at time t (the moving average)
+vector[T] error;                                    // noise at each step
+
+// priors 
+mu ~ cauchy(0, 2.5);
+theta ~ normal(0, 2);
+sigma ~ exponential(2.01);
+
+// likelihood
+for(t in 1:T){
+previous_steps[t] = mu;
+error[t] = returns[t] - mu;
+
+for(q in 1:min(t-1, Q)){
+previous_steps[t] = previous_steps[t] + theta[q] * error[t-q];
+error[t] = error[t] - theta[q] * error[t-q];
+}
+}
+
+returns ~ normal(previous_steps, sigma);
+}
+</code></pre>
+<pre class="r"><code># Set up data like the data section of stan code
+model_order = 4
+MAq_data &lt;- list(Q = model_order, # order of AR model
+                 T = length(returns), # length of TS 
+                 returns = returns # the data
+) 
+
+MAq_fit &lt;- rstan::stan(&quot;Stan_files/MAqV2.stan&quot;, 
+                       data = MAq_data,
+                       iter = 2000,
+                       chains = 2, 
+                       refresh = 0, 
+                       pars = c(&quot;mu&quot;, &quot;theta&quot;,&quot;sigma&quot;))</code></pre>
+<pre class="r"><code># the model 
+MAq_fit</code></pre>
+<pre><code>## Inference for Stan model: MAqV2.
+## 2 chains, each with iter=2000; warmup=1000; thin=1; 
+## post-warmup draws per chain=1000, total post-warmup draws=2000.
+## 
+##             mean se_mean    sd    2.5%     25%     50%    75%  97.5% n_eff  Rhat
+## mu          1.92    1.24  1.33    0.73    0.74    0.94   3.18   4.42     1  2.48
+## theta[1]    0.59    0.26  0.26    0.29    0.35    0.41   0.84   1.02     1  3.74
+## theta[2]    0.36    0.56  0.56   -0.24   -0.21    0.20   0.92   1.09     1  8.82
+## theta[3]   -0.05    0.83  0.83   -0.88   -0.88   -0.26   0.77   1.02     1 10.97
+## theta[4]   -0.19    1.05  1.05   -1.26   -1.24   -0.52   0.87   1.05     1 15.43
+## sigma       4.11    2.59  2.59    1.33    1.51    4.32   6.70   6.81     1 32.74
+## lp__     -141.11   59.90 59.93 -202.93 -201.08 -145.80 -80.86 -78.59     1 42.04
+## 
+## Samples were drawn using NUTS(diag_e) at Sun May 10 00:55:48 2020.
+## For each parameter, n_eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor on split chains (at 
+## convergence, Rhat=1).</code></pre>
+<pre class="r"><code># posterior plots
+stan_plot(MAq_fit, 
+          point_est = &quot;mean&quot;, 
+          show_density = TRUE) + 
+     labs(title = &#39;MA(3) Posterior Plots&#39;,
+          subtitle = &#39;of Johnson&amp;Johnson Dataset&#39;)  </code></pre>
+<p><img src="P_Bayesian_TS_files/figure-html/MAq%20outputs-1.png" width="672" /></p>
+<p>The posterior plots look like houses from a Dr. Seuss book which means that this is a multimodal posterior distribution.</p>
+</div>
+<div id="auto-regressive-moving-average-model" class="section level3">
+<h3><span class="header-section-number">0.5.3</span> Auto-regressive Moving Average Model</h3>
+<p>Auto-regressuve Moving average models of order (p,q), denoted ARMA(p,q), take the form: <span class="math display">\[\begin{align}
+     y_t &amp;= \phi_1 y_{t-1} + \ldots + \phi_p y_{t-p} + \theta_1 y\epsilon_{t-1} + \ldots + \theta_p epsilon_{t-q} + \epsilon_t \\
+     \epsilon_t &amp;\sim N(0, \sigma^2)
+\end{align}\]</span></p>
+<p>The parameters we need to estimate are <span class="math inline">\((\phi_1, \ldots, \phi_p, \theta_1, \ldots, \theta_p, \sigma)\)</span>. The Stan code is as follows.</p>
+<pre class="stan"><code>data {
+    int&lt;lower = 0&gt; P;                       // AR Order
+    int&lt;lower = 0&gt; Q;                       // MA Order
+    int&lt;lower=1&gt; T;                         // num observations
+    real y[T];                              // observed outputs
+}
+parameters {
+    real mu;                                // mean coeff
+    vector[P] phi;                          // autoregression coeff
+    vector[Q] theta;                        // moving avg coeff
+    real&lt;lower=0&gt; sigma;                    // noise scale
+}
+model {
+    vector[T] nu;                           // prediction for time t
+    vector[T] err;                          // error for time t
+
+    // initialization
+    for(t in 1:max(P,Q)){
+        nu[t] = mu + phi[t] * mu;           // assume err[0] == 0
+        err[t] = y[t] - nu[t];
+    }
+
+    for (t in (max(P,Q)+1):T) {
+        nu[t] = mu;
+        // 
+        // AR component
+        for(p in 1:P){
+            nu[t] = nu[t] + phi[p] * y[t-p];
+
+        }
+        // MA component
+        for(q in 1:Q){
+            nu[t] = nu[t] + theta[q] * y[t-q];
+        }
+        //
+        // error computation 
+        err[t] = y[t] - nu[t];
+    }
+
+    // priors
+    mu ~ normal(0, 10);        
+    phi ~ normal(0, 2);
+    theta ~ normal(0, 2);
+    sigma ~ cauchy(0, 5);
+    
+    // likelihood
+    err ~ normal(0, sigma);    
+}
+</code></pre>
+<pre class="r"><code># Set up data like the data section of stan code
+AR_order = 2
+MA_order = 2
+
+ARMApq_data &lt;- list(P = AR_order,
+                    Q = MA_order,
+                    T = length(returns),
+                    y = returns)
+
+ARMApq_fit &lt;- rstan::stan(&#39;Stan_files/ARMAV2.stan&#39;,
+                          data = ARMApq_data,
+                          iter = 4000,
+                          refresh = 0,
+                          chains =4,
+                          thin = 1,
+                          algorithm = &#39;HMC&#39;)</code></pre>
+<pre class="r"><code># the model 
+ARMApq_fit</code></pre>
+<pre><code>## Inference for Stan model: ARMAV2.
+## 4 chains, each with iter=4000; warmup=2000; thin=1; 
+## post-warmup draws per chain=2000, total post-warmup draws=8000.
+## 
+##            mean se_mean   sd   2.5%    25%    50%    75%  97.5% n_eff Rhat
+## mu         0.22    0.00 0.19  -0.16   0.09   0.22   0.34   0.59 31225 1.00
+## phi[1]     0.34    0.06 1.29  -2.23  -0.55   0.35   1.20   2.85   442 1.01
+## phi[2]     0.38    0.05 1.34  -2.28  -0.51   0.37   1.25   3.02   659 1.01
+## theta[1]   0.04    0.06 1.29  -2.46  -0.83   0.03   0.92   2.61   441 1.01
+## theta[2]   0.26    0.05 1.34  -2.38  -0.60   0.25   1.15   2.93   676 1.01
+## sigma      1.18    0.00 0.09   1.00   1.11   1.17   1.24   1.37   524 1.01
+## lp__     -56.09    0.05 1.72 -60.19 -56.96 -55.76 -54.83 -53.71  1208 1.00
+## 
+## Samples were drawn using HMC(diag_e) at Sun May 10 00:58:32 2020.
+## For each parameter, n_eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor on split chains (at 
+## convergence, Rhat=1).</code></pre>
+<pre class="r"><code># posterior plots
+stan_plot(ARMApq_fit, 
+          point_est = &quot;mean&quot;, 
+          show_density = TRUE) + 
+     labs(title = &#39;ARMA(2,2) Posterior Plots&#39;,
+          subtitle = &#39;of Johnson&amp;Johnson Dataset&#39;)  </code></pre>
+<p><img src="P_Bayesian_TS_files/figure-html/ARMAq%20outputs-1.png" width="672" /></p>
+</div>
+</div>
+<div id="additional-stan-plots" class="section level2">
+<h2><span class="header-section-number">0.6</span> Additional Stan Plots</h2>
+<p>Beyond the \texttt{stan_plot} objects above, there are several other plots provided for posterior checks. This section is dedicated to showing those plots.</p>
+<pre class="r"><code>library(gridExtra)
+# All plots will be done on the ARMA(2,2) model
+
+# Posterior plots - these all tell us the same thing
+stan_hist(ARMApq_fit,
+          bins = 20) + 
+     labs(title = &quot;Posterior Histograms&quot;)</code></pre>
+<p><img src="P_Bayesian_TS_files/figure-html/Posterior%20Plots-1.png" width="672" /></p>
+<pre class="r"><code>stan_dens(ARMApq_fit,
+          separate_chains = TRUE, 
+          alpha = 0.3)</code></pre>
+<p><img src="P_Bayesian_TS_files/figure-html/Posterior%20Plots-2.png" width="672" /></p>
+<pre class="r"><code># Let&#39;s look at the chains themselves
+stan_trace(ARMApq_fit, 
+           alpha = 0.7) +
+  scale_color_brewer(type = &quot;div&quot;) +
+     theme(strip.background = ggplot2::element_rect(fill = &quot;maroon&quot;),
+                     strip.text = ggplot2::element_text(size = 13, color = &quot;black&quot;)) </code></pre>
+<p><img src="P_Bayesian_TS_files/figure-html/Posterior%20Plots-3.png" width="672" /></p>
+<pre class="r"><code># Look at individual parameter&#39;s chains 
+stan_trace(ARMApq_fit,
+           alpha = 0.7, 
+           pars = c(&quot;theta&quot;),          # add name of parameter vector to the vector
+           inc_warmup = FALSE) +      
+     labs(title =&#39;Trace Plots of Markov Chains&#39;,
+          subtitle = &#39;MA Components&#39;) + 
+     scale_color_brewer(type = &quot;div&quot;) +
+     theme(strip.background = ggplot2::element_rect(fill = &quot;maroon&quot;),
+           plot.title = element_text(color = &#39;black&#39;),
+           strip.text = ggplot2::element_text(size = 12, color = &quot;white&quot;),
+           plot.background = element_rect(fill = &#39;grey90&#39;))</code></pre>
+<p><img src="P_Bayesian_TS_files/figure-html/Posterior%20Plots-4.png" width="672" /></p>
+<pre class="r"><code># Lastly we have the scatterplots. These will show the joint posteriors of 
+# 2 named parameters 
+stan_scat(ARMApq_fit, 
+          pars = c(&quot;mu&quot;, &quot;phi[2]&quot;), 
+          color = &quot;blue&quot;, 
+          size = 2,
+          alpha = 0.3) +
+     labs(title = &quot;Posterior Joint Density Plot&quot;,
+          subtitle = &#39;Time series mean vs 1st order AR Component&#39;) +
+     theme(panel.background = ggplot2::element_rect(fill = &quot;black&quot;)) + 
+     geom_density2d(color = &#39;skyblue&#39;)</code></pre>
+<p><img src="P_Bayesian_TS_files/figure-html/Posterior%20Plots-5.png" width="672" /></p>
+<pre class="r"><code>stan_scat(ARMApq_fit, 
+          pars = c(&quot;theta[1]&quot;, &quot;theta[2]&quot;), 
+          color = &quot;blue&quot;, 
+          size = 2,
+          alpha = 0.3) +
+     labs(title = &quot;Posterior Joint Density Plot&quot;,
+          subtitle = &#39;1st order MA Component vs 2nd order MA Component&#39;) +
+     theme(panel.background = ggplot2::element_rect(fill = &quot;black&quot;)) + 
+     geom_density2d(color = &#39;skyblue&#39;)</code></pre>
+<p><img src="P_Bayesian_TS_files/figure-html/Posterior%20Plots-6.png" width="672" /></p>
+</div>
+<div id="acknowledgments" class="section level2">
+<h2><span class="header-section-number">0.7</span> Acknowledgments</h2>
+<p>The material for this page was sourced from the <a href="https://mc-stan.org/docs/2_23/stan-users-guide/index.html">Stan User’s Guide</a>.</p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
