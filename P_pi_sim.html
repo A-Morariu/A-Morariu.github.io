@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Alin Morariu" />
+
+
+<title>Searching for Pi</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">My Website</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-university"></span>
+     
+    Teaching
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="T_STA130_tutorial.html">
+        <span class="fa fa-book"></span>
+         
+        STA130 - Winter 2019
+      </a>
+    </li>
+    <li>
+      <a href="T_STA302_tutorial.html">
+        <span class="fa fa-book"></span>
+         
+        STA302 - Summer 2019
+      </a>
+    </li>
+    <li>
+      <a href="T_STA314_tutorial.html">
+        <span class="fa fa-book"></span>
+         
+        STA314 - Fall 2018
+      </a>
+    </li>
+    <li>
+      <a href="T_MTH380_tutorial.html">
+        <span class="fa fa-book"></span>
+         
+        MTH380 - Fall 2019
+      </a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book-open"></span>
+     
+    Coursework
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="C_STA355_coursework.html">
+        <span class="fa fa-book"></span>
+         
+        STA355
+      </a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-briefcase"></span>
+     
+    Personal Projects
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="P_Spatial_Stats.html">
+        <span class="fa fa-map-marker"></span>
+         
+        Spatial Statistics
+      </a>
+    </li>
+    <li>
+      <a href="P_Bayesian_TS.html">
+        <span class="fa fa-stream"></span>
+         
+        Bayesian Time Series with Stan
+      </a>
+    </li>
+    <li>
+      <a href="P_pi_sim.html">
+        <span class="fa fa-circle"></span>
+         
+        Searching for Pi
+      </a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="Presentations.html">
+    <span class="fa fa-chalkboard-teacher"></span>
+     
+    Presentations &amp; Talks
+  </a>
+</li>
+<li>
+  <a href="Files/Resume_AMorariu.pdf">
+    <span class="fa fa-file-pdf-o"></span>
+     
+    Resume
+  </a>
+</li>
+<li>
+  <a href="about.html">About Me</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Searching for Pi</h1>
+<h4 class="author">Alin Morariu</h4>
+<h4 class="date">26/03/2021</h4>
+
+</div>
+
+
+<p>A classic exercise when learning how to use Monte Carlo simulations (or just simulations in general) is to find pi – yes, this <span class="math inline">\(\pi\)</span>. As we all know from our elementary level mathematics courses, pi is the ratio of the circle’s diameter to its radius <em>or</em> the ratio of the circle’s area to the area of a square with sides of the same length as the circle’s radius. That second fact is actually what we will take advantage of in order to do this simulation. Measuring the area of a circle is a difficult task to do empircally so a computer simulation is a useful tool to determine pi to a sufficient degree of precision.</p>
+<p>This post will explore the thinking process behind a bsic rejection sampling scheme that will converge to <span class="math inline">\(\pi\)</span>. The main idea here is that we will use random number generation and some clever mathematical tricks to find the area of the circle to an arbitrary degree of precision.</p>
+<div id="mathematical-motivation" class="section level1">
+<h1><span class="header-section-number">1</span> Mathematical motivation</h1>
+<p>To motivate this simulation, we need to understand the mathematical formulation which we are interested in. Recall the formula for the area of a circle: <span class="math display">\[\begin{equation}
+     A = \pi r^2
+\end{equation}\]</span> Where <span class="math inline">\(A\)</span> is the area and <span class="math inline">\(r\)</span> is the radius (both measured in the same arbitrary unit). This formula can be rewritten as <span class="math inline">\(\pi = \frac{A}{r^2}\)</span> (which will be the basis of our sampling scheme).</p>
+</div>
+<div id="what-is-sampling" class="section level1">
+<h1><span class="header-section-number">2</span> What is sampling?</h1>
+<p>In statistics, we often use Monte Carlo methods to solve deterministic problems. They’re particularly useful when standard numerical methods don’t work. We will be taking advantage of sampling from probability distributions to solve this problem. This random number generation will be part of a larger algorithm which when combined with a rejection criterion/condition, will be useful to numerically determine the value of <span class="math inline">\(\pi\)</span>.</p>
+</div>
+<div id="when-do-you-reject" class="section level1">
+<h1><span class="header-section-number">3</span> When do you reject?</h1>
+When creating a rejection sampling algorithm, one of the key choices is exactly what the rejection criterion is. For this specific problem we turn to a geometric solution. Begin by drawing a unit circle on a pair of axes. Next, we inscribe this unit circle inside of a square such that the square touches the circle at the points <span class="math inline">\(\{(1,0), (0,1), (-1,0), (0,-1) \}\)</span> (see Figure 1). With this configuration, the area of the square is easily determined by the formula <span class="math display">\[\begin{align}
+     A_{\Box} &amp;= l^2 = (2r)^2 = 4r^2 \\
+     &amp;=_{r = 1} 4
+\end{align}\]</span> The next step is to start using random sampling to generate ordered pairs of <span class="math inline">\((x,y)\)</span> coordinates on the plane we have created. An easy way to do this is to let each axis represent a random variable drawn from a uniform distribution on <span class="math inline">\((-1,1)\)</span>. <span class="math display">\[\begin{align}
+     X &amp;\sim Unif(-1,1) \\
+     Y &amp;\sim Unif(-1,1)
+\end{align}\]</span> We sample each uniform random variable <span class="math inline">\(n\)</span> many times and create a sequence of vectors <span class="math inline">\(\{ (x_i, y_i): i = 1, \ldots, n \}\)</span>. The rejection critera will be to determine if these points lie inside the circle <em>and</em> the square or if they lie <em>only</em> within the square. This is determined by computing the length of each vector <span class="math inline">\((x_i, y_i)\)</span> and comparing to the radius (of fixed length 1). Vectors with length above 1 are rejected while vectors with length less than or equal to 1 are accepted (since they are within the circle).
+<div class="figure">
+<img src="Images/pi_sampling.jpg" alt="Figure 1: Geometric motivation for rejection sampling scheme to discover pi" width="100%" />
+<p class="caption">
+Figure 1: Geometric motivation for rejection sampling scheme to discover pi
+</p>
+</div>
+</div>
+<div id="finding-pi" class="section level1">
+<h1><span class="header-section-number">4</span> Finding Pi</h1>
+<p>Once we have this rejection criteria and have completed the sampling, it’s time to put it all together to get our estimate of <span class="math inline">\(\pi\)</span>. This is based directly off of the proportion of accepted points <span class="math inline">\(p\)</span> which is calculated by the formula <span class="math display">\[\begin{equation}
+     p = \frac{n_{accept}}{n_{accept} + n_{reject}} = \frac{n_{accept}}{n}
+\end{equation}\]</span> Recall from earlier that <span class="math inline">\(\pi = \frac{A_{\bigcirc}}{r^2}\)</span>. Since this is a unit circle, the radius 1 and this formula simplifies to <span class="math inline">\(\pi = \frac{A_{\bigcirc}}{1^2} = A_{\bigcirc}\)</span>. In addition, our sampling scheme allows us to discover the proportion of points that are in the circle versus the square so we get that <span class="math inline">\(A_{\bigcirc} = A_{\Box} \cdot p\)</span>. The final step is that <span class="math inline">\(\pi = A_{\Box} \cdot p\)</span> which completes our Monte Carlo simulation.</p>
+</div>
+<div id="implementation" class="section level1">
+<h1><span class="header-section-number">5</span> Implementation</h1>
+<pre class="r"><code>N &lt;- 500000
+
+X &lt;- c()
+Y &lt;- c()
+L &lt;- c()
+accept&lt;- c()
+
+for (ii in c(1:N)) {
+     # Sample X and Y 
+     X[ii] &lt;- runif(n = 1, min = -1, max = 1)
+     Y[ii] &lt;- runif(n = 1, min = -1, max = 1)
+     
+     # compute length
+     L[ii] &lt;- sqrt( X[ii]^2 + Y[ii]^2 )
+     
+     # determine accept-reject
+     accept[ii] &lt;- ifelse(L[ii] &lt;= 1, 1, 0)
+}
+
+# Conclusion
+p &lt;- sum(accept)/N
+
+pi &lt;- 4*p</code></pre>
+<p>Let’s take a look at the results of our simulation.</p>
+<pre class="r"><code>df &lt;- tibble(X, Y, L, accept)
+
+cut_offs &lt;- c(1000, 5000, 10000, N)
+
+plt_1 &lt;- df %&gt;% sample_n(cut_offs[1]) %&gt;% 
+        ggplot(aes(x = X, y = Y)) +
+        geom_point(aes(colour = factor(accept)), alpha = 0.7) + 
+        labs(title = &#39;Monte Carlo Simulation for Pi&#39;, 
+             subtitle = &quot;N = 1000&quot;) + 
+        scale_colour_manual(values=c(&quot;#DE0101&quot;, &quot;#1AA711&quot;), 
+                            name = &quot;Sampling Result&quot;,
+                            labels = c(&quot;Reject&quot;, &quot;Accept&quot;))+ 
+        theme_minimal()
+
+plt_2 &lt;- df %&gt;% sample_n(cut_offs[2]) %&gt;% 
+        ggplot(aes(x = X, y = Y)) +
+        geom_point(aes(colour = factor(accept)), alpha = 0.7) + 
+        labs(title = &#39;Monte Carlo Simulation for Pi&#39;,
+             subtitle = &quot;N = 5000&quot;) + 
+        scale_colour_manual(values=c(&quot;#DE0101&quot;, &quot;#1AA711&quot;), 
+                            name = &quot;Sampling Result&quot;,
+                            labels = c(&quot;Reject&quot;, &quot;Accept&quot;))+ 
+        theme_minimal()
+
+plt_3 &lt;- df %&gt;% sample_n(cut_offs[3]) %&gt;% 
+        ggplot(aes(x = X, y = Y)) +
+        geom_point(aes(colour = factor(accept)), alpha = 0.7) + 
+        labs(title = &#39;Monte Carlo Simulation for Pi&#39;,
+             subtitle = &quot;N = 10000&quot;) + 
+        scale_colour_manual(values=c(&quot;#DE0101&quot;, &quot;#1AA711&quot;), 
+                            name = &quot;Sampling Result&quot;,
+                            labels = c(&quot;Reject&quot;, &quot;Accept&quot;))+ 
+        theme_minimal()
+
+plt_4 &lt;- df %&gt;% sample_n(cut_offs[4]) %&gt;% 
+        ggplot(aes(x = X, y = Y)) +
+        geom_point(aes(colour = factor(accept)), alpha = 0.7) + 
+        labs(title = &#39;Monte Carlo Simulation for Pi&#39;,
+             subtitle = &quot;N = 50000&quot;) + 
+        scale_colour_manual(values = c(&quot;#DE0101&quot;, &quot;#1AA711&quot;), 
+                            name = &quot;Sampling Result&quot;,
+                            labels = c(&quot;Reject&quot;, &quot;Accept&quot;))+ 
+        theme_minimal()
+
+# grid.arrange(plt_1, plt_2, plt_3, plt_4, 
+#              nrow =2,
+#              top = &quot;Monte Carlo Simulation&quot;)
+plt_1</code></pre>
+<p><img src="P_pi_sim_files/figure-html/Formating%20outputs-1.png" width="672" /></p>
+<pre class="r"><code>plt_2</code></pre>
+<p><img src="P_pi_sim_files/figure-html/Formating%20outputs-2.png" width="672" /></p>
+<pre class="r"><code>plt_3</code></pre>
+<p><img src="P_pi_sim_files/figure-html/Formating%20outputs-3.png" width="672" /></p>
+<pre class="r"><code>plt_4</code></pre>
+<p><img src="P_pi_sim_files/figure-html/Formating%20outputs-4.png" width="672" /> Based on the plots above, we can see that when the number of points increases the circle and square get more and more pronounced. This goes hand in hand with the accuracy of the the estimate of <span class="math inline">\(\pi\)</span>. The results are that pi = <span class="math inline">\(\pi =\)</span> 3.138384 based on the accept proportion of 0.784596.</p>
+<p>Hope you enjoyed this walk through! For more simulation exercise, check out the Bayesian Time Series post.</p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

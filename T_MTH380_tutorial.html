@@ -438,6 +438,13 @@ div.tocify {
         Bayesian Time Series with Stan
       </a>
     </li>
+    <li>
+      <a href="P_pi_sim.html">
+        <span class="fa fa-circle"></span>
+         
+        Searching for Pi
+      </a>
+    </li>
   </ul>
 </li>
 <li>
@@ -606,11 +613,11 @@ head(iris, 10) # option 1 and my favourite</code></pre>
 <pre class="r"><code>dplyr::glimpse(iris) # option 2, works better than head on larger data sets</code></pre>
 <pre><code>## Rows: 150
 ## Columns: 5
-## $ Sepal.Length &lt;dbl&gt; 5.1, 4.9, 4.7, 4.6, 5.0, 5.4, 4.6, 5.0, 4.4, 4.9, 5.4, 4.8, 4.8, 4.3, 5.8, 5.7, 5.4, …
-## $ Sepal.Width  &lt;dbl&gt; 3.5, 3.0, 3.2, 3.1, 3.6, 3.9, 3.4, 3.4, 2.9, 3.1, 3.7, 3.4, 3.0, 3.0, 4.0, 4.4, 3.9, …
-## $ Petal.Length &lt;dbl&gt; 1.4, 1.4, 1.3, 1.5, 1.4, 1.7, 1.4, 1.5, 1.4, 1.5, 1.5, 1.6, 1.4, 1.1, 1.2, 1.5, 1.3, …
-## $ Petal.Width  &lt;dbl&gt; 0.2, 0.2, 0.2, 0.2, 0.2, 0.4, 0.3, 0.2, 0.2, 0.1, 0.2, 0.2, 0.1, 0.1, 0.2, 0.4, 0.4, …
-## $ Species      &lt;fct&gt; setosa, setosa, setosa, setosa, setosa, setosa, setosa, setosa, setosa, setosa, setos…</code></pre>
+## $ Sepal.Length &lt;dbl&gt; 5.1, 4.9, 4.7, 4.6, 5.0, 5.4, 4.6, 5.0, 4.4, 4.9, 5.4, 4.8, 4.8, 4.3, 5.8, …
+## $ Sepal.Width  &lt;dbl&gt; 3.5, 3.0, 3.2, 3.1, 3.6, 3.9, 3.4, 3.4, 2.9, 3.1, 3.7, 3.4, 3.0, 3.0, 4.0, …
+## $ Petal.Length &lt;dbl&gt; 1.4, 1.4, 1.3, 1.5, 1.4, 1.7, 1.4, 1.5, 1.4, 1.5, 1.5, 1.6, 1.4, 1.1, 1.2, …
+## $ Petal.Width  &lt;dbl&gt; 0.2, 0.2, 0.2, 0.2, 0.2, 0.4, 0.3, 0.2, 0.2, 0.1, 0.2, 0.2, 0.1, 0.1, 0.2, …
+## $ Species      &lt;fct&gt; setosa, setosa, setosa, setosa, setosa, setosa, setosa, setosa, setosa, set…</code></pre>
 <pre class="r"><code>summary(iris) # summary statistics of Iris dataset</code></pre>
 <pre><code>##   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width          Species  
 ##  Min.   :4.300   Min.   :2.000   Min.   :1.000   Min.   :0.100   setosa    :50  
@@ -704,8 +711,8 @@ cowplot::plot_grid(iris.hist, iris.bar, iris.line,
 <p>Where <span class="math inline">\(\mu\)</span> is the mean of the distribution and <span class="math inline">\(\sigma\)</span> is the standard deviation. A multivariate form exists but will be left out for now (more on multivariate distributions in later tutorials). So now for how R can help us make sense of these distributions. We can evaluate them at various points and compute probabilities of certain events happening. Or we can generate random samples from a the distribution for simulation purposes.</p>
 <pre class="r"><code># generate random normals 
 round(rnorm(n = 25, mean = 4, sd = 1.2), 2)</code></pre>
-<pre><code>##  [1] 5.49 4.60 2.58 4.00 4.94 4.69 4.15 3.45 2.19 6.30 5.21 4.43 2.01 3.09 3.89 3.61 3.91 2.84 5.74 2.27 2.58
-## [22] 4.64 4.11 2.11 5.68</code></pre>
+<pre><code>##  [1] 5.49 4.60 2.58 4.00 4.94 4.69 4.15 3.45 2.19 6.30 5.21 4.43 2.01 3.09 3.89 3.61 3.91 2.84 5.74
+## [20] 2.27 2.58 4.64 4.11 2.11 5.68</code></pre>
 <pre class="r"><code># compute probabilities 
 dnorm(4.67, mean = 4, sd = 1.2) # value of the density (i.e. plug in x = 4.67 into f(x))</code></pre>
 <pre><code>## [1] 0.2844698</code></pre>
