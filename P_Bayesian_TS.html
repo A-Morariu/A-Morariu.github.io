@@ -609,8 +609,8 @@ AR1_fit &lt;- rstan::stan(&quot;Stan_files/AR1.stan&quot;,
 <pre><code>## 
 ## SAMPLING FOR MODEL &#39;AR1&#39; NOW (CHAIN 1).
 ## Chain 1: 
-## Chain 1: Gradient evaluation took 2.5e-05 seconds
-## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.25 seconds.
+## Chain 1: Gradient evaluation took 6.1e-05 seconds
+## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.61 seconds.
 ## Chain 1: Adjust your expectations accordingly!
 ## Chain 1: 
 ## Chain 1: 
@@ -621,9 +621,9 @@ AR1_fit &lt;- rstan::stan(&quot;Stan_files/AR1.stan&quot;,
 ## Chain 1: Iteration: 1500 / 2000 [ 75%]  (Sampling)
 ## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 1: 
-## Chain 1:  Elapsed Time: 0.062708 seconds (Warm-up)
-## Chain 1:                0.054304 seconds (Sampling)
-## Chain 1:                0.117012 seconds (Total)
+## Chain 1:  Elapsed Time: 0.095219 seconds (Warm-up)
+## Chain 1:                0.052849 seconds (Sampling)
+## Chain 1:                0.148068 seconds (Total)
 ## Chain 1: 
 ## 
 ## SAMPLING FOR MODEL &#39;AR1&#39; NOW (CHAIN 2).
@@ -640,15 +640,15 @@ AR1_fit &lt;- rstan::stan(&quot;Stan_files/AR1.stan&quot;,
 ## Chain 2: Iteration: 1500 / 2000 [ 75%]  (Sampling)
 ## Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 2: 
-## Chain 2:  Elapsed Time: 0.061356 seconds (Warm-up)
-## Chain 2:                0.05047 seconds (Sampling)
-## Chain 2:                0.111826 seconds (Total)
+## Chain 2:  Elapsed Time: 0.061543 seconds (Warm-up)
+## Chain 2:                0.059348 seconds (Sampling)
+## Chain 2:                0.120891 seconds (Total)
 ## Chain 2: 
 ## 
 ## SAMPLING FOR MODEL &#39;AR1&#39; NOW (CHAIN 3).
 ## Chain 3: 
-## Chain 3: Gradient evaluation took 7e-06 seconds
-## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
+## Chain 3: Gradient evaluation took 6e-06 seconds
+## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
 ## Chain 3: Adjust your expectations accordingly!
 ## Chain 3: 
 ## Chain 3: 
@@ -659,9 +659,9 @@ AR1_fit &lt;- rstan::stan(&quot;Stan_files/AR1.stan&quot;,
 ## Chain 3: Iteration: 1500 / 2000 [ 75%]  (Sampling)
 ## Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 3: 
-## Chain 3:  Elapsed Time: 0.067595 seconds (Warm-up)
-## Chain 3:                0.121271 seconds (Sampling)
-## Chain 3:                0.188866 seconds (Total)
+## Chain 3:  Elapsed Time: 0.069295 seconds (Warm-up)
+## Chain 3:                0.06262 seconds (Sampling)
+## Chain 3:                0.131915 seconds (Total)
 ## Chain 3: 
 ## 
 ## SAMPLING FOR MODEL &#39;AR1&#39; NOW (CHAIN 4).
@@ -678,9 +678,9 @@ AR1_fit &lt;- rstan::stan(&quot;Stan_files/AR1.stan&quot;,
 ## Chain 4: Iteration: 1500 / 2000 [ 75%]  (Sampling)
 ## Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 ## Chain 4: 
-## Chain 4:  Elapsed Time: 0.060555 seconds (Warm-up)
-## Chain 4:                0.065954 seconds (Sampling)
-## Chain 4:                0.126509 seconds (Total)
+## Chain 4:  Elapsed Time: 0.063011 seconds (Warm-up)
+## Chain 4:                0.056871 seconds (Sampling)
+## Chain 4:                0.119882 seconds (Total)
 ## Chain 4:</code></pre>
 <pre class="r"><code># the model 
 AR1_fit</code></pre>
@@ -694,7 +694,7 @@ AR1_fit</code></pre>
 ## sigma     1.45    0.00 0.12   1.24   1.36   1.44   1.52   1.70  2626    1
 ## lp__    -70.80    0.03 1.25 -73.92 -71.39 -70.49 -69.86 -69.35  1829    1
 ## 
-## Samples were drawn using NUTS(diag_e) at Sat Mar 27 21:58:08 2021.
+## Samples were drawn using NUTS(diag_e) at Sat Mar 27 22:14:06 2021.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
@@ -765,7 +765,7 @@ ARp_fit</code></pre>
 ## sigma      1.17    0.00 0.09   1.00   1.10   1.16   1.22   1.37  1429 1.00
 ## lp__     -55.96    0.06 1.67 -60.18 -56.73 -55.62 -54.79 -53.86   793 1.01
 ## 
-## Samples were drawn using NUTS(diag_e) at Sat Mar 27 21:58:11 2021.
+## Samples were drawn using NUTS(diag_e) at Sat Mar 27 22:14:09 2021.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
@@ -830,7 +830,7 @@ ARCH1_fit</code></pre>
 ## sigma      2.12    0.03 0.88    1.02    1.48    1.90   2.51   4.39   670 1.00
 ## lp__    -100.58    0.07 1.48 -104.29 -101.35 -100.24 -99.49 -98.60   444 1.01
 ## 
-## Samples were drawn using NUTS(diag_e) at Sat Mar 27 21:58:14 2021.
+## Samples were drawn using NUTS(diag_e) at Sat Mar 27 22:14:12 2021.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
@@ -910,7 +910,7 @@ MAq_fit</code></pre>
 ## sigma       4.11    2.59  2.59    1.33    1.51    4.32   6.70   6.81     1 32.74
 ## lp__     -141.11   59.90 59.93 -202.93 -201.08 -145.80 -80.86 -78.59     1 42.04
 ## 
-## Samples were drawn using NUTS(diag_e) at Sat Mar 27 21:58:45 2021.
+## Samples were drawn using NUTS(diag_e) at Sat Mar 27 22:14:46 2021.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>
@@ -1010,7 +1010,7 @@ ARMApq_fit</code></pre>
 ## sigma      1.18    0.00 0.09   1.00   1.11   1.17   1.24   1.37   524 1.01
 ## lp__     -56.09    0.05 1.72 -60.19 -56.96 -55.76 -54.83 -53.71  1208 1.00
 ## 
-## Samples were drawn using HMC(diag_e) at Sat Mar 27 22:01:54 2021.
+## Samples were drawn using HMC(diag_e) at Sat Mar 27 22:17:59 2021.
 ## For each parameter, n_eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor on split chains (at 
 ## convergence, Rhat=1).</code></pre>

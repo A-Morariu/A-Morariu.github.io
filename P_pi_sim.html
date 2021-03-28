@@ -481,8 +481,8 @@ div.tocify {
 </div>
 
 
-<p>A classic exercise when learning how to use Monte Carlo simulations (or just simulations in general) is to find pi – yes, this <span class="math inline">\(\pi\)</span>. As we all know from our elementary level mathematics courses, pi is the ratio of the circle’s diameter to its radius <em>or</em> the ratio of the circle’s area to the area of a square with sides of the same length as the circle’s radius. That second fact is actually what we will take advantage of in order to do this simulation. Measuring the area of a circle is a difficult task to do empircally so a computer simulation is a useful tool to determine pi to a sufficient degree of precision.</p>
-<p>This post will explore the thinking process behind a bsic rejection sampling scheme that will converge to <span class="math inline">\(\pi\)</span>. The main idea here is that we will use random number generation and some clever mathematical tricks to find the area of the circle to an arbitrary degree of precision.</p>
+<p>A classic exercise when learning how to use Monte Carlo simulations (or just simulations in general) is to find pi – yes, this <span class="math inline">\(\pi\)</span>. As we all know from our elementary level mathematics courses, pi is the ratio of the circle’s diameter to its radius <em>or</em> the ratio of the circle’s area to the area of a square with sides of the same length as the circle’s radius. That second fact is actually what we will take advantage of in order to do this simulation. Measuring the area of a circle is a difficult task to do empirically so a computer simulation is a useful tool to determine pi to a sufficient degree of precision.</p>
+<p>This post will explore the thinking process behind a basic rejection sampling scheme that will converge to <span class="math inline">\(\pi\)</span>. The main idea here is that we will use random number generation and some clever mathematical tricks to find the area of the circle to an arbitrary degree of precision.</p>
 <div id="mathematical-motivation" class="section level1">
 <h1><span class="header-section-number">1</span> Mathematical motivation</h1>
 <p>To motivate this simulation, we need to understand the mathematical formulation which we are interested in. Recall the formula for the area of a circle: <span class="math display">\[\begin{equation}
@@ -550,7 +550,7 @@ plt_1 &lt;- df %&gt;% sample_n(cut_offs[1]) %&gt;%
         geom_point(aes(colour = factor(accept)), alpha = 0.7) + 
         labs(title = &#39;Monte Carlo Simulation for Pi&#39;, 
              subtitle = &quot;N = 1000&quot;) + 
-        scale_colour_manual(values=c(&quot;#DE0101&quot;, &quot;#1AA711&quot;), 
+        scale_colour_manual(values = c(&quot;#A93226&quot;, &quot;#3CA067&quot;), 
                             name = &quot;Sampling Result&quot;,
                             labels = c(&quot;Reject&quot;, &quot;Accept&quot;))+ 
         theme_minimal()
@@ -560,7 +560,7 @@ plt_2 &lt;- df %&gt;% sample_n(cut_offs[2]) %&gt;%
         geom_point(aes(colour = factor(accept)), alpha = 0.7) + 
         labs(title = &#39;Monte Carlo Simulation for Pi&#39;,
              subtitle = &quot;N = 5000&quot;) + 
-        scale_colour_manual(values=c(&quot;#DE0101&quot;, &quot;#1AA711&quot;), 
+        scale_colour_manual(values = c(&quot;#A93226&quot;, &quot;#3CA067&quot;), 
                             name = &quot;Sampling Result&quot;,
                             labels = c(&quot;Reject&quot;, &quot;Accept&quot;))+ 
         theme_minimal()
@@ -570,7 +570,7 @@ plt_3 &lt;- df %&gt;% sample_n(cut_offs[3]) %&gt;%
         geom_point(aes(colour = factor(accept)), alpha = 0.7) + 
         labs(title = &#39;Monte Carlo Simulation for Pi&#39;,
              subtitle = &quot;N = 10000&quot;) + 
-        scale_colour_manual(values=c(&quot;#DE0101&quot;, &quot;#1AA711&quot;), 
+        scale_colour_manual(values = c(&quot;#A93226&quot;, &quot;#3CA067&quot;), 
                             name = &quot;Sampling Result&quot;,
                             labels = c(&quot;Reject&quot;, &quot;Accept&quot;))+ 
         theme_minimal()
@@ -580,7 +580,7 @@ plt_4 &lt;- df %&gt;% sample_n(cut_offs[4]) %&gt;%
         geom_point(aes(colour = factor(accept)), alpha = 0.7) + 
         labs(title = &#39;Monte Carlo Simulation for Pi&#39;,
              subtitle = &quot;N = 50000&quot;) + 
-        scale_colour_manual(values = c(&quot;#DE0101&quot;, &quot;#1AA711&quot;), 
+        scale_colour_manual(values = c(&quot;#A93226&quot;, &quot;#3CA067&quot;), 
                             name = &quot;Sampling Result&quot;,
                             labels = c(&quot;Reject&quot;, &quot;Accept&quot;))+ 
         theme_minimal()
